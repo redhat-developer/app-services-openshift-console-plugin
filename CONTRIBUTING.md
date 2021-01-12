@@ -5,7 +5,7 @@ https://github.com/openshift/console
 
 ## Local development 
 
-1. Execute devsetup
+1. Execute script to setup your dev env
 
 ./scripts/devSetup.sh
 
