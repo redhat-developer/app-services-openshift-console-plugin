@@ -18,3 +18,9 @@ For example `Code ./console`
 
 5. Development and builds should be done inside openshift repository because 
 we need packages that are only available inside the mono repostory.
+
+
+## Hot code reload
+
+Since our plugin is symlinked we need to make change in any other plugin 
+to see code reloaded. Our changes will be picked up during reload anyway.
