@@ -4,7 +4,7 @@ import StreamsInstancePage from '../instance-list/StreamsInstancePage';
 const ManagedKafkas = () => {
   return (
     <>
-      <StreamsInstancePage/>
+      Hello from RHOAS plugin
     </>
   )
 

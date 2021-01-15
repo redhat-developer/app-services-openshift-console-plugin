@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 import { AddAction } from '@console/dev-console/src/extensions/add-actions';
+import * as rhoasIcon from '@console/internal/imgs/logos/other-unknown.svg';
 import {
   ModelDefinition,
   ModelFeatureFlag,
   RoutePage,
   Plugin,
 } from '@console/plugin-sdk';
-import { MaintenanceIcon } from '@patternfly/react-icons';
 import { FLAG_RHOAS_KAFKA } from './const';
 
 import * as models from './models';
@@ -60,7 +60,7 @@ const plugin: Plugin<ConsumedExtensions> = [
       label: '%rhoas-plugin~ManagedService-Kafka%',
       // t('rhoas-plugin~ManagedService')
       description: '%rhoas-plugin~ManagedService-Kafka-Long%',
-      icon: MaintenanceIcon,
+      icon: rhoasIcon,
     },
   }
 ];
