@@ -8,7 +8,8 @@ import {
   Plugin,
 } from '@console/plugin-sdk';
 import { NamespaceRedirect } from '@console/internal/components/utils/namespace-redirect';
-import { FLAG_RHOAS } from './const';
+import { MaintenanceIcon } from '@patternfly/react-icons';
+import { FLAG_RHOAS_KAFKA } from './const';
 
 import * as models from './models';
 
@@ -28,37 +29,26 @@ const plugin: Plugin<ConsumedExtensions> = [
     },
   },
   {
-    type: 'NavItem/Href',
+    type: 'FeatureFlag/Model',
     properties: {
-      id: 'rhoas',
-      perspective: 'dev',
-      section: 'resources',
-      insertBefore: 'project',
-      componentProps: {
-        name: '%rhoas-plugin~Rhoas%',
-        href: '/rhoas',
-        testID: 'rhoas',
-        // 'data-quickstart-id': 'qs-nav-helm',
-      },
-    },
-    flags: {
-      required: [FLAG_RHOAS],
+      model: models.ManagedKafkaRequestModel,
+      flag: FLAG_RHOAS_KAFKA,
     },
   },
   {
     type: 'Page/Route',
     properties: {
       exact: true,
-      path: ['/rhoas'],
+      path: ['/managedServices/rhosak', '/managedServices/rhosak/ns/:ns'],
       loader: async () =>
         (
           await import(
-            './components/rhoas-page/RhoasPage' /* webpackChunkName: "helm-plugin-releases-list-page" */
+            './components/rhosak-page/ManagedKafkas' /* webpackChunkName: "helm-plugin-releases-list-page" */
           )
         ).default,
     },
     flags: {
-      required: [FLAG_RHOAS],
+      required: [FLAG_RHOAS_KAFKA],
     },
   },
   {
@@ -67,13 +57,13 @@ const plugin: Plugin<ConsumedExtensions> = [
       required: [],
     },
     properties: {
-      id: 'rhoas',
-      url: '/catalog?catalogType=RhoasService',
+      id: 'rhosak',
+      url: '/managedServices/rhosak',
       // t('rhoas-plugin~ManagedService')
-      label: '%rhoas-plugin~ManagedService%',
+      label: '%rhoas-plugin~ManagedService-Kafka%',
       // t('rhoas-plugin~ManagedService')
-      description: '%rhoas-plugin~ManagedService%',
-      icon: "",
+      description: '%rhoas-plugin~ManagedService-Kafka-Long%',
+      icon: <MaintenanceIcon/>,
     },
   }
 ];

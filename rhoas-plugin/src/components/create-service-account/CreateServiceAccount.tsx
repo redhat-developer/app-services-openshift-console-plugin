@@ -20,13 +20,13 @@ const CreateServiceAccount = () => {
   }
 
   const addServiceAccount = async () => {
-    try {
-      await coFetchJSON('./../../mock/crds/ManagedServiceAccountRequest').then((response) => {
-        console.log(response)
-      });
-    } catch (error) {
-      // Handle error
-    }
+    // try {
+    //   await coFetchJSON('./../../mock/crds/ManagedServiceAccountRequest').then((response) => {
+    //     console.log(response)
+    //   });
+    // } catch (error) {
+    //   // Handle error
+    // }
   }
 
 
