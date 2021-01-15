@@ -8,7 +8,7 @@ import {
   Plugin,
 } from '@console/plugin-sdk';
 import { NamespaceRedirect } from '@console/internal/components/utils/namespace-redirect';
-
+import { FLAG_RHOAS } from './const';
 
 import * as models from './models';
 
@@ -25,6 +25,40 @@ const plugin: Plugin<ConsumedExtensions> = [
     type: 'ModelDefinition',
     properties: {
       models: _.values(models),
+    },
+  },
+  {
+    type: 'NavItem/Href',
+    properties: {
+      id: 'rhoas',
+      perspective: 'dev',
+      section: 'resources',
+      insertBefore: 'project',
+      componentProps: {
+        name: '%rhoas-plugin~Rhoas%',
+        href: '/rhoas',
+        testID: 'rhoas',
+        // 'data-quickstart-id': 'qs-nav-helm',
+      },
+    },
+    flags: {
+      required: [FLAG_RHOAS],
+    },
+  },
+  {
+    type: 'Page/Route',
+    properties: {
+      exact: true,
+      path: ['/rhoas'],
+      loader: async () =>
+        (
+          await import(
+            './components/rhoas-page/RhoasPage' /* webpackChunkName: "helm-plugin-releases-list-page" */
+          )
+        ).default,
+    },
+    flags: {
+      required: [FLAG_RHOAS],
     },
   },
   {
