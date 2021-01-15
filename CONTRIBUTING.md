@@ -19,8 +19,10 @@ For example `Code ./console`
 5. Development and builds should be done inside openshift repository because 
 we need packages that are only available inside the mono repostory.
 
+## Pushing changes back
 
-## Hot code reload
+Since plugin was copied to openshift repository we need to extract it back to the original repo:
 
-Since our plugin is symlinked we need to make change in any other plugin 
-to see code reloaded. Our changes will be picked up during reload anyway.
+```
+cp -Rf ./console/frontend/packages/rhoas-plugin $(pwd)/rhoas-plugin 
+```

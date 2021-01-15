@@ -2,6 +2,6 @@ echo "Clonning OpenShift console"
 
 git clone git@github.com:openshift/console.git
 
-echo "Including plugin"
+echo "Copying plugin"
 
-ln -s $(pwd)/rhoas-plugin ./console/frontend/packages/rhoas-plugin
+cp -Rf $(pwd)/rhoas-plugin ./console/frontend/packages/rhoas-plugin
