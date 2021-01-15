@@ -5,11 +5,11 @@ export const ManagedKafkaRequestModel: K8sKind = {
   apiVersion: 'v1alpha1',
   kind: 'ManagedKafkaRequest',
   id: 'ManagedKafkaRequest',
-  plural: '',
+  plural: 'ManagedKafkaRequests',
   label: 'Managed Kafka Request',
-  labelPlural: '',
+  labelPlural: 'Managed Kafka Requests',
   abbr: 'MKR',
-  namespaced: false,
+  namespaced: true,
   crd: true,
 };
 
@@ -18,11 +18,11 @@ export const ManagedKafkaConnectionModel: K8sKind = {
   apiVersion: 'v1alpha1',
   kind: 'ManagedKafkaConnection',
   id: 'ManagedKafkaConnection',
-  plural: '',
+  plural: 'ManagedKafkaConnections',
   label: 'Managed Kafka Connection',
-  labelPlural: '',
+  labelPlural: 'Managed Kafka Connections',
   abbr: 'MKC',
-  namespaced: false,
+  namespaced: true,
   crd: true,
 };
 
@@ -33,8 +33,8 @@ export const ManagedServiceAccountRequest: K8sKind = {
   id: 'ManagedServiceAccountRequest',
   plural: '',
   label: 'Managed Service Account Request',
-  labelPlural: '',
+  labelPlural: 'Managed Service Account Requests',
   abbr: 'MSAR',
-  namespaced: false,
+  namespaced: true,
   crd: true,
 };
