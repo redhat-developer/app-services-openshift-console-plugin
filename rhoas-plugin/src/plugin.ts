@@ -2,12 +2,10 @@ import * as _ from 'lodash';
 import { AddAction } from '@console/dev-console/src/extensions/add-actions';
 import {
   ModelDefinition,
-  CustomFeatureFlag,
-  HrefNavItem,
+  ModelFeatureFlag,
   RoutePage,
   Plugin,
 } from '@console/plugin-sdk';
-import { NamespaceRedirect } from '@console/internal/components/utils/namespace-redirect';
 import { MaintenanceIcon } from '@patternfly/react-icons';
 import { FLAG_RHOAS_KAFKA } from './const';
 
@@ -15,8 +13,7 @@ import * as models from './models';
 
 type ConsumedExtensions =
   | ModelDefinition
-  | CustomFeatureFlag
-  | HrefNavItem
+  | ModelFeatureFlag
   | RoutePage
   | AddAction
 
@@ -54,7 +51,7 @@ const plugin: Plugin<ConsumedExtensions> = [
   {
     type: 'AddAction',
     flags: {
-      required: [],
+      required: [FLAG_RHOAS_KAFKA],
     },
     properties: {
       id: 'rhosak',
@@ -63,7 +60,7 @@ const plugin: Plugin<ConsumedExtensions> = [
       label: '%rhoas-plugin~ManagedService-Kafka%',
       // t('rhoas-plugin~ManagedService')
       description: '%rhoas-plugin~ManagedService-Kafka-Long%',
-      icon: <MaintenanceIcon/>,
+      icon: MaintenanceIcon,
     },
   }
 ];
