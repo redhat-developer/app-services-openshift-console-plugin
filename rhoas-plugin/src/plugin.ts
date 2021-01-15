@@ -6,6 +6,7 @@ import {
   ModelFeatureFlag,
   RoutePage,
   Plugin,
+  HrefNavItem,
 } from '@console/plugin-sdk';
 import { FLAG_RHOAS_KAFKA } from './const';
 
@@ -16,6 +17,7 @@ type ConsumedExtensions =
   | ModelFeatureFlag
   | RoutePage
   | AddAction
+  | HrefNavItem
 
 
 const plugin: Plugin<ConsumedExtensions> = [
@@ -49,17 +51,33 @@ const plugin: Plugin<ConsumedExtensions> = [
     },
   },
   {
-    type: 'AddAction',
+    type: 'NavItem/Href',
+    properties: {
+      id: 'rhoas',
+      perspective: 'dev',
+      section: 'resources',
+      insertBefore: 'project',
+      componentProps: {
+        name: 'rhoas',
+        href: '/rhoas',
+        testID: 'rhoas',
+        'data-quickstart-id': 'qs-nav-helm',
+      },
+    },
     flags: {
       required: [FLAG_RHOAS_KAFKA],
+    },
+  },
+  {
+    type: 'AddAction',
+    flags: {
+      required: [],
     },
     properties: {
       id: 'rhosak',
       url: '/managedServices/rhosak',
-      // t('rhoas-plugin~ManagedService')
-      label: '%rhoas-plugin~ManagedService-Kafka%',
-      // t('rhoas-plugin~ManagedService')
-      description: '%rhoas-plugin~ManagedService-Kafka-Long%',
+      label: 'ManagedService Kafka',
+      description: 'ManagedService',
       icon: rhoasIcon,
     },
   }
