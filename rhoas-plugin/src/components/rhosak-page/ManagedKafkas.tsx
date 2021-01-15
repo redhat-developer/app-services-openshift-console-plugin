@@ -1,5 +1,5 @@
 import * as React from 'react';
-import StreamsInstancePage from './../instance-list/StreamsInstancePage';
+import StreamsInstancePage from '../instance-list/StreamsInstancePage';
 
 const ManagedKafkas = () => {
   return (
@@ -10,4 +10,4 @@ const ManagedKafkas = () => {
 
 }
 
-export default RhoasPage;
+export default ManagedKafkas;
