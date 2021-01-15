@@ -1,1 +1,1 @@
-export const FLAG = 'RHOAS';
+export const FLAG_RHOAS = 'RHOAS';
