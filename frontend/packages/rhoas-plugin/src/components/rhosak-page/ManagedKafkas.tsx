@@ -4,7 +4,6 @@ const ManagedKafkas = () => {
   return (
     <>
       Hello from Managed Kafka plugin
-      Provide accessTokenSecretName
     </>
   )
 
