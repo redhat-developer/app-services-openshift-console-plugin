@@ -4,6 +4,7 @@ import { PageBody } from '@console/shared';
 import StreamsInstanceFilter from './StreamsInstanceFilter';
 import StreamsInstanceTable from './StreamsInstanceTable';
 import { PageHeading } from '@console/internal/components/utils';
+import './StreamsInstancePage.css';
 
 const StreamsInstancePage = () => {
   return (

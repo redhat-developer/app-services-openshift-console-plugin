@@ -3,28 +3,23 @@ import StreamsInstancePage from '../streams-list/StreamsInstancePage';
 import NamespacedPage, {
   NamespacedPageVariants,
 } from '@console/dev-console/src/components/NamespacedPage';
-import { Button, ActionList, ActionListItem } from '@patternfly/react-core';
-import { PageBody } from '@console/shared';
+import { FormFooter } from '@console/shared';
+import { history } from '@console/internal/components/utils';
 
 const ManagedKafkas = () => {
   return (
     <>
       <NamespacedPage variant={NamespacedPageVariants.light} hideApplications>
         <StreamsInstancePage />
-        <PageBody>
-          <ActionList>
-            <ActionListItem>
-              <Button variant="primary" id="create-button">
-                Create
-              </Button>
-            </ActionListItem>
-            <ActionListItem>
-              <Button variant="secondary" id="cancels-button">
-                Cancel
-              </Button>
-            </ActionListItem>
-          </ActionList>
-        </PageBody>
+        <FormFooter
+          isSubmitting={false}
+          errorMessage=""
+          submitLabel="Create"
+          disableSubmit={false}
+          resetLabel="Reset"
+          sticky
+          handleCancel={history.goBack}
+        />
       </NamespacedPage>
     </>
   );
