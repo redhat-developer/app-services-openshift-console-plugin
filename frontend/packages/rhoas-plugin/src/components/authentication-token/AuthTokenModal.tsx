@@ -31,7 +31,7 @@ const AuthTokenModal = () => {
     return "Loading"
   }
 
-  // console.log(data, loadError);
+  console.log(data, loadError);
 
   if (data) {
     return "Token already exist"
@@ -40,7 +40,7 @@ const AuthTokenModal = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     const existingSecret = await k8sGet(SecretModel.kind, secretName, namespace, {})
-    // console.log(existingSecret)
+    console.log(existingSecret)
 
     if (existingSecret) {
       return;
@@ -73,11 +73,11 @@ const AuthTokenModal = () => {
     };
 
     // TODO proper handling for create
-    // console.log(await k8sCreate(SecretModel, secret))
-    // console.log(await k8sCreate(ManagedKafkaRequestModel, mkRequest));
+    console.log(await k8sCreate(SecretModel, secret))
+    console.log(await k8sCreate(ManagedKafkaRequestModel, mkRequest));
     // TODO This is for tesing and should not be on this page
     k8sWatch(ManagedKafkaRequestModel.kind, {}).onmessage((msg) => {
-      // console.log("resource updated", msg)
+      console.log("resource updated", msg)
     })
   }
 
