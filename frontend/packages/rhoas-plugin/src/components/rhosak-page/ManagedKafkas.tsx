@@ -5,11 +5,13 @@ import NamespacedPage, {
 } from '@console/dev-console/src/components/NamespacedPage';
 import { FormFooter } from '@console/shared';
 import { history } from '@console/internal/components/utils';
+import AuthTokenModal from '../authentication-token/AuthTokenModal';
 
 const ManagedKafkas = () => {
   return (
     <>
       <NamespacedPage variant={NamespacedPageVariants.light} hideApplications>
+        <AuthTokenModal/>
         <StreamsInstancePage />
         <FormFooter
           isSubmitting={false}

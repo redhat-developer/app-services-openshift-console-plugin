@@ -18,7 +18,7 @@ import {
 } from '@console/shared';
 
 
-const ManagedServicesToken = () => {
+const AuthTokenModal = () => {
 
   // TODO change namespace from URL (args)
   const namespace = "default";
@@ -31,7 +31,7 @@ const ManagedServicesToken = () => {
     return "Loading"
   }
 
-  console.log(data, loadError);
+  // console.log(data, loadError);
 
   if (data) {
     return "Token already exist"
@@ -40,7 +40,7 @@ const ManagedServicesToken = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     const existingSecret = await k8sGet(SecretModel.kind, secretName, namespace, {})
-    console.log(existingSecret)
+    // console.log(existingSecret)
 
     if (existingSecret) {
       return;
@@ -73,19 +73,19 @@ const ManagedServicesToken = () => {
     };
 
     // TODO proper handling for create
-    console.log(await k8sCreate(SecretModel, secret))
-    console.log(await k8sCreate(ManagedKafkaRequestModel, mkRequest));
+    // console.log(await k8sCreate(SecretModel, secret))
+    // console.log(await k8sCreate(ManagedKafkaRequestModel, mkRequest));
     // TODO This is for tesing and should not be on this page
     k8sWatch(ManagedKafkaRequestModel.kind, {}).onmessage((msg) => {
-      console.log("resource updated", msg)
+      // console.log("resource updated", msg)
     })
   }
 
   return (
     <>
-      Managed Managed Kafka Access token.
+      {/* Managed Managed Kafka Access token. */}
       {/*  TODO Add environment abstraction */}
-      Go to https://qaprodauth.cloud.redhat.com/openshift/token to retrieve token
+      {/* Go to https://qaprodauth.cloud.redhat.com/openshift/token to retrieve token */}
 
       <FlexForm onSubmit={onSubmit}>
         <FormHeader title="Access token" helpText="token help" marginBottom="lg" />
@@ -105,4 +105,4 @@ const ManagedServicesToken = () => {
 
 }
 
-export default ManagedServicesToken;
+export default AuthTokenModal;
