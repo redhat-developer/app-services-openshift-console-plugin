@@ -9,7 +9,7 @@ import StreamsInstancePage from '../streams-list/StreamsInstancePage';
 import { ManagedKafkaModel } from './ManagedKafkaModel';
 import { ManagedKafkaRequestModel } from '../../models/rhoas';
 import { useActiveNamespace } from '@console/shared';
-import { k8sCreate, k8sPatch } from '@console/internal/module/k8s/resource';
+import { k8sCreate, k8sUpdate } from '@console/internal/module/k8s/resource';
 import { AccessTokenSecretName } from '../../const'
 import { KafkaMocks } from '../mocks/KafkaMocks';
 
@@ -33,17 +33,18 @@ const ManagedKafkas = () => {
       },
       spec: {
         accessTokenSecretName: AccessTokenSecretName,
-      },
-      status: {
-        lastUpdate: new Date().getTime(),
-        userKafkas: KafkaMocks
       }
     };
 
+    const status =  {
+      lastUpdate: new Date().getTime(),
+      userKafkas: KafkaMocks
+    }
     // FIXME Progress bar/Handling errors here?
     // FIXME Patch existing request if exist etc.
-    await k8sCreate(ManagedKafkaRequestModel, mkRequest)
-    await k8sPatch(ManagedKafkaRequestModel, mkRequest)
+    const resource = await k8sCreate(ManagedKafkaRequestModel, mkRequest)
+    resource.status = status;
+    await k8sUpdate(ManagedKafkaRequestModel, resource, currentNamespace, currentCRName)
     await new Promise((resolver) => {
       setTimeout(resolver, 3000);
     })
