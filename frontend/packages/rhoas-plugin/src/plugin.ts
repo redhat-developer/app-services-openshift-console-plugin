@@ -42,7 +42,7 @@ const plugin: Plugin<ConsumedExtensions> = [
         ).default,
     },
     flags: {
-      required: [],
+      required: [FLAG_RHOAS_KAFKA],
     },
   },
   {
@@ -53,36 +53,18 @@ const plugin: Plugin<ConsumedExtensions> = [
       loader: async () =>
         (
           await import(
-            './components/rhosak-page/ManagedKafkas' /* webpackChunkName: "managedservices-plugin-releases-list-page" */
+            './components/managed-services-kafka/ManagedKafkas' /* webpackChunkName: "managedservices-kafka-plugin-releases-kafka-page" */
           )
         ).default,
     },
     flags: {
-      required: [],
-    },
-  },
-  {
-    type: 'NavItem/Href',
-    properties: {
-      id: 'rhoas',
-      perspective: 'dev',
-      section: 'resources',
-      insertBefore: 'project',
-      componentProps: {
-        name: 'rhoas',
-        href: '/rhoas',
-        testID: 'rhoas',
-        'data-quickstart-id': 'qs-nav-helm',
-      },
-    },
-    flags: {
-      required: [],
+      required: [FLAG_RHOAS_KAFKA],
     },
   },
   {
     type: 'AddAction',
     flags: {
-      required: [],
+      required: [FLAG_RHOAS_KAFKA],
     },
     properties: {
       id: 'rhosak',
