@@ -47,6 +47,11 @@ export const catalogPage = {
         cy.get(catalogPO.catalogTypes.serviceClass).check();
         break;
       }
+      case catalogTypes.ManagedServices:
+      case 'Managed Services': {
+        cy.get(catalogPO.catalogTypes.managedServices).check();
+        break;
+      }
       default: {
         throw new Error('Card is not available in Catalog');
       }

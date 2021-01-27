@@ -95,6 +95,7 @@ export const catalogPO = {
     builderImage: '[data-test="kind-image-stream"]',
     template: '[data-test="kind-template"]',
     serviceClass: '[data-test="kind-cluster-service-class"]',
+    managedServices: '[data-test="kind-managed-service"]',
   },
   cards: {
     mariaDBTemplate: '[data-test="Template-mariadb-persistent"]',
