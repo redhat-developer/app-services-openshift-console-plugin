@@ -11,6 +11,7 @@ import {
 import { FLAG_RHOAS_KAFKA } from './const';
 import { rhoasTopologyPlugin, TopologyConsumedExtensions } from './topology/rhoas-topology-plugin'
 import * as models from './models';
+import { rhoasCatalogPlugin, CatalogConsumedExtensions } from './catalog/rhoas-catalog-plugin';
 
 type ConsumedExtensions = ModelDefinition
   | ModelFeatureFlag
@@ -18,6 +19,7 @@ type ConsumedExtensions = ModelDefinition
   | AddAction
   | HrefNavItem
   | TopologyConsumedExtensions
+  | CatalogConsumedExtensions
 
 const plugin: Plugin<ConsumedExtensions> = [
   {
@@ -79,7 +81,8 @@ const plugin: Plugin<ConsumedExtensions> = [
       icon: rhoasIcon,
     },
   },
-  ...rhoasTopologyPlugin
+  ...rhoasTopologyPlugin,
+  ...rhoasCatalogPlugin
 ];
 
 export default plugin;
