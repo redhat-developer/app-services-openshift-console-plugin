@@ -12,13 +12,11 @@ import { LockIcon } from '@patternfly/react-icons';
 import './ManagedServicesList.css';
 
 const ManagedServicesList = () => {
-
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [currentNamespace] = useActiveNamespace();
-  const namespace = currentNamespace;
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  console.log("Token page rendered for namespace ", namespace, AccessTokenSecretName)
-  const [tokenSecret] = useK8sWatchResource({ kind: SecretModel.kind, isList: false, name: AccessTokenSecretName, namespace, namespaced: true })
+  console.log("Token page rendered for namespace ", currentNamespace, AccessTokenSecretName)
+  const [tokenSecret] = useK8sWatchResource({ kind: SecretModel.kind, isList: false, name: AccessTokenSecretName, namespace: currentNamespace, namespaced: true })
 
 
   const checkTokenSecretStatus = () => {
@@ -31,7 +29,7 @@ const ManagedServicesList = () => {
   }
 
   const tokenStatusFooter = () => {
-    if(tokenSecret) {
+    if (tokenSecret) {
       return (
         <span>Unlocked</span>
       )
@@ -39,7 +37,7 @@ const ManagedServicesList = () => {
     else {
       return (
         <div className="temp-token-status-footer">
-          <LockIcon/>
+          <LockIcon />
           <span>Unlock with token</span>
         </div>
       )
