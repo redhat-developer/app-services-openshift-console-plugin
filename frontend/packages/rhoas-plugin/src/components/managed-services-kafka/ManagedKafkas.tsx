@@ -6,123 +6,84 @@ import { FormFooter } from '@console/shared';
 import { history } from '@console/internal/components/utils';
 import './ManagedKafkas.css';
 import StreamsInstancePage from '../streams-list/StreamsInstancePage';
-import { ManagedKafkaModel } from './ManagedKafkaModel';
-import { ManagedKafkaRequestModel, ManagedServiceAccountRequest, ManagedKafkaConnectionModel } from '../../models/rhoas';
+import { ManagedKafkaRequestModel } from '../../models/rhoas';
 import { useActiveNamespace } from '@console/shared';
-import { k8sCreate, k8sGet } from '@console/internal/module/k8s/resource';
-import { AccessTokenSecretName } from '../../const'
-import { KafkaMocks } from '../mocks/KafkaMocks';
-import { ServiceAccountSecretName } from '../../const';
+import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
+import { ManagedKafkaRequestCRName } from '../../const';
 import { Button, EmptyState, EmptyStateIcon, EmptyStateSecondaryActions, Title } from '@patternfly/react-core';
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
+import {
+  createManagedKafkaConnection,
+  createManagedKafkaRequestIfNeeded,
+  createServiceAccountIfNeeded,
+  listOfCurrentKafkaConnectionsById
+} from './resourceCreators';
+import { referenceForModel } from '@console/internal/module/k8s';
+
+import { KafkaRequest } from "./types"
 
 const ManagedKafkas = () => {
   const [currentNamespace] = useActiveNamespace();
-  // FIXME IMPORTANT: Name should be fixed later and patched if needed.
-  const currentCRName = 'kafkarequest' + currentNamespace + new Date().getTime();
-  const currentMSAName = 'managedservice' + currentNamespace + new Date().getTime();
-
-  const kafkaRequestData: ManagedKafkaModel[] = KafkaMocks;
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
-  const [serviceAccountExists, setServiceAccountExists] = React.useState(false);
+  const [serviceAccountCreated, setServiceAccountCreated] = React.useState(false);
   const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState([]);
 
-  console.log('what is length of currentKafkaConnections' + currentKafkaConnections.length);
-  console.log('what is length of kafkaRequestData' + kafkaRequestData.length)
-
-  const doesManagedServiceAccountExist = async () => {
-    const managedServiceAccounts = await k8sGet(ManagedServiceAccountRequest, null, currentNamespace);
-    if (managedServiceAccounts.items.length > 0) {
-      setServiceAccountExists(true);
+  const createKafkaRequestFlow = async () => {
+    await createManagedKafkaRequestIfNeeded(currentNamespace);
+    const accountCreated = await createServiceAccountIfNeeded(currentNamespace);
+    const currentKafka = await listOfCurrentKafkaConnectionsById(currentNamespace)
+    if (currentKafka) {
+      setCurrentKafkaConnections(currentKafka);
     }
-  }
-
-  const listOfCurrentKafkaConnectionsById = async () => {
-    const localArray = [];
-    const kafkaConnections = await k8sGet(ManagedKafkaConnectionModel, null, currentNamespace);
-    if (kafkaConnections) {
-      kafkaConnections.items.map((kafka) => {
-        const kafkaId = kafka.spec.kafkaId;
-        localArray.push(kafkaId);
-      })
-      setCurrentKafkaConnections(localArray);
+    if (accountCreated) {
+      setServiceAccountCreated(true);
     }
-  }
-
-  const createManagedKafkaRequest = async () => {
-    const mkRequest = {
-      apiVersion: ManagedKafkaRequestModel.apiGroup + "/" + ManagedKafkaRequestModel.apiVersion,
-      kind: ManagedKafkaRequestModel.kind,
-      metadata: {
-        name: currentCRName,
-        namespace: currentNamespace
-      },
-      spec: {
-        accessTokenSecretName: AccessTokenSecretName,
-      }
-    };
-
-    // FIXME Progress bar/Handling errors here?
-    // FIXME Patch existing request if exist etc.
-    await k8sCreate(ManagedKafkaRequestModel, mkRequest);
   }
 
   React.useEffect(() => {
-    createManagedKafkaRequest();
-    doesManagedServiceAccountExist();
-    listOfCurrentKafkaConnectionsById();
+    createKafkaRequestFlow()
   }, []);
 
-  const createManagedServiceAccount = async () => {
-    const serviceAcct = {
-      apiVersion: "rhoas.redhat.com/v1alpha1",
-      kind: ManagedServiceAccountRequest.kind,
-      metadata: {
-        name: currentMSAName,
-        namespace: currentNamespace
-      },
-      spec: {
-        serviceAccountName: "myServiceAccount",
-        reset: false,
-        description: "some service account",
-        serviceAccountSecretName: ServiceAccountSecretName
-      },
+  const [watchedKafkaRequest] = useK8sWatchResource<KafkaRequest>({
+    kind: referenceForModel(ManagedKafkaRequestModel),
+    name: ManagedKafkaRequestCRName,
+    namespace: currentNamespace,
+    isList: false
+  })
 
-    }
+  if (!watchedKafkaRequest || !watchedKafkaRequest.status) {
+    // TODO improve loader
+    return (<><h1>Loading</h1></>)
+  }
 
-    await k8sCreate(ManagedServiceAccountRequest, serviceAcct);
-  };
+  let watchedKafkasObject = watchedKafkaRequest.status.userKafkas;
+  console.log('what is kafkaRequestData', watchedKafkasObject);
+  const remoteKafkaInstances = [];
+  for (const kafkaName of Object.keys(watchedKafkasObject)) {
+    remoteKafkaInstances.push({ ...watchedKafkasObject[kafkaName], name: kafkaName })
+  }
 
-  const createManagedKafkaConnection = async (kafkaId, kafkaName) => {
-    const kafkaConnection = {
-      apiVersion: "rhoas.redhat.com/v1alpha1",
-      kind: ManagedKafkaConnectionModel.kind,
-      metadata: {
-        name: kafkaName,
-        namespace: currentNamespace
-      },
-      spec: {
-        kafkaId: kafkaId,
-        credentials: {
-          serviceAccountSecretName: ServiceAccountSecretName
-        }
-      }
-    }
-
-    await k8sCreate(ManagedKafkaConnectionModel, kafkaConnection);
-  };
+  if (remoteKafkaInstances.length === 0) {
+    return <NamespacedPage disabled variant={NamespacedPageVariants.light} hideApplications>
+      <EmptyState>
+        <EmptyStateIcon icon={CubesIcon} />
+        <Title headingLevel="h4" size="lg">
+          No Managed Kafka Clusters found
+        </Title>
+        <EmptyStateSecondaryActions>
+          <Button variant="link">Go back to Managed Services Catalog</Button>
+        </EmptyStateSecondaryActions>
+      </EmptyState>
+    </NamespacedPage>
+  }
 
   const createManagedKafkaConnectionFlow = async () => {
-    if (serviceAccountExists !== undefined || serviceAccountExists !== true) {
-      createManagedServiceAccount();
-    }
-
-    const kafkaId = kafkaRequestData[selectedKafka].id;
-    const kafkaName = kafkaRequestData[selectedKafka].name;
-
+    // TODO verify if service account sercret exist
+    const kafkaId = remoteKafkaInstances[selectedKafka].id;
+    const kafkaName = remoteKafkaInstances[selectedKafka].name;
     if (currentKafkaConnections) {
       if (!currentKafkaConnections.includes(kafkaId)) {
-        createManagedKafkaConnection(kafkaId, kafkaName);
+        createManagedKafkaConnection(kafkaId, kafkaName, currentNamespace);
       }
     }
     history.push(`/topology/ns/${currentNamespace}`);
@@ -132,7 +93,7 @@ const ManagedKafkas = () => {
     if (selectedKafka === null || selectedKafka === undefined) {
       return true;
     }
-    if (currentKafkaConnections.length === kafkaRequestData.length) {
+    if (currentKafkaConnections.length === remoteKafkaInstances.length) {
       return true;
     }
     else {
@@ -143,37 +104,26 @@ const ManagedKafkas = () => {
   return (
     <>
       <NamespacedPage disabled variant={NamespacedPageVariants.light} hideApplications>
-        {kafkaRequestData.length > 0 ? (
-          <>
-            <StreamsInstancePage
-              kafkaArray={kafkaRequestData}
-              setSelectedKafka={setSelectedKafka}
-              currentKafkaConnections={currentKafkaConnections}
+        <>
+          {serviceAccountCreated ? (<><p>Created Service Account</p></>) : ""}
+          <StreamsInstancePage
+            kafkaArray={remoteKafkaInstances}
+            setSelectedKafka={setSelectedKafka}
+            currentKafkaConnections={currentKafkaConnections}
+          />
+          <div className="co-m-pane__body" style={{ borderTop: 0, paddingTop: 0, paddingBottom: 0 }}>
+            <FormFooter
+              handleSubmit={() => createManagedKafkaConnectionFlow()}
+              isSubmitting={false}
+              errorMessage=""
+              submitLabel={"Create"}
+              disableSubmit={disableCreate()}
+              resetLabel="Reset"
+              sticky
+              handleCancel={history.goBack}
             />
-            <div className="co-m-pane__body" style={{ borderTop: 0, paddingTop: 0, paddingBottom: 0 }}>
-              <FormFooter
-                handleSubmit={() => createManagedKafkaConnectionFlow()}
-                isSubmitting={false}
-                errorMessage=""
-                submitLabel={"Create"}
-                disableSubmit={disableCreate()}
-                resetLabel="Reset"
-                sticky
-                handleCancel={history.goBack}
-              />
-            </div>
-          </>
-        ) : (
-            <EmptyState>
-              <EmptyStateIcon icon={CubesIcon} />
-              <Title headingLevel="h4" size="lg">
-                No Managed Kafka Clusters found
-            </Title>
-              <EmptyStateSecondaryActions>
-                <Button variant="link">Go back to Managed Services Catalog</Button>
-              </EmptyStateSecondaryActions>
-            </EmptyState>
-          )}
+          </div>
+        </>
       </NamespacedPage>
     </>
   );
