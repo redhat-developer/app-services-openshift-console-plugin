@@ -6,30 +6,26 @@ import {
 
 import { withEditReviewAccess } from '@console/topology/src/utils';
 import {
-  createConnectorCallback,
-  NodeComponentProps,
   nodeDragSourceSpec,
-  nodeDropTargetSpec,
   withContextMenu,
-  CreateConnector,
-  createMenuItems
+  createMenuItems,
 } from '@console/topology/src/components/graph-view';
 import {
   withDragNode,
   withSelection,
-  withDndDrop,
-  withCreateConnector,
 } from '@patternfly/react-topology';
 import { kebabOptionsToMenu } from '@console/internal/components/utils';
 import KafkaNode from './KafkaNode';
 import { K8sResourceKind, modelFor, referenceFor } from '@console/internal/module/k8s';
 import { KebabOption } from '@console/internal/components/utils';
-import {
-  Node,
-} from '@patternfly/react-topology';
 import { getResource } from '@console/topology/src/utils';
 import { ModifyApplication } from '@console/topology/src/actions';
 import { MANAGED_KAFKA_TOPOLOGY_TYPE } from '../rhoas-topology-plugin'
+
+import {
+  Node
+} from '@patternfly/react-topology';
+
 
 export const rhoasActions = (
   contextMenuResource: K8sResourceKind
@@ -53,26 +49,13 @@ export const getRhoasComponentFactory = (): ComponentFactory => {
     switch (type) {
       // Using resource kind as model kind for simplicity
       case MANAGED_KAFKA_TOPOLOGY_TYPE:
-        return withCreateConnector(
-          createConnectorCallback(),
-          CreateConnector,
-        )(
-          withDndDrop<
-            any,
-            any,
-            { droppable?: boolean; hover?: boolean; canDrop?: boolean },
-            NodeComponentProps
-          >(nodeDropTargetSpec)(
-            withEditReviewAccess('patch')(
-              withDragNode(nodeDragSourceSpec(type))(
-                withSelection({ controlled: true })(withContextMenu(rhoasContextMenu)(KafkaNode)),
-              ),
-            ),
-          ),
+        return withEditReviewAccess('patch')(
+          withDragNode(nodeDragSourceSpec(type))(
+            withSelection({ controlled: true })(withContextMenu(rhoasContextMenu)(KafkaNode)),
+          )
         );
       default:
         return undefined;
-
     }
   };
 };
