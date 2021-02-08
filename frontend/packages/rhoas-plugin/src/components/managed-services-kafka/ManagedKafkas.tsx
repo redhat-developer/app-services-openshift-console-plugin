@@ -28,6 +28,10 @@ const ManagedKafkas = () => {
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
   const [serviceAccountCreated, setServiceAccountCreated] = React.useState(false);
   const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState([]);
+  // const [remoteKafkaInstances, setRemoteKafkaInstances] = React.useState();
+  const [isWatchKafkasLoading, setIsWatchKafkasLoading] = React.useState(true);
+
+  let remoteKafkaInstances;
 
   const createKafkaRequestFlow = async () => {
     await createManagedKafkaRequestIfNeeded(currentNamespace);
@@ -52,29 +56,19 @@ const ManagedKafkas = () => {
     isList: false
   })
 
-  if (!watchedKafkaRequest || !watchedKafkaRequest.status) {
-    // TODO loader should be in center of page
-    return (
-      <div>
-        <LoadingBox/>
-      </div>
-    )
-  }
+  // if (!watchedKafkaRequest || !watchedKafkaRequest.status) {
+  //   // TODO loader should be in center of page
+  //   return (
+  //     <div>
+  //       <LoadingBox/>
+  //     </div>
+  //   )
+  // }
 
-  let remoteKafkaInstances = watchedKafkaRequest.status.userKafkas;
 
-  if (remoteKafkaInstances.length === 0) {
-    return <NamespacedPage disabled variant={NamespacedPageVariants.light} hideApplications>
-      <EmptyState>
-        <EmptyStateIcon icon={CubesIcon} />
-        <Title headingLevel="h4" size="lg">
-          No Managed Kafka Clusters found
-        </Title>
-        <EmptyStateSecondaryActions>
-          <Button variant="link">Go back to Managed Services Catalog</Button>
-        </EmptyStateSecondaryActions>
-      </EmptyState>
-    </NamespacedPage>
+  if (watchedKafkaRequest && watchedKafkaRequest.status) {
+    remoteKafkaInstances = watchedKafkaRequest.status.userKafkas;
+    setIsWatchKafkasLoading(false);
   }
 
   const createManagedKafkaConnectionFlow = async () => {
@@ -103,26 +97,29 @@ const ManagedKafkas = () => {
 
   return (
     <>
-      <NamespacedPage disabled variant={NamespacedPageVariants.light} hideApplications>
+      <NamespacedPage variant={NamespacedPageVariants.light} disabled hideApplications>
         <>
           {serviceAccountCreated ? (<><p>Created Service Account</p></>) : ""}
           <StreamsInstancePage
-            kafkaArray={remoteKafkaInstances}
+            kafkaArray={!isWatchKafkasLoading && remoteKafkaInstances}
             setSelectedKafka={setSelectedKafka}
             currentKafkaConnections={currentKafkaConnections}
+            isWatchKafkasLoading={isWatchKafkasLoading}
           />
-          <div className="co-m-pane__body" style={{ borderTop: 0, paddingTop: 0, paddingBottom: 0 }}>
-            <FormFooter
-              handleSubmit={() => createManagedKafkaConnectionFlow()}
-              isSubmitting={false}
-              errorMessage=""
-              submitLabel={"Create"}
-              disableSubmit={disableCreate()}
-              resetLabel="Reset"
-              sticky
-              handleCancel={history.goBack}
-            />
-          </div>
+          { remoteKafkaInstances && (
+            <div className="co-m-pane__body" style={{ borderTop: 0, paddingTop: 0, paddingBottom: 0 }}>
+              <FormFooter
+                handleSubmit={() => createManagedKafkaConnectionFlow()}
+                isSubmitting={false}
+                errorMessage=""
+                submitLabel={"Create"}
+                disableSubmit={disableCreate()}
+                resetLabel="Reset"
+                sticky
+                handleCancel={history.goBack}
+              />
+            </div>
+          )}
         </>
       </NamespacedPage>
     </>
