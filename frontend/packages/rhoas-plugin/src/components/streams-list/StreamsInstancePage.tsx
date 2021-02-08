@@ -4,20 +4,17 @@ import { PageBody } from '@console/shared';
 import StreamsInstanceFilter from './StreamsInstanceFilter';
 import StreamsInstanceTable from './StreamsInstanceTable';
 import { PageHeading } from '@console/internal/components/utils';
-import { LoadingBox } from '@console/internal/components/utils';
 import { ManagedKafkaEmptyState } from './../empty-state/ManagedKafkaEmptyState';
+import { history } from '@console/internal/components/utils';
+import { FormFooter } from '@console/shared';
 
 // FIXME full typed experience React.FC<{ kafkaArray: ManagedKafkaModel[]}>
-const StreamsInstancePage: any = ({ kafkaArray, setSelectedKafka, currentKafkaConnections, isWatchKafkasLoading }) => {
+const StreamsInstancePage: any = ({ kafkaArray, setSelectedKafka, currentKafkaConnections, currentNamespace, createManagedKafkaConnectionFlow, disableCreate }) => {
 
-  const [unableToConnect, setUnableToConnect] = React.useState(false);
+  const [allKafkasConnected, setAllKafkasConnected] = React.useState(false);
 
-  const countTimeLoaded = () => {
-    setUnableToConnect(true);
-  }
-
-  if (!unableToConnect) {
-    setTimeout(countTimeLoaded, 10000)
+  const goToTopology = () => {
+    history.push(`/topology/ns/${currentNamespace}`);
   }
 
   return (
@@ -31,22 +28,18 @@ const StreamsInstancePage: any = ({ kafkaArray, setSelectedKafka, currentKafkaCo
       >
         <p>The managed Kafka cluster selected below will appear in the topology view.</p>
       </PageHeading>
-      { unableToConnect ? (
-        <PageBody>
-          <ManagedKafkaEmptyState
-            title="Could not connect"
-            body="We weren't able to load your managed clusters"
-            action="Try again"
-            icon="TimesCircleIcon"
-          />
-        </PageBody>
-      ) : (
-        <PageBody>
-          { isWatchKafkasLoading ? <LoadingBox/> 
-          : kafkaArray.length === 0 ? (
+      <PageBody>
+          { kafkaArray.length === 0 ? (
             <ManagedKafkaEmptyState
               title="No Managed Kafka Clusters found"
-              action="Go back to Managed Services Catalog"
+              actionInfo="Go back to Managed Services Catalog"
+              icon="CubesIcon"
+            />
+          ) : allKafkasConnected ? (
+            <ManagedKafkaEmptyState
+              title="All Managed Kafka clusters are in use"
+              actionInfo="See Managed Kafka clusters in Topology view"
+              action={() => goToTopology()}
               icon="CubesIcon"
             />
           ) : (
@@ -56,11 +49,24 @@ const StreamsInstancePage: any = ({ kafkaArray, setSelectedKafka, currentKafkaCo
                 kafkaArray={kafkaArray}
                 setSelectedKafka={setSelectedKafka}
                 currentKafkaConnections={currentKafkaConnections}
+                allKafkasConnected={allKafkasConnected}
+                setAllKafkasConnected={setAllKafkasConnected}
               />
+              <div className="co-m-pane__body" style={{ borderTop: 0, paddingTop: 0, paddingBottom: 0 }}>
+                <FormFooter
+                  handleSubmit={() => createManagedKafkaConnectionFlow()}
+                  isSubmitting={false}
+                  errorMessage=""
+                  submitLabel={"Create"}
+                  disableSubmit={disableCreate()}
+                  resetLabel="Reset"
+                  sticky
+                  handleCancel={history.goBack}
+                />
+            </div>
             </>
           )}
         </PageBody>
-      )}
     </>
   );
 };
