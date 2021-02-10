@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { SecretModel } from '@console/internal/models';
 import { k8sCreate } from '@console/internal/module/k8s/resource';
-import { Button, Form, FormGroup, Modal, ModalVariant, TextInput } from '@patternfly/react-core';
+import { ActionGroup, Button, Form, FormGroup, TextInput, TextContent, Text, TextVariants } from '@patternfly/react-core';
 import { useActiveNamespace } from '@console/shared';
 import { AccessTokenSecretName } from '../../const';
 import { createServiceAccountIfNeeded } from '../managed-services-kafka/resourceCreators';
 import { useTranslation } from 'react-i18next';
 
 // TODO Full typings
-const AccessManagedServices: any = ({ isModalOpen, setIsModalOpen }) => {
+export const AccessManagedServices: any = () => {
   const [apiTokenValue, setApiTokenValue] = React.useState("");
   const [currentNamespace] = useActiveNamespace();
   const namespace = currentNamespace;
@@ -30,11 +30,6 @@ const AccessManagedServices: any = ({ isModalOpen, setIsModalOpen }) => {
 
     await k8sCreate(SecretModel, secret);
     await createServiceAccountIfNeeded(namespace);
-    setIsModalOpen(false);
-  }
-
-  const handleModalToggle = () => {
-    setIsModalOpen(!isModalOpen);
   }
 
   const handleApiTokenValueChange = (value) => {
@@ -43,25 +38,14 @@ const AccessManagedServices: any = ({ isModalOpen, setIsModalOpen }) => {
 
   return (
     <>
-      <Modal
-        title={t('rhoas-plugin~Access Red Hat application services')}
-        isOpen={isModalOpen}
-        onClose={handleModalToggle}
-        variant={ModalVariant.small}
-        actions={[
-          <Button key="confirm" variant="primary" onClick={onCreate} isDisabled={apiTokenValue.length < 1 ? true : false}>
-            {t('rhoas-plugin~Create')}
-          </Button>,
-          <Button key="cancel" variant="link" onClick={handleModalToggle}>
-            {t('rhoas-plugin~Cancel')}
-          </Button>
-        ]}
-      >
-        {t('rhoas-plugin~To access this application service, input the API token which can be located at')}
-        <a href="https://cloud.redhat.com/openshift/token" target="_blank"> https://cloud.redhat.com/openshift/token</a>
-        <br />
-        <br />
-        <Form>
+      <TextContent>
+        <Text component={TextVariants.h2}>{t('rhoas-plugin~Access Red Hat application services')}</Text>
+        <Text component={TextVariants.p}>
+          {t('rhoas-plugin~To access this application service, input the API token which can be located at')}
+          <a href="https://cloud.redhat.com/openshift/token" target="_blank"> https://cloud.redhat.com/openshift/token</a>
+        </Text>
+      </TextContent>
+      <Form>
           <FormGroup
             fieldId="api-token-value"
             label="API Token"
@@ -79,12 +63,18 @@ const AccessManagedServices: any = ({ isModalOpen, setIsModalOpen }) => {
               placeholder=""
             />
           </FormGroup>
+          <FormGroup fieldId="help-text">
+            {t('rhoas-plugin~Cant create an access token? Contact your administrator')}
+          </FormGroup>
+          <ActionGroup>
+            <Button key="confirm" variant="primary" onClick={onCreate} isDisabled={apiTokenValue.length < 1 ? true : false}>
+              {t('rhoas-plugin~Create')}
+            </Button>,
+            <Button key="cancel" variant="link">
+              {t('rhoas-plugin~Cancel')}
+            </Button>
+          </ActionGroup>
         </Form>
-        <br />
-        {t('rhoas-plugin~Cant create an access token? Contact your administrator')}
-      </Modal>
     </>
   )
 }
-
-export default AccessManagedServices;

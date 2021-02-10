@@ -3,7 +3,7 @@ import { Gallery, GalleryItem, Label } from '@patternfly/react-core';
 import { CatalogTile } from '@patternfly/react-catalog-view-extension';
 import { history } from '@console/internal/components/utils';
 import { PageLayout } from '@console/shared';
-import AccessManagedServices from '../access-managed-services/AccessManagedServices';
+// import AccessManagedServices from '../access-managed-services/AccessManagedServices';
 import { AccessTokenSecretName, managedKafkaIcon } from '../../const';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
 import { SecretModel } from '@console/internal/models';
@@ -16,16 +16,12 @@ import { useTranslation } from 'react-i18next';
 
 const ManagedServicesList = () => {
   const [currentNamespace] = useActiveNamespace();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [tokenSecret] = useK8sWatchResource({ kind: SecretModel.kind, isList: false, name: AccessTokenSecretName, namespace: currentNamespace, namespaced: true })
   const { t } = useTranslation();
 
   const checkTokenSecretStatus = () => {
     if (tokenSecret) {
       history.push("/managedServices/managedkafka");
-    }
-    else {
-      setIsModalOpen(true);
     }
   }
 
@@ -65,10 +61,10 @@ const ManagedServicesList = () => {
               />
             </GalleryItem>
           </Gallery>
-          <AccessManagedServices
+          {/* <AccessManagedServices
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-          />
+          /> */}
         </PageLayout>
       </NamespacedPage>
     </>
