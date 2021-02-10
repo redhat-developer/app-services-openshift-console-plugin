@@ -39,7 +39,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     },
   ];
 
-  const services = React.useMemo(() => rhoasServices, []);
+  const services = React.useMemo(() => rhoasServices, [rhoasServices]);
   return [services, true, undefined];
 };
 
