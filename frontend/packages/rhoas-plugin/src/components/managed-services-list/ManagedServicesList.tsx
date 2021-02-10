@@ -57,7 +57,7 @@ const ManagedServicesList = () => {
                 className="co-kafka-tile"
                 onClick={() => checkTokenSecretStatus()}
                 title={t('rhoas-plugin~Red Hat OpenShift Application Services')}
-                iconImg={managedKafkaIcon}
+                iconImg={managedServicesIcon}
                 iconClass={""}
                 icon={""}
                 description={t('rhoas-plugin~RHOAS can include Managed Kafka, Service Registry, custom resources for Managed Kafka, and Open Data Hub')}
