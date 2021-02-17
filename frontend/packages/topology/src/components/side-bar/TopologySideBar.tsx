@@ -23,6 +23,7 @@ import {
   TYPE_HELM_RELEASE,
   TYPE_HELM_WORKLOAD,
 } from '@console/helm-plugin/src/topology/components/const';
+import { TYPE_MANAGED_KAFKA_CONNECTION } from '@console/rhoas-plugin/src/topology/components/const';
 import { TopologyDataObject } from '../../topology-types';
 import { TYPE_APPLICATION_GROUP, TYPE_SERVICE_BINDING } from '../../const';
 import { OdcBaseEdge } from '../../elements';
@@ -74,7 +75,7 @@ export const SelectedItemDetails: React.FC<SelectedItemDetailsProps> = observer(
       if (selectedEntity.getType() === TYPE_HELM_RELEASE) {
         return <TopologyHelmReleasePanel helmRelease={selectedEntity} />;
       }
-      if (selectedEntity.getType() === "ManagedKafkaConnection") {
+      if (selectedEntity.getType() === TYPE_MANAGED_KAFKA_CONNECTION) {
         return <TopologyKafkaPanel item={selectedEntity} />;
       }
       if (selectedEntity.getType() === TYPE_HELM_WORKLOAD) {
