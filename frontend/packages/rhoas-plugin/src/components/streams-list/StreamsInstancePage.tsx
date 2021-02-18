@@ -17,6 +17,15 @@ const StreamsInstancePage: any = ({ kafkaArray,
   disableCreate }) => {
 
   const [allKafkasConnected, setAllKafkasConnected] = React.useState(false);
+
+  const [pageKafkas, setPageKafkas] = React.useState();
+
+  React.useEffect(() => {
+    setPageKafkas(kafkaArray);
+  }, [kafkaArray]);
+
+  console.log('what is kafkaArray' + kafkaArray);
+
   const { t } = useTranslation();
 
   const goToTopology = () => {
@@ -50,9 +59,13 @@ const StreamsInstancePage: any = ({ kafkaArray,
           />
         ) : (
               <>
-                <StreamsInstanceFilter />
+                <StreamsInstanceFilter
+                  pageKafkas={pageKafkas}
+                  setPageKafkas={setPageKafkas}
+                />
                 <StreamsInstanceTable
-                  kafkaArray={kafkaArray}
+                  pageKafkas={pageKafkas}
+                  setPageKafkas={setPageKafkas}
                   setSelectedKafka={setSelectedKafka}
                   currentKafkaConnections={currentKafkaConnections}
                   allKafkasConnected={allKafkasConnected}
