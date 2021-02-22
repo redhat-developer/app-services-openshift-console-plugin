@@ -143,12 +143,12 @@ const StreamsInstanceTable: any = ({
     }
 
     const sortedRows = kafkaRows.sort(function(a, b) {
-      const a = a[filterKey];
-      const b = b[filterKey];
-      if(a < b) {
+      const keyA = a[filterKey];
+      const keyB = b[filterKey];
+      if(keyA < keyB) {
         return -1;
       }
-      if(a > b) {
+      if(keyA > keyB) {
         return 1;
       }
       else {
