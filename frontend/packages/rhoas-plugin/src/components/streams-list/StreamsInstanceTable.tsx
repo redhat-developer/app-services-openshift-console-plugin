@@ -11,7 +11,6 @@ import {
 } from '@patternfly/react-core';
 import {
   sortable,
-  cellWidth,
   Table,
   TableHeader,
   TableBody,
@@ -28,7 +27,14 @@ type FormattedKafkas = {
   selected: boolean;
 };
 
-const StreamsInstanceTable: any = ({ pageKafkas, setSelectedKafka, currentKafkaConnections, setAllKafkasConnected }) => {
+const StreamsInstanceTable: any = ({
+  kafkaArray,
+  pageKafkas,
+  setSelectedKafka,
+  currentKafkaConnections,
+  setAllKafkasConnected,
+  handleTextInputNameChange
+}) => {
 
   const [formattedKafkas, setFormattedKafkas] = React.useState<FormattedKafkas[]>([]);
   const [kafkaRows, setKafkaRows] = React.useState(pageKafkas);
@@ -46,11 +52,11 @@ const StreamsInstanceTable: any = ({ pageKafkas, setSelectedKafka, currentKafkaC
           { title: <a href="/">{owner}</a> },
           { title: <Timestamp timestamp={createdAt} /> },
         ],
-        ...(currentKafkaConnections.includes(id) && { disableSelection : true })
+        ...((currentKafkaConnections.includes(id) || bootstrapServerHost.length < 1) && { disableSelection : true })
       }
     })
 
-    if(pageKafkas && pageKafkas.length === currentKafkaConnections.length) {
+    if(kafkaArray && kafkaArray.length === currentKafkaConnections.length) {
       setAllKafkasConnected(true);
     }
     else {
@@ -65,30 +71,35 @@ const StreamsInstanceTable: any = ({ pageKafkas, setSelectedKafka, currentKafkaC
 
   const tableColumns = [
     { title: t('rhoas-plugin~Cluster Name'), transforms: [sortable] },
-    { title: t('rhoas-plugin~Bootstrap URL'), transforms: [sortable, cellWidth(20)] },
+    { title: t('rhoas-plugin~Bootstrap URL'), transforms: [sortable] },
     { title: t('rhoas-plugin~Provider'), transforms: [sortable] },
     { title: t('rhoas-plugin~Region'), transforms: [sortable] },
     { title: t('rhoas-plugin~Owner'), transforms: [sortable] },
     { title: t('rhoas-plugin~Created'), transforms: [sortable] },
   ];
 
+  const clearFilters = () => {
+    const value = '';
+    handleTextInputNameChange(value);
+  }
+
   const emptyStateRows = [
     {
       heightAuto: true,
       cells: [
         {
-          props: { colSpan: 8 },
+          props: { colSpan: 6 },
           title: (
             <Bullseye>
               <EmptyState variant={EmptyStateVariant.small}>
                 <EmptyStateIcon icon={SearchIcon} />
                 <Title headingLevel="h2" size="lg">
-                  No results found
+                  No Managed Kafka clusters found 
                 </Title>
                 <EmptyStateBody>
-                  No results match the filter criteria. Remove all filters or clear all filters to show results.
+                  No results match the filter criteria
                 </EmptyStateBody>
-                <Button variant="link">Clear all filters</Button>
+                <Button variant="link" onClick={clearFilters}>Clear filters</Button>
               </EmptyState>
             </Bullseye>
           )
@@ -107,10 +118,43 @@ const StreamsInstanceTable: any = ({ pageKafkas, setSelectedKafka, currentKafkaC
   };
 
   const onSort = (_event, index, direction) => {
-    console.log('what is index' + index);
-    const sortedRows = kafkaRows.sort((a,b) =>
-      (a[index] < b[index] ? -1 : a[index] > b[index] ? 1 : 0));
+    let filterKey = "";
+    switch (index) {
+      case 1:
+        filterKey = "name";
+        break;
+      case 2:
+        filterKey = "bootstrapServerHost";
+        break;
+      case 3:
+        filterKey = "provider";
+        break;
+      case 4:
+        filterKey = "region";
+        break;
+      case 5:
+        filterKey = "owner";
+        break;
+      case 6:
+        filterKey = "createdAt";
+        break;
+      default:
+        return;
+    }
 
+    const sortedRows = kafkaRows.sort(function(a, b) {
+      const a = a[filterKey];
+      const b = b[filterKey];
+      if(a < b) {
+        return -1;
+      }
+      if(a > b) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    });
     setSortBy({index, direction});
     formatTableRowData(direction === SortByDirection.asc ? sortedRows : sortedRows.reverse())
     setKafkaRows(direction === SortByDirection.asc ? sortedRows : sortedRows.reverse())
@@ -118,7 +162,7 @@ const StreamsInstanceTable: any = ({ pageKafkas, setSelectedKafka, currentKafkaC
 
   return (
     <>
-    { formattedKafkas || pageKafkas && (
+    { formattedKafkas && pageKafkas && (
       <Table
         aria-label={t('rhoas-plugin~List of Kafka Instances')}
         cells={tableColumns}

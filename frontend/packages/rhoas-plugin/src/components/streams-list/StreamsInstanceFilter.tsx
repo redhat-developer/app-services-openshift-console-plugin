@@ -7,40 +7,10 @@ import {
   ToolbarItem,
   ToolbarGroup,
 } from '@patternfly/react-core';
+import './StreamsInstanceFilter.css';
 
-const StreamsInstanceFilter = ({ pageKafkas, setPageKafkas }) => {
-  console.log('what is kafkaArray' + JSON.stringify(pageKafkas));
-  const [textInputNameValue, setTextInputNameValue] = React.useState('');
-  // const [kafkaNamesList, setKafkaNamesList] = React.useState([]);
+const StreamsInstanceFilter = ({textInputNameValue, handleTextInputNameChange }) => {
   const { t } = useTranslation();
-
-  // const getListOfKafkaNames
-
-  // React.useEffect(() => {
-
-  // }, [kafkaArray]);
-
-
-  const handleTextInputNameChange = value => {
-    setTextInputNameValue(value);
-
-
-      let filteredKafkas = pageKafkas.filter(kafka => kafka.name.includes(value));
-      console.log('what is filteredKafkas' + JSON.stringify(filteredKafkas));
-      setPageKafkas(filteredKafkas);
-
-      // pageKafkas.forEach(kafka => {
-      //   console.log('what is kafka.name' + kafka.name);
-      //   if(kafka.name.includes(value)) {
-      //     console.log('includes value');
-      //   }
-      //   else {
-      //     console.log('does not includes value');
-      //   }
-      // })
-
-    
-  };
 
   return (
     <Toolbar id="toolbar-filter-instances">
@@ -53,6 +23,7 @@ const StreamsInstanceFilter = ({ pageKafkas, setPageKafkas }) => {
               onChange={handleTextInputNameChange}
               aria-label={t('rhoas-plugin~Search by name')}
               placeholder={t('rhoas-plugin~Search by name...')}
+              className="mk-streams-filter"
             />
           </ToolbarItem>
         </ToolbarGroup>
