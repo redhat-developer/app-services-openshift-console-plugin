@@ -17,11 +17,23 @@ const StreamsInstancePage: any = ({ kafkaArray,
   disableCreate }) => {
 
   const [allKafkasConnected, setAllKafkasConnected] = React.useState(false);
+  const [textInputNameValue, setTextInputNameValue] = React.useState('');
+  const [pageKafkas, setPageKafkas] = React.useState(kafkaArray);
   const { t } = useTranslation();
+
+  React.useEffect(() => {
+    setPageKafkas(kafkaArray);
+  }, [kafkaArray]);
 
   const goToTopology = () => {
     history.push(`/topology/ns/${currentNamespace}`);
   }
+
+  const handleTextInputNameChange = value => {
+    let filteredKafkas = kafkaArray.filter(kafka => kafka.name.includes(value));
+    setPageKafkas(filteredKafkas);
+    setTextInputNameValue(value);
+  };
 
   return (
     <>
@@ -35,24 +47,31 @@ const StreamsInstancePage: any = ({ kafkaArray,
         <p>{t('rhoas-plugin~The managed Kafka cluster selected below will appear on the topology view.')}</p>
       </PageHeading>
       <PageBody>
-        {kafkaArray.length === 0 ? (
-          <ManagedKafkaEmptyState
-            title={t('rhoas-plugin~No Managed Kafka Clusters found')}
-            actionInfo={t('rhoas-plugin~Go back to Managed Services Catalog')}
-            icon="CubesIcon"
-          />
-        ) : allKafkasConnected ? (
+        { allKafkasConnected ? (
           <ManagedKafkaEmptyState
             title={t('rhoas-plugin~All Managed Kafka clusters are in use')}
             actionInfo={t('rhoas-plugin~See Managed Kafka clusters in Topology view')}
             action={() => goToTopology()}
             icon="CubesIcon"
           />
-        ) : (
+        ) : kafkaArray.length === 0 ? (
+          <ManagedKafkaEmptyState
+            title={t('rhoas-plugin~No Managed Kafka Clusters found')}
+            actionInfo={t('rhoas-plugin~Go back to Managed Services Catalog')}
+            icon="CubesIcon"
+          />
+          ) : (
               <>
-                <StreamsInstanceFilter />
+                <StreamsInstanceFilter
+                  textInputNameValue={textInputNameValue}
+                  handleTextInputNameChange={handleTextInputNameChange}
+                />
                 <StreamsInstanceTable
                   kafkaArray={kafkaArray}
+                  pageKafkas={pageKafkas}
+                  setPageKafkas={setPageKafkas}
+                  setTextInputNameValue={setTextInputNameValue}
+                  handleTextInputNameChange={handleTextInputNameChange}
                   setSelectedKafka={setSelectedKafka}
                   currentKafkaConnections={currentKafkaConnections}
                   allKafkasConnected={allKafkasConnected}
