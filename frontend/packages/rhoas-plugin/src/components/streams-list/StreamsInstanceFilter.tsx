@@ -7,24 +7,31 @@ import {
   ToolbarItem,
   ToolbarGroup,
 } from '@patternfly/react-core';
-import './StreamsInstanceFilter.css';
+import { useDocumentListener, KEYBOARD_SHORTCUTS } from '@console/shared';
 
-const StreamsInstanceFilter = ({textInputNameValue, handleTextInputNameChange }) => {
+const StreamsInstanceFilter = ({ textInputNameValue, handleTextInputNameChange }) => {
   const { t } = useTranslation();
+  const { ref } = useDocumentListener();
 
   return (
     <Toolbar id="toolbar-filter-instances">
       <ToolbarContent>
         <ToolbarGroup variant="filter-group">
           <ToolbarItem>
-            <TextInput
-              value={textInputNameValue}
-              type="text"
-              onChange={handleTextInputNameChange}
-              aria-label={t('rhoas-plugin~Search by name')}
-              placeholder={t('rhoas-plugin~Search by name...')}
-              className="mk-streams-filter"
-            />
+            <div className="has-feedback">
+              <TextInput
+                value={textInputNameValue}
+                type="text"
+                onChange={handleTextInputNameChange}
+                aria-label={t('rhoas-plugin~Search by name')}
+                placeholder={t('rhoas-plugin~Search by name...')}
+                className="co-text-filter"
+                ref={ref}
+              />
+              <span className="form-control-feedback form-control-feedback--keyboard-hint">
+                <kbd>{KEYBOARD_SHORTCUTS.focusFilterInput}</kbd>
+              </span>
+            </div>
           </ToolbarItem>
         </ToolbarGroup>
       </ToolbarContent>
