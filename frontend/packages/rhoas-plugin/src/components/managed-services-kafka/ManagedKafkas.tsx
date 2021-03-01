@@ -16,12 +16,12 @@ import {
   listOfCurrentKafkaConnectionsById
 } from './resourceCreators';
 import './ManagedKafkas.css';
-import { KafkaRequest } from "./types"
+import { ManagedKafka, KafkaRequest } from '../../types/rhoas-types';
 
 const ManagedKafkas = () => {
   const [currentNamespace] = useActiveNamespace();
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
-  const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState([]);
+  const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState<Array<string>>([]);
 
   const createKafkaRequestFlow = async () => {
     await createManagedServicesRequestIfNeeded(currentNamespace);
@@ -66,7 +66,7 @@ const ManagedKafkas = () => {
     history.push(`/topology/ns/${currentNamespace}`);
   };
 
-  const disableCreate = () => {
+  const disableCreateButton = () => {
     if (selectedKafka === null || selectedKafka === undefined) {
       return true;
     }
@@ -83,11 +83,11 @@ const ManagedKafkas = () => {
       <NamespacedPage variant={NamespacedPageVariants.light} disabled hideApplications>
         <StreamsInstancePage
           kafkaArray={remoteKafkaInstances}
+          selectedKafka={selectedKafka}
           setSelectedKafka={setSelectedKafka}
           currentKafkaConnections={currentKafkaConnections}
-          currentNamespace={currentNamespace}
           createManagedKafkaConnectionFlow={createManagedKafkaConnectionFlow}
-          disableCreate={disableCreate}
+          disableCreateButton={disableCreateButton}
         />
       </NamespacedPage>
     </>

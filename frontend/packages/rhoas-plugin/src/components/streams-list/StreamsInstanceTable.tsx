@@ -18,23 +18,35 @@ import {
   SortByDirection
 } from '@patternfly/react-table';
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
-
 import { Timestamp } from '@console/internal/components/utils';
 import './StreamsInstanceTable.css';
+import { ManagedKafka } from '../../types/rhoas-types';
 
 type FormattedKafkas = {
   cells: JSX.Element[];
   selected: boolean;
 };
 
-const StreamsInstanceTable: any = ({
+type StreamsInstanceTableProps = {
+  kafkaArray: ManagedKafka[];
+  pageKafkas: ManagedKafka[];
+  selectedKafka: number;
+  setSelectedKafka: (selectedKafka: number) => {};
+  currentKafkaConnections: Array<string>;
+  allKafkasConnected: boolean;
+  setAllKafkasConnected: (allKafkasConnected: boolean) => {};
+  value: string;
+  handleTextInputNameChange: (value: string) => void;
+}
+
+const StreamsInstanceTable = ({
   kafkaArray,
   pageKafkas,
   setSelectedKafka,
   currentKafkaConnections,
   setAllKafkasConnected,
   handleTextInputNameChange
-}) => {
+}: StreamsInstanceTableProps) => {
 
   const [formattedKafkas, setFormattedKafkas] = React.useState<FormattedKafkas[]>([]);
   const [kafkaRows, setKafkaRows] = React.useState(pageKafkas);
