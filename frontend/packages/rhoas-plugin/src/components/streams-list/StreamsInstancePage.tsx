@@ -8,17 +8,29 @@ import { PageHeading } from '@console/internal/components/utils';
 import StreamsInstanceFilter from './StreamsInstanceFilter';
 import StreamsInstanceTable from './StreamsInstanceTable';
 import { ManagedKafkaEmptyState } from './../empty-state/ManagedKafkaEmptyState';
+import { useActiveNamespace } from '@console/shared';
+import { ManagedKafka } from '../../types/rhoas-types';
 
-const StreamsInstancePage: any = ({ kafkaArray,
+type StreamsInstancePageProps = {
+  kafkaArray: ManagedKafka[];
+  selectedKafka: number;
+  setSelectedKafka: (selectedKafka: number) => {};
+  currentKafkaConnections: Array<string>;
+  createManagedKafkaConnectionFlow: () => {};
+  disableCreateButton: () => {} | boolean;
+}
+
+const StreamsInstancePage = ({ kafkaArray,
+  selectedKafka,
   setSelectedKafka,
   currentKafkaConnections,
-  currentNamespace,
   createManagedKafkaConnectionFlow,
-  disableCreate }) => {
+  disableCreateButton }: StreamsInstancePageProps) => {
 
-  const [allKafkasConnected, setAllKafkasConnected] = React.useState(false);
-  const [textInputNameValue, setTextInputNameValue] = React.useState('');
-  const [pageKafkas, setPageKafkas] = React.useState(kafkaArray);
+  const [currentNamespace] = useActiveNamespace();
+  const [allKafkasConnected, setAllKafkasConnected] = React.useState<boolean>(false);
+  const [textInputNameValue, setTextInputNameValue] = React.useState<string>("");
+  const [pageKafkas, setPageKafkas] = React.useState<ManagedKafka[]>(kafkaArray);
   const { t } = useTranslation();
 
   React.useEffect(() => {
@@ -29,7 +41,7 @@ const StreamsInstancePage: any = ({ kafkaArray,
     history.push(`/topology/ns/${currentNamespace}`);
   }
 
-  const handleTextInputNameChange = value => {
+  const handleTextInputNameChange = (value: string) => {
     let filteredKafkas = kafkaArray.filter(kafka => kafka.name.includes(value));
     setPageKafkas(filteredKafkas);
     setTextInputNameValue(value);
@@ -72,6 +84,7 @@ const StreamsInstancePage: any = ({ kafkaArray,
                   setPageKafkas={setPageKafkas}
                   setTextInputNameValue={setTextInputNameValue}
                   handleTextInputNameChange={handleTextInputNameChange}
+                  selectedKafka={selectedKafka}
                   setSelectedKafka={setSelectedKafka}
                   currentKafkaConnections={currentKafkaConnections}
                   allKafkasConnected={allKafkasConnected}
@@ -83,7 +96,7 @@ const StreamsInstancePage: any = ({ kafkaArray,
                     isSubmitting={false}
                     errorMessage=""
                     submitLabel={t('rhoas-plugin~Create')}
-                    disableSubmit={disableCreate()}
+                    disableSubmit={disableCreateButton()}
                     resetLabel={t('rhoas-plugin~Reset')}
                     sticky
                     handleCancel={history.goBack}
