@@ -9,7 +9,14 @@ import {
 import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
 
-export const ManagedKafkaEmptyState: any = ({ title, body, actionInfo, action, icon }) => {
+type ManagedKafkaEmptyStateProps = {
+  title: string;
+  actionInfo: string;
+  action?: () => void;
+  icon: string;
+}
+
+export const ManagedKafkaEmptyState = ({ title, actionInfo, action, icon }: ManagedKafkaEmptyStateProps) => {
 
   const renderIcon = () => {
     switch (icon) {
@@ -28,11 +35,6 @@ export const ManagedKafkaEmptyState: any = ({ title, body, actionInfo, action, i
     <Title headingLevel="h4" size="lg">
       {title}
     </Title>
-    {body &&
-      <EmptyStateBody>
-        {body}
-      </EmptyStateBody>
-    }
     <Button variant="link" onClick={action && action}>{actionInfo}</Button>
   </EmptyState>
   )
