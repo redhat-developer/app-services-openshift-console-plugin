@@ -2,7 +2,6 @@ import * as React from 'react';
 import { 
   Button, 
   EmptyState,
-  EmptyStateBody,
   EmptyStateIcon,
   Title 
 } from '@patternfly/react-core';
