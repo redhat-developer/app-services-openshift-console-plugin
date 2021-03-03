@@ -15,8 +15,7 @@ import {
   createManagedServicesRequestIfNeeded,
   listOfCurrentKafkaConnectionsById
 } from './resourceCreators';
-import './ManagedKafkas.css';
-import { ManagedKafka, KafkaRequest } from '../../types/rhoas-types';
+import { KafkaRequest } from '../../types/rhoas-types';
 
 const ManagedKafkas = () => {
   const [currentNamespace] = useActiveNamespace();

@@ -31,12 +31,11 @@ type StreamsInstanceTableProps = {
   kafkaArray: ManagedKafka[];
   pageKafkas: ManagedKafka[];
   selectedKafka: number;
-  setSelectedKafka: (selectedKafka: number) => {};
+  setSelectedKafka: (selectedKafka: number) => void;
   currentKafkaConnections: Array<string>;
   allKafkasConnected: boolean;
-  setAllKafkasConnected: (allKafkasConnected: boolean) => {};
-  value: string;
-  handleTextInputNameChange: (value: string) => void;
+  setAllKafkasConnected: (allKafkasConnected: boolean) => void;
+  handleTextInputNameChange: (arg0: string) => void;
 }
 
 const StreamsInstanceTable = ({

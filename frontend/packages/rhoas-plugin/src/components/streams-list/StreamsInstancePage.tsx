@@ -14,10 +14,10 @@ import { ManagedKafka } from '../../types/rhoas-types';
 type StreamsInstancePageProps = {
   kafkaArray: ManagedKafka[];
   selectedKafka: number;
-  setSelectedKafka: (selectedKafka: number) => {};
+  setSelectedKafka: (selectedKafka: number) => void;
   currentKafkaConnections: Array<string>;
   createManagedKafkaConnectionFlow: () => {};
-  disableCreateButton: () => {} | boolean;
+  disableCreateButton: () => boolean;
 }
 
 const StreamsInstancePage = ({ kafkaArray,
@@ -81,8 +81,6 @@ const StreamsInstancePage = ({ kafkaArray,
                 <StreamsInstanceTable
                   kafkaArray={kafkaArray}
                   pageKafkas={pageKafkas}
-                  setPageKafkas={setPageKafkas}
-                  setTextInputNameValue={setTextInputNameValue}
                   handleTextInputNameChange={handleTextInputNameChange}
                   selectedKafka={selectedKafka}
                   setSelectedKafka={setSelectedKafka}
