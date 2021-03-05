@@ -71,11 +71,7 @@ const ManagedKafkas = () => {
   const createManagedKafkaConnectionFlow = async () => {
     const kafkaId = remoteKafkaInstances[selectedKafka].id;
     const kafkaName = remoteKafkaInstances[selectedKafka].name;
-    if (currentKafkaConnections) {
-      if (!currentKafkaConnections.includes(kafkaId)) {
-        createManagedKafkaConnection(kafkaId, kafkaName, currentNamespace);
-      }
-    }
+    createManagedKafkaConnection(kafkaId, kafkaName, currentNamespace);
     history.push(`/topology/ns/${currentNamespace}`);
   };
 

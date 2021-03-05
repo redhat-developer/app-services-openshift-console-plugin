@@ -1,4 +1,4 @@
-import { k8sCreate, k8sGet, k8sPatch } from '@console/internal/module/k8s/resource';
+import { k8sCreate, k8sGet, k8sPatch, k8sWaitForUpdate, k8sWatch } from '@console/internal/module/k8s/resource';
 import * as _ from 'lodash';
 import {
   AccessTokenSecretName,
@@ -12,6 +12,7 @@ import {
   ManagedServiceAccountRequest,
   ManagedKafkaConnectionModel,
 } from '../../models/rhoas';
+import { getFinishedCondition } from '../../utils/conditionHandler';
 
 /**
  * Create service account for purpose of supplying connection credentials
@@ -162,7 +163,18 @@ export const createManagedKafkaConnection = async (
     },
   };
 
-  await k8sCreate(ManagedKafkaConnectionModel, kafkaConnection);
+  const createdConnection = await k8sCreate(ManagedKafkaConnectionModel, kafkaConnection);
+  return await k8sWaitForUpdate(ManagedKafkaConnectionModel, createdConnection, (resource) => {
+    const condition = getFinishedCondition(resource);
+    if (condition) {
+      if (condition.status === "True") {
+        return true
+      } else {
+        throw new Error(`Message: ${condition.message} reason: ${condition.reason}`)
+      }
+    }
+    return false
+  }, 10000)
 };
 
 export const listOfCurrentKafkaConnectionsById = async (currentNamespace: string) => {
