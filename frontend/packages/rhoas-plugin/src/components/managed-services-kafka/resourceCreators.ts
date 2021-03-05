@@ -166,7 +166,9 @@ export const createManagedKafkaConnection = async (
   const createdConnection = await k8sCreate(ManagedKafkaConnectionModel, kafkaConnection);
   return await k8sWaitForUpdate(ManagedKafkaConnectionModel, createdConnection, (resource) => {
     const condition = getFinishedCondition(resource);
+    console.log("checking MKC")
     if (condition) {
+      console.log("condition MKC", condition)
       if (condition.status === "True") {
         return true
       } else {
