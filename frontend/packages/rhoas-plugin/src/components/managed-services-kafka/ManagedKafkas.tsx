@@ -71,8 +71,12 @@ const ManagedKafkas = () => {
   const createManagedKafkaConnectionFlow = async () => {
     const kafkaId = remoteKafkaInstances[selectedKafka].id;
     const kafkaName = remoteKafkaInstances[selectedKafka].name;
-    createManagedKafkaConnection(kafkaId, kafkaName, currentNamespace);
-    history.push(`/topology/ns/${currentNamespace}`);
+    try{
+      await createManagedKafkaConnection(kafkaId, kafkaName, currentNamespace);
+      history.push(`/topology/ns/${currentNamespace}`);
+    }catch(error){
+      // TODO :)
+    }
   };
 
   const disableCreateButton = () => {
