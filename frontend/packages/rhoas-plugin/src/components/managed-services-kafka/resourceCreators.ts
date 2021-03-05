@@ -25,6 +25,9 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
     metadata: {
       name: ManagedServiceAccountCRName,
       namespace: currentNamespace,
+      annotations: {
+        refreshTime: new Date().toISOString()
+      },
     },
     spec: {
       accessTokenSecretName: AccessTokenSecretName,
@@ -64,6 +67,20 @@ export const createManagedServicesRequest = async function (currentNamespace: st
 /**
  * Create request to fetch all managed kafkas from upstream
  */
+export const patchServiceAccountRequest = async function (request: any) {
+  const path = '/metadata/annotations/refreshTime';
+  return await k8sPatch(ManagedServiceAccountRequest, request, [
+    {
+      path,
+      op: "replace",
+      value: new Date().toISOString(),
+    },
+  ]);
+};
+
+/**
+ * Create request to fetch all managed kafkas from upstream
+ */
 export const patchManagedServicesRequest = async function (request: any) {
   const path = '/metadata/annotations/refreshTime';
   console.log(request)
@@ -89,15 +106,13 @@ export const createManagedServicesRequestIfNeeded = async (currentNamespace) => 
     console.log("rhoas: ManagedServicesRequest already exist")
   }
   try {
-    let createdRequest;
     if (currentRequest) {
-      createdRequest = await patchManagedServicesRequest(currentRequest);
+      return await patchManagedServicesRequest(currentRequest);
     } else {
-      createdRequest = await createManagedServicesRequest(currentNamespace);
+      return await createManagedServicesRequest(currentNamespace);
     }
-    console.log(createdRequest);
   } catch (error) {
-    return error;
+    return;
   }
 };
 
@@ -113,15 +128,15 @@ export const createServiceAccountIfNeeded = async (currentNamespace) => {
     // eslint-disable-next-line no-console
     console.log("rhoas: ServiceAccount already exist")
   }
-  if (!managedServiceAccount) {
-    await createManagedServiceAccount(currentNamespace);
-    return true;
+  if (managedServiceAccount) {
+    return await patchServiceAccountRequest(managedServiceAccount)
+  } else {
+    return await createManagedServiceAccount(currentNamespace);
   }
-  return false;
 };
 
 /**
- * Create
+ * createManagedKafkaConnection
  * @param kafkaId
  * @param kafkaName
  * @param currentNamespace
