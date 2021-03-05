@@ -1,7 +1,7 @@
 import { StatusCondition } from "../types/rhoas-types";
 
 export const getFinishedCondition = (request: any) => {
-  return getCondition(request, "Success");
+  return getCondition(request, "Finished");
 }
 
 export const getCondition = (request: any, name: string) => {

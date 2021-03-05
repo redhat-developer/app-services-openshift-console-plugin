@@ -35,6 +35,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
   });
 
   const condition = getFinishedCondition(serviceAccount)
+  console.log("condition", serviceAccount, condition)
   const isServiceAccountValid = condition && condition.status === "True";
   const toast = useToast();
   if (!isServiceAccountValid) {
