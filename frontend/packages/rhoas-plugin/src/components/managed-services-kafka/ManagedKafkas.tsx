@@ -13,7 +13,7 @@ import {
   createManagedKafkaConnection,
   createManagedServicesRequestIfNeeded,
   listOfCurrentKafkaConnectionsById,
-} from './resourceCreators';
+} from '../../utils/resourceCreators';
 import { KafkaRequest } from '../../types/rhoas-types';
 import { getCondition, getFinishedCondition } from '../../utils/conditionHandler';
 
@@ -71,11 +71,11 @@ const ManagedKafkas = () => {
   const createManagedKafkaConnectionFlow = async () => {
     const kafkaId = remoteKafkaInstances[selectedKafka].id;
     const kafkaName = remoteKafkaInstances[selectedKafka].name;
-    try{
+    try {
       await createManagedKafkaConnection(kafkaId, kafkaName, currentNamespace);
       history.push(`/topology/ns/${currentNamespace}`);
-    }catch(error){
-      // TODO :)
+    } catch (error) {
+      // TODO
     }
   };
 
