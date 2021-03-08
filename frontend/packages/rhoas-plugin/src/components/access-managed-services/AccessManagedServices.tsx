@@ -14,7 +14,7 @@ import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/
 
 export const AccessManagedServices: any = () => {
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
-
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [currentNamespace] = useActiveNamespace();
   const namespace = currentNamespace;
   const { t } = useTranslation();
@@ -22,9 +22,14 @@ export const AccessManagedServices: any = () => {
   const onCreate = async () => {
     try {
       await createSecretIfNeeded(namespace, apiTokenValue);
+    } catch (error) {
+      setErrorMessage("Problem with creating secret. Please try again" + error);
+      return;
+    }
+    try {
       await createServiceAccountIfNeeded(namespace);
     } catch (error) {
-      console.log("rhoas: cannot create service account", error)
+      setErrorMessage("Cannot create service account: " + error)
     }
   };
 
@@ -62,7 +67,7 @@ export const AccessManagedServices: any = () => {
           <TextInput
             value={apiTokenValue}
             onChange={(value: string) => handleApiTokenValueChange(value)}
-            type="text"
+            type="password"
             id="offlinetoken"
             name="apitoken"
             placeholder=""
@@ -74,6 +79,7 @@ export const AccessManagedServices: any = () => {
           </Text>
         </TextContent>
         <FormGroup fieldId="action-group">
+          <div className="text-muted">{errorMessage}</div>
           <Button
             key="confirm"
             variant="primary"
@@ -82,10 +88,11 @@ export const AccessManagedServices: any = () => {
           >
             {t('rhoas-plugin~Create')}
           </Button>
-          <Button key="cancel"
-            variant="link">
+          <Button key="reset"
+            variant="link"
+            onClick={() => { setApiTokenValue("") }}>
 
-            {t('rhoas-plugin~Cancel')}
+            {t('rhoas-plugin~Reset')}
           </Button>
         </FormGroup>
       </Form>

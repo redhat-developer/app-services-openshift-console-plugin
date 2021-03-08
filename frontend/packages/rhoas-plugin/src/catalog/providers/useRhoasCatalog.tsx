@@ -17,7 +17,7 @@ import { AccessManagedServices } from '../../components/access-managed-services/
 import { CATALOG_TYPE } from '../rhoas-catalog-plugin';
 import { ManagedServiceAccountCRName, managedKafkaIcon, operatorIcon } from '../../const';
 import { ManagedServiceAccountRequest } from '../../models';
-import { getFinishedCondition } from '../../utils/conditionHandler';
+import { isSuccessfull } from '../../utils/conditionHandler';
 import { referenceForModel } from '@console/internal/module/k8s';
 
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[], boolean, any] => {
@@ -32,9 +32,8 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     namespaced: true,
   });
 
-  const condition = getFinishedCondition(serviceAccount)
-  const isServiceAccountValid = condition && condition.status === "True";
-  console.log("isServiceAccountValid", isServiceAccountValid)
+  const isServiceAccountValid = isSuccessfull(serviceAccount)
+
   const tokenStatusFooter = () => {
     let token;
     if (serviceAccount === null || !isServiceAccountValid) {

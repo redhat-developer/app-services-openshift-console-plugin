@@ -1,5 +1,4 @@
 import { k8sCreate, k8sGet, k8sPatch, k8sUpdate, k8sWaitForUpdate } from '@console/internal/module/k8s/resource';
-import { namespace } from 'd3';
 import * as _ from 'lodash';
 
 import {
@@ -134,8 +133,9 @@ export const createSecretIfNeeded = async function (currentNamespace: string, ap
   }
 
   if (currentSecret) {
-    currentSecret.stringData.value = apiTokenValue
-    return await k8sUpdate(SecretModel, currentSecret, namespace)
+    delete currentSecret.data
+    currentSecret.stringData = { value: apiTokenValue };
+    return await k8sUpdate(SecretModel, currentSecret)
   } else {
     const secret = {
       apiVersion: SecretModel.apiVersion,
@@ -164,11 +164,26 @@ export const createServiceAccountIfNeeded = async (currentNamespace) => {
     // eslint-disable-next-line no-console
     console.info("rhoas: ServiceAccount doesn't exist. Creating new ServiceAccount")
   }
+  let request;
   if (managedServiceAccount) {
-    return await patchServiceAccountRequest(managedServiceAccount)
+    request = await patchServiceAccountRequest(managedServiceAccount)
   } else {
-    return await createManagedServiceAccount(currentNamespace);
+    request = await createManagedServiceAccount(currentNamespace);
   }
+
+  await k8sWaitForUpdate(ManagedServiceAccountRequest, request, (resource) => {
+    const condition = getFinishedCondition(resource);
+
+    if (condition) {
+      if (condition.status === "True") {
+        return true
+      } else {
+        let errorToLog = condition.message
+        throw new Error(errorToLog)
+      }
+    }
+    return false
+  }, 10000)
 };
 
 /**
