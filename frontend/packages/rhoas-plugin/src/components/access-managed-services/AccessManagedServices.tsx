@@ -9,38 +9,27 @@ import {
   Text,
   TextVariants,
 } from '@patternfly/react-core';
-import { SecretModel } from '@console/internal/models';
-import { k8sCreate, k8sKillByName } from '@console/internal/module/k8s/resource';
 import { useActiveNamespace } from '@console/shared';
-import { AccessTokenSecretName } from '../../const';
-import { createServiceAccountIfNeeded } from '../managed-services-kafka/resourceCreators';
+import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
 
 export const AccessManagedServices: any = () => {
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
-
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [currentNamespace] = useActiveNamespace();
   const namespace = currentNamespace;
   const { t } = useTranslation();
 
   const onCreate = async () => {
-    const secret = {
-      apiVersion: SecretModel.apiVersion,
-      kind: SecretModel.kind,
-      metadata: {
-        name: AccessTokenSecretName,
-        namespace,
-      },
-      stringData: {
-        value: apiTokenValue,
-      },
-      type: 'Opaque',
-    };
-    try{
-      await k8sCreate(SecretModel, secret);
+    try {
+      await createSecretIfNeeded(namespace, apiTokenValue);
+    } catch (error) {
+      setErrorMessage("Problem with creating secret. Please try again" + error);
+      return;
+    }
+    try {
       await createServiceAccountIfNeeded(namespace);
-    }catch(error){
-      k8sKillByName(SecretModel, AccessTokenSecretName, namespace);
-      console.log("rhoas: cannot create service account", error)
+    } catch (error) {
+      setErrorMessage("Cannot create service account: " + error)
     }
   };
 
@@ -52,12 +41,12 @@ export const AccessManagedServices: any = () => {
     <>
       <TextContent>
         <Text component={TextVariants.h2}>
-          {t('rhoas-plugin~Access Red Hat application services with API Token')}
+          {t('rhoas-plugin~Access Red Hat Cloud Services with API Token')}
         </Text>
         <Text component={TextVariants.p}>
           <span>
             {t(
-              'rhoas-plugin~To access this application service, input the API token which can be located at',
+              'rhoas-plugin~To access this Cloud Service, input the API token which can be located at',
             )}
             <a href="https://cloud.redhat.com/openshift/token" target="_blank">
               {' '}
@@ -78,9 +67,9 @@ export const AccessManagedServices: any = () => {
           <TextInput
             value={apiTokenValue}
             onChange={(value: string) => handleApiTokenValueChange(value)}
-            type="text"
-            id=""
-            name=""
+            type="password"
+            id="offlinetoken"
+            name="apitoken"
             placeholder=""
           />
         </FormGroup>
@@ -90,6 +79,7 @@ export const AccessManagedServices: any = () => {
           </Text>
         </TextContent>
         <FormGroup fieldId="action-group">
+          <div className="text-muted">{errorMessage}</div>
           <Button
             key="confirm"
             variant="primary"
@@ -98,10 +88,11 @@ export const AccessManagedServices: any = () => {
           >
             {t('rhoas-plugin~Create')}
           </Button>
-          <Button key="cancel"
-            variant="link">
+          <Button key="reset"
+            variant="link"
+            onClick={() => { setApiTokenValue("") }}>
 
-            {t('rhoas-plugin~Cancel')}
+            {t('rhoas-plugin~Reset')}
           </Button>
         </FormGroup>
       </Form>
