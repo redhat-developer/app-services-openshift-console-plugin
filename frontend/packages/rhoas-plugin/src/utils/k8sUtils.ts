@@ -13,6 +13,9 @@ import {
  * @returns {Promise<K8sResourceKind>}
  */
 export const k8sWaitForUpdate = (kind, resource, checkCondition, timeoutInMs) => {
+  if (!resource || !resource.metadata) {
+    Promise.reject("Provided resource is undefined");
+  }
   const { namespace, name, resourceVersion } = resource.metadata;
 
   if (checkCondition(resource)) {

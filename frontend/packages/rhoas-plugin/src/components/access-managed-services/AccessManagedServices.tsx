@@ -90,7 +90,10 @@ export const AccessManagedServices: any = () => {
           </Button>
           <Button key="reset"
             variant="link"
-            onClick={() => { setApiTokenValue("") }}>
+            onClick={() => {
+              setApiTokenValue("")
+              setErrorMessage("")
+            }}>
 
             {t('rhoas-plugin~Reset')}
           </Button>

@@ -42,8 +42,7 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
     },
   };
 
-
-  await k8sCreate(ManagedServiceAccountRequest, serviceAcct);
+  return await k8sCreate(ManagedServiceAccountRequest, serviceAcct);
 };
 
 /**

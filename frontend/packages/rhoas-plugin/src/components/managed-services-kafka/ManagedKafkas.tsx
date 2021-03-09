@@ -55,13 +55,12 @@ const ManagedKafkas = () => {
   if (condition && condition.status === "False") {
     if (getCondition(watchedKafkaRequest, "AcccesTokenSecretValid")?.status == "False") {
       return (<>
-        <p>Invalid access token</p>
+        <div>Invalid access token</div>
       </>)
     } else {
       return (<>
-        <p>Failed to load list of services</p>
-        <p>Message: {condition.message}</p>
-        <p>Reason: {condition.reason}</p>
+        <div>Failed to load list of services</div>
+        <div>{condition.message}</div>
       </>)
     }
   }
