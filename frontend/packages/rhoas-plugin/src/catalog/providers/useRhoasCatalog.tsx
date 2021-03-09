@@ -13,9 +13,9 @@ import { LockIcon } from '@patternfly/react-icons';
 import { CatalogExtensionHook, CatalogItem } from '@console/plugin-sdk';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
 import { useActiveNamespace } from '@console/shared';
-import { AccessManagedServices } from '../../components/access-managed-services/AccessManagedServices';
+import { ServiceToken } from '../../components/access-services/ServicesToken';
 import { CATALOG_TYPE } from '../rhoas-catalog-plugin';
-import { ManagedServiceAccountCRName, managedKafkaIcon, operatorIcon } from '../../const';
+import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { ManagedServiceAccountRequest } from '../../models';
 import { isSuccessfull } from '../../utils/conditionHandler';
 import { referenceForModel } from '@console/internal/module/k8s';
@@ -27,12 +27,12 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
   const [serviceAccount] = useK8sWatchResource({
     kind: referenceForModel(ManagedServiceAccountRequest),
     isList: false,
-    name: ManagedServiceAccountCRName,
+    name: ServiceAccountCRName,
     namespace: currentNamespace,
     namespaced: true,
   });
 
-  const isServiceAccountValid = isSuccessfull(serviceAccount)
+  const isServiceAccountValid = isSuccessfull(serviceAccount);
 
   const tokenStatusFooter = () => {
     let token;
@@ -48,9 +48,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     return (
       <Flex direction={{ default: 'column' }}>
         <FlexItem>
-          {t(
-            'rhoas-plugin~RHOAS can include Streams for Kafka, Service Registry',
-          )}
+          {t('rhoas-plugin~RHOAS can include Streams for Kafka, Service Registry')}
         </FlexItem>
         <FlexItem>{token}</FlexItem>
       </Flex>
@@ -66,7 +64,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
       </FlexItem>
       <Divider component="li" />
       <FlexItem>
-        <AccessManagedServices />
+        <ServiceToken />
       </FlexItem>
     </Flex>
   );
@@ -78,15 +76,15 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
   ];
 
   const managedServicesCard: CatalogItem[] = [
+    // TODO internationalize this
     {
-      name: 'Red Hat Application Services',
+      name: 'Red Hat Cloud Services',
       type: CATALOG_TYPE,
-      uid: "services-1615213269575",
+      uid: 'services-1615213269575',
       description: tokenStatusFooter(),
       provider: 'Red Hat',
-      tags: ['Kafka', 'service', 'managed'],
+      tags: ['kafka', 'service'],
       creationTimestamp: '2019-09-04T13:56:06Z',
-      documentationUrl: 'Refer Documentation',
       attributes: {
         version: '1',
       },
@@ -105,22 +103,21 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     },
   ];
 
-  const managedKafkaCard: CatalogItem[] = [
+  const serviceKafkaCard: CatalogItem[] = [
     {
       name: 'Streams for Apache Kafka',
       type: CATALOG_TYPE,
-      uid: "streams-1615213269575",
+      uid: 'streams-1615213269575',
       description: 'Streams for Apache Kafka',
       provider: 'Red Hat',
       tags: ['Kafka', 'service', 'managed'],
       creationTimestamp: '2019-09-04T13:56:06Z',
-      documentationUrl: 'Refer Documentation',
       attributes: {
         version: '1',
       },
       icon: {
         class: 'kafkaIcon',
-        url: managedKafkaIcon,
+        url: kafkaIcon,
       },
       cta: {
         label: 'Connect',
@@ -137,9 +134,12 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     },
   ];
 
-  const services = React.useMemo(() => (isServiceAccountValid ? managedKafkaCard : managedServicesCard), [
-    serviceAccount,
-  ]);
+  const services = React.useMemo(
+    () => (isServiceAccountValid ? serviceKafkaCard : managedServicesCard),
+    // Prevent automatically filling the dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
   return [services, true, undefined];
 };
 
