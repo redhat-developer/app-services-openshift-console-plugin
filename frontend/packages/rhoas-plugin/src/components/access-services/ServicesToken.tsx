@@ -8,11 +8,12 @@ import {
   TextContent,
   Text,
   TextVariants,
+  Alert,
 } from '@patternfly/react-core';
 import { useActiveNamespace } from '@console/shared';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
 
-export const AccessManagedServices: any = () => {
+export const ServiceToken: any = () => {
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [currentNamespace] = useActiveNamespace();
@@ -23,13 +24,13 @@ export const AccessManagedServices: any = () => {
     try {
       await createSecretIfNeeded(namespace, apiTokenValue);
     } catch (error) {
-      setErrorMessage("Problem with creating secret. Please try again" + error);
+      setErrorMessage(`Problem with creating secret: ${error}`);
       return;
     }
     try {
       await createServiceAccountIfNeeded(namespace);
     } catch (error) {
-      setErrorMessage("Cannot create service account: " + error)
+      setErrorMessage(`Cannot create service account: ${error}`);
     }
   };
 
@@ -48,7 +49,11 @@ export const AccessManagedServices: any = () => {
             {t(
               'rhoas-plugin~To access this Cloud Service, input the API token which can be located at',
             )}
-            <a href="https://cloud.redhat.com/openshift/token" target="_blank">
+            <a
+              href="https://cloud.redhat.com/openshift/token"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               {' '}
               https://cloud.redhat.com/openshift/token
             </a>
@@ -78,20 +83,28 @@ export const AccessManagedServices: any = () => {
             {t('rhoas-plugin~Cant create an access token? Contact your administrator')}
           </Text>
         </TextContent>
+        {errorMessage && (
+          <TextContent>
+            <Alert variant="danger" isInline title={errorMessage}/>
+          </TextContent>
+        )}
         <FormGroup fieldId="action-group">
-          <div className="text-muted">{errorMessage}</div>
           <Button
             key="confirm"
             variant="primary"
             onClick={onCreate}
-            isDisabled={apiTokenValue.length < 500 ? true : false}
+            isDisabled={apiTokenValue.length < 500}
           >
             {t('rhoas-plugin~Create')}
           </Button>
-          <Button key="reset"
+          <Button
+            key="reset"
             variant="link"
-            onClick={() => { setApiTokenValue("") }}>
-
+            onClick={() => {
+              setApiTokenValue('');
+              setErrorMessage('');
+            }}
+          >
             {t('rhoas-plugin~Reset')}
           </Button>
         </FormGroup>
