@@ -32,7 +32,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     namespaced: true,
   });
 
-  const isServiceAccountValid = isSuccessfull(serviceAccount)
+  const isServiceAccountValid = isSuccessfull(serviceAccount);
 
   const tokenStatusFooter = () => {
     let token;
@@ -48,9 +48,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     return (
       <Flex direction={{ default: 'column' }}>
         <FlexItem>
-          {t(
-            'rhoas-plugin~RHOAS can include Streams for Kafka, Service Registry',
-          )}
+          {t('rhoas-plugin~RHOAS can include Streams for Kafka, Service Registry')}
         </FlexItem>
         <FlexItem>{token}</FlexItem>
       </Flex>
@@ -78,15 +76,15 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
   ];
 
   const managedServicesCard: CatalogItem[] = [
+    // TODO internationalize this
     {
-      name: 'Red Hat Application Services',
+      name: 'Red Hat Cloud Services',
       type: CATALOG_TYPE,
-      uid: "services-1615213269575",
+      uid: 'services-1615213269575',
       description: tokenStatusFooter(),
       provider: 'Red Hat',
-      tags: ['Kafka', 'service', 'managed'],
+      tags: ['kafka', 'service'],
       creationTimestamp: '2019-09-04T13:56:06Z',
-      documentationUrl: 'Refer Documentation',
       attributes: {
         version: '1',
       },
@@ -109,12 +107,11 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     {
       name: 'Streams for Apache Kafka',
       type: CATALOG_TYPE,
-      uid: "streams-1615213269575",
+      uid: 'streams-1615213269575',
       description: 'Streams for Apache Kafka',
       provider: 'Red Hat',
       tags: ['Kafka', 'service', 'managed'],
       creationTimestamp: '2019-09-04T13:56:06Z',
-      documentationUrl: 'Refer Documentation',
       attributes: {
         version: '1',
       },
@@ -137,9 +134,12 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     },
   ];
 
-  const services = React.useMemo(() => (isServiceAccountValid ? serviceKafkaCard : managedServicesCard), [
-    serviceAccount,
-  ]);
+  const services = React.useMemo(
+    () => (isServiceAccountValid ? serviceKafkaCard : managedServicesCard),
+    // Prevent automatically filling the dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
   return [services, true, undefined];
 };
 

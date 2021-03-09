@@ -6,7 +6,7 @@ import { history, LoadingBox } from '@console/internal/components/utils';
 import { referenceForModel } from '@console/internal/module/k8s';
 import { useActiveNamespace } from '@console/shared';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
-import StreamsInstancePage from './InstancePage';
+import ServiceInstance from './ServiceInstance';
 import { ManagedServicesRequestModel } from '../../models/rhoas';
 import { ServicesRequestCRName } from '../../const';
 import {
@@ -16,8 +16,9 @@ import {
 } from '../../utils/resourceCreators';
 import { KafkaRequest } from '../../utils/rhoas-types';
 import { getCondition, getFinishedCondition } from '../../utils/conditionHandler';
+import { ServicesErrorState } from '../states/ServicesErrorState';
 
-const ManagedKafkas = () => {
+const ServiceListPage = () => {
   const [currentNamespace] = useActiveNamespace();
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
   const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState<string[]>([]);
@@ -33,7 +34,7 @@ const ManagedKafkas = () => {
 
   React.useEffect(() => {
     createKafkaRequestFlow();
-  }, []);
+  });
 
   const [watchedKafkaRequest] = useK8sWatchResource<KafkaRequest>({
     kind: referenceForModel(ManagedServicesRequestModel),
@@ -52,17 +53,25 @@ const ManagedKafkas = () => {
   }
 
   const condition = getFinishedCondition(watchedKafkaRequest);
-  if (condition && condition.status === "False") {
-    if (getCondition(watchedKafkaRequest, "AcccesTokenSecretValid")?.status == "False") {
-      return (<>
-        <div>Invalid access token</div>
-      </>)
-    } else {
-      return (<>
-        <div>Failed to load list of services</div>
-        <div>{condition.message}</div>
-      </>)
+  if (condition && condition.status === 'False') {
+    if (getCondition(watchedKafkaRequest, 'AcccesTokenSecretValid')?.status === 'False') {
+      return (
+        <ServicesErrorState
+          title={'Connection failed'}
+          message={'Could not connect to RHOAS with API Token. Is your API token valid?'}
+        ></ServicesErrorState>
+      );
     }
+    return (
+      <>
+        <ServicesErrorState
+          title={'Could not fetch services'}
+          message={`Failed to load list of services: ${condition.message}`}
+        ></ServicesErrorState>
+        <div></div>
+        <div>{}</div>
+      </>
+    );
   }
 
   const remoteKafkaInstances = watchedKafkaRequest.status.userKafkas;
@@ -91,7 +100,7 @@ const ManagedKafkas = () => {
   return (
     <>
       <NamespacedPage variant={NamespacedPageVariants.light} disabled hideApplications>
-        <StreamsInstancePage
+        <ServiceInstance
           kafkaArray={remoteKafkaInstances}
           selectedKafka={selectedKafka}
           setSelectedKafka={setSelectedKafka}
@@ -104,4 +113,4 @@ const ManagedKafkas = () => {
   );
 };
 
-export default ManagedKafkas;
+export default ServiceListPage;

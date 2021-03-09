@@ -1,39 +1,38 @@
 import * as React from 'react';
 import { Button, EmptyState, EmptyStateIcon, Title } from '@patternfly/react-core';
-import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
-import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
+import ErrorCircle from '@patternfly/react-icons/dist/js/icons/error-circle-o-icon';
 
-type ManagedKafkaEmptyStateProps = {
+import { history } from '@console/internal/components/utils';
+
+type ServicesEmptyStateProps = {
   title: string;
-  actionInfo: string;
+  message: string
+  actionInfo?: string;
   action?: () => void;
-  icon: string;
 };
 
 export const ServicesErrorState = ({
   title,
+  message,
   actionInfo,
   action,
-  icon,
-}: ManagedKafkaEmptyStateProps) => {
-  const renderIcon = () => {
-    switch (icon) {
-      case 'TimesCircleIcon':
-        return TimesCircleIcon;
-      case 'CubesIcon':
-        return CubesIcon;
-      default:
-        return undefined;
-    }
-  };
+}: ServicesEmptyStateProps) => {
+  if (!action) {
+    action = () => {
+      history.goBack();
+    };
+  }
 
   return (
     <EmptyState>
-      <EmptyStateIcon icon={renderIcon()} />
+      <EmptyStateIcon icon={ErrorCircle} />
       <Title headingLevel="h4" size="lg">
         {title}
       </Title>
-      <Button variant="link" onClick={action && action}>
+      <Title headingLevel="h5" size="md">
+        {message}
+      </Title>
+      <Button variant="link" onClick={action}>
         {actionInfo}
       </Button>
     </EmptyState>
