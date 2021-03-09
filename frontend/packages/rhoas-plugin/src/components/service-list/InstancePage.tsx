@@ -5,11 +5,11 @@ import { PageBody } from '@console/shared';
 import { history } from '@console/internal/components/utils';
 import { FormFooter } from '@console/shared';
 import { PageHeading } from '@console/internal/components/utils';
-import StreamsInstanceFilter from './StreamsInstanceFilter';
-import StreamsInstanceTable from './StreamsInstanceTable';
-import { ManagedKafkaEmptyState } from './../empty-state/ManagedKafkaEmptyState';
+import StreamsInstanceFilter from '../service-table/StreamsInstanceFilter';
+import StreamsInstanceTable from '../service-table/StreamsInstanceTable';
+import { ServicesEmptyState } from '../states/EmptyState';
 import { useActiveNamespace } from '@console/shared';
-import { ManagedKafka } from '../../types/rhoas-types';
+import { ManagedKafka } from '../../utils/rhoas-types';
 
 type StreamsInstancePageProps = {
   kafkaArray: ManagedKafka[];
@@ -65,14 +65,14 @@ const StreamsInstancePage = ({
       </PageHeading>
       <PageBody>
         {allKafkasConnected ? (
-          <ManagedKafkaEmptyState
+          <ServicesEmptyState
             title={t('rhoas-plugin~All Managed Kafka clusters are in use')}
             actionInfo={t('rhoas-plugin~See Managed Kafka clusters in Topology view')}
             action={() => goToTopology()}
             icon="CubesIcon"
           />
         ) : kafkaArray.length === 0 ? (
-          <ManagedKafkaEmptyState
+          <ServicesEmptyState
             title={t('rhoas-plugin~No Managed Kafka Clusters found')}
             actionInfo={t('rhoas-plugin~Go back to Managed Services Catalog')}
             icon="CubesIcon"

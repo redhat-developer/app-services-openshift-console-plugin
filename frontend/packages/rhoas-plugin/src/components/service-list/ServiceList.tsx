@@ -6,15 +6,15 @@ import { history, LoadingBox } from '@console/internal/components/utils';
 import { referenceForModel } from '@console/internal/module/k8s';
 import { useActiveNamespace } from '@console/shared';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
-import StreamsInstancePage from '../streams-list/StreamsInstancePage';
+import StreamsInstancePage from './InstancePage';
 import { ManagedServicesRequestModel } from '../../models/rhoas';
-import { ManagedServicesRequestCRName } from '../../const';
+import { ServicesRequestCRName } from '../../const';
 import {
   createManagedKafkaConnection,
   createManagedServicesRequestIfNeeded,
   listOfCurrentKafkaConnectionsById,
 } from '../../utils/resourceCreators';
-import { KafkaRequest } from '../../types/rhoas-types';
+import { KafkaRequest } from '../../utils/rhoas-types';
 import { getCondition, getFinishedCondition } from '../../utils/conditionHandler';
 
 const ManagedKafkas = () => {
@@ -37,7 +37,7 @@ const ManagedKafkas = () => {
 
   const [watchedKafkaRequest] = useK8sWatchResource<KafkaRequest>({
     kind: referenceForModel(ManagedServicesRequestModel),
-    name: ManagedServicesRequestCRName,
+    name: ServicesRequestCRName,
     namespace: currentNamespace,
     isList: false,
     optional: true,

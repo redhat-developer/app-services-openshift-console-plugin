@@ -1,4 +1,4 @@
-import { StatusCondition } from "../types/rhoas-types";
+import { StatusCondition } from "./rhoas-types";
 
 export const getFinishedCondition = (request: any) => {
   return getCondition(request, "Finished");

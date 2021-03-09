@@ -4,8 +4,8 @@ import * as _ from 'lodash';
 import {
   AccessTokenSecretName,
   ServiceAccountSecretName,
-  ManagedServiceAccountCRName,
-  ManagedServicesRequestCRName,
+  ServiceAccountCRName,
+  ServicesRequestCRName,
 } from '../const';
 
 import {
@@ -26,7 +26,7 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
     apiVersion: `${ManagedServicesRequestModel.apiGroup}/${ManagedServicesRequestModel.apiVersion}`,
     kind: ManagedServiceAccountRequest.kind,
     metadata: {
-      name: ManagedServiceAccountCRName,
+      name: ServiceAccountCRName,
       namespace: currentNamespace,
       annotations: {
         refreshTime: new Date().toISOString()
@@ -56,7 +56,7 @@ export const createManagedServicesRequest = async function (currentNamespace: st
       annotations: {
         refreshTime: new Date().toISOString()
       },
-      name: ManagedServicesRequestCRName,
+      name: ServicesRequestCRName,
       namespace: currentNamespace,
     },
     spec: {
@@ -101,7 +101,7 @@ export const createManagedServicesRequestIfNeeded = async (currentNamespace) => 
   try {
     currentRequest = await k8sGet(
       ManagedServicesRequestModel,
-      ManagedServicesRequestCRName,
+      ServicesRequestCRName,
       currentNamespace,
     );
   } catch (error) {
@@ -156,7 +156,7 @@ export const createServiceAccountIfNeeded = async (currentNamespace) => {
   try {
     managedServiceAccount = await k8sGet(
       ManagedServiceAccountRequest,
-      ManagedServiceAccountCRName,
+      ServiceAccountCRName,
       currentNamespace,
     );
   } catch (error) {

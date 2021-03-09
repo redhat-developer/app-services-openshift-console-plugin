@@ -12,7 +12,7 @@ import {
 import { useActiveNamespace } from '@console/shared';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
 
-export const AccessManagedServices: any = () => {
+export const ServiceToken: any = () => {
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [currentNamespace] = useActiveNamespace();

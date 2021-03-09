@@ -13,9 +13,9 @@ import { LockIcon } from '@patternfly/react-icons';
 import { CatalogExtensionHook, CatalogItem } from '@console/plugin-sdk';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
 import { useActiveNamespace } from '@console/shared';
-import { AccessManagedServices } from '../../components/access-managed-services/AccessManagedServices';
+import { ServiceToken } from '../../components/access-services/ServicesToken';
 import { CATALOG_TYPE } from '../rhoas-catalog-plugin';
-import { ManagedServiceAccountCRName, managedKafkaIcon, operatorIcon } from '../../const';
+import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { ManagedServiceAccountRequest } from '../../models';
 import { isSuccessfull } from '../../utils/conditionHandler';
 import { referenceForModel } from '@console/internal/module/k8s';
@@ -27,7 +27,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
   const [serviceAccount] = useK8sWatchResource({
     kind: referenceForModel(ManagedServiceAccountRequest),
     isList: false,
-    name: ManagedServiceAccountCRName,
+    name: ServiceAccountCRName,
     namespace: currentNamespace,
     namespaced: true,
   });
@@ -66,7 +66,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
       </FlexItem>
       <Divider component="li" />
       <FlexItem>
-        <AccessManagedServices />
+        <ServiceToken />
       </FlexItem>
     </Flex>
   );
@@ -105,7 +105,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     },
   ];
 
-  const managedKafkaCard: CatalogItem[] = [
+  const serviceKafkaCard: CatalogItem[] = [
     {
       name: 'Streams for Apache Kafka',
       type: CATALOG_TYPE,
@@ -120,7 +120,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
       },
       icon: {
         class: 'kafkaIcon',
-        url: managedKafkaIcon,
+        url: kafkaIcon,
       },
       cta: {
         label: 'Connect',
@@ -137,7 +137,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     },
   ];
 
-  const services = React.useMemo(() => (isServiceAccountValid ? managedKafkaCard : managedServicesCard), [
+  const services = React.useMemo(() => (isServiceAccountValid ? serviceKafkaCard : managedServicesCard), [
     serviceAccount,
   ]);
   return [services, true, undefined];

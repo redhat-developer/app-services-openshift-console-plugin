@@ -23,7 +23,7 @@ import {
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
 import { Timestamp } from '@console/internal/components/utils';
 import './StreamsInstanceTable.css';
-import { ManagedKafka } from '../../types/rhoas-types';
+import { ManagedKafka } from '../../utils/rhoas-types';
 
 type FormattedKafkas = {
   cells: JSX.Element[];
