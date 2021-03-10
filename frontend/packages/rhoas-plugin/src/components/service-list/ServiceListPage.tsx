@@ -23,18 +23,17 @@ const ServiceListPage = () => {
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
   const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState<string[]>([]);
 
-  const createKafkaRequestFlow = async () => {
-    await createManagedServicesRequestIfNeeded(currentNamespace);
-
-    const currentKafka = await listOfCurrentKafkaConnectionsById(currentNamespace);
-    if (currentKafka) {
-      setCurrentKafkaConnections(currentKafka);
-    }
-  };
-
   React.useEffect(() => {
+    const createKafkaRequestFlow = async () => {
+      await createManagedServicesRequestIfNeeded(currentNamespace);
+
+      const currentKafka = await listOfCurrentKafkaConnectionsById(currentNamespace);
+      if (currentKafka) {
+        setCurrentKafkaConnections(currentKafka);
+      }
+    };
     createKafkaRequestFlow();
-  });
+  }, [currentNamespace]);
 
   const [watchedKafkaRequest] = useK8sWatchResource<KafkaRequest>({
     kind: referenceForModel(ManagedServicesRequestModel),
@@ -59,7 +58,7 @@ const ServiceListPage = () => {
         <ServicesErrorState
           title={'Connection failed'}
           message={'Could not connect to RHOAS with API Token. Is your API token valid?'}
-        ></ServicesErrorState>
+        />
       );
     }
     return (
@@ -67,8 +66,8 @@ const ServiceListPage = () => {
         <ServicesErrorState
           title={'Could not fetch services'}
           message={`Failed to load list of services: ${condition.message}`}
-        ></ServicesErrorState>
-        <div></div>
+        />
+        <div />
         <div>{}</div>
       </>
     );

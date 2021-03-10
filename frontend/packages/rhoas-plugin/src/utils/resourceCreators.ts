@@ -39,8 +39,7 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
     spec: {
       accessTokenSecretName: AccessTokenSecretName,
       serviceAccountName: `RHOASOperator-ServiceAccount-${currentNamespace}`,
-      serviceAccountDescription:
-        'Service account created by RHOASOperator to access managed services',
+      serviceAccountDescription: 'Service account created by RHOASOperator to access services',
       serviceAccountSecretName: ServiceAccountSecretName,
       reset: false,
     },
@@ -50,7 +49,7 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
 };
 
 /**
- * Create request to fetch all managed kafkas from upstream
+ * Create request to fetch all kafkas from upstream
  */
 export const createManagedServicesRequest = async function(currentNamespace: string) {
   const mkRequest = {
@@ -71,9 +70,6 @@ export const createManagedServicesRequest = async function(currentNamespace: str
   return k8sCreate(ManagedServicesRequestModel, mkRequest);
 };
 
-/**
- * Create request to fetch all managed kafkas from upstream
- */
 export const patchServiceAccountRequest = async function(request: any) {
   const path = '/metadata/annotations/refreshTime';
   return k8sPatch(ManagedServiceAccountRequest, request, [
@@ -85,9 +81,6 @@ export const patchServiceAccountRequest = async function(request: any) {
   ]);
 };
 
-/**
- * Create request to fetch all managed kafkas from upstream
- */
 export const patchManagedServicesRequest = async function(request: any) {
   const path = '/metadata/annotations/refreshTime';
 
