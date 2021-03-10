@@ -220,7 +220,7 @@ export const createManagedKafkaConnection = async (
         if (condition.status === 'True') {
           return true;
         }
-        throw new Error(`Message: ${condition.message} reason: ${condition.reason}`);
+        throw new Error(condition.message);
       }
       return false;
     },
@@ -242,6 +242,7 @@ export const deleteManagedKafkaConnection = async (kafkaName: string, currentNam
     // eslint-disable-next-line no-console
     console.log('rhoas: failed to delete kafka connection');
   }
+  return Promise.resolve();
 };
 
 export const listOfCurrentKafkaConnectionsById = async (currentNamespace: string) => {

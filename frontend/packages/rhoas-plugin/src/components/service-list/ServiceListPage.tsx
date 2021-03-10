@@ -104,7 +104,7 @@ const ServiceListPage = () => {
       history.push(`/topology/ns/${currentNamespace}`);
     } catch (error) {
       deleteManagedKafkaConnection(kafkaName, currentNamespace);
-      setManagedKafkaCreateError(error.message ? error.message : error);
+      setManagedKafkaCreateError(error);
     }
   };
 
