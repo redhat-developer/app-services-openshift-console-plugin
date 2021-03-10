@@ -4,7 +4,7 @@ import {
   k8sGet,
   k8sPatch,
   k8sUpdate,
-  k8sWaitForUpdate,
+  k8sKillByName,
 } from '@console/internal/module/k8s/resource';
 
 import {
@@ -18,7 +18,8 @@ import {
   ManagedServiceAccountRequest,
   ManagedServicesRequestModel,
 } from '../models/rhoas';
-import { getFinishedCondition, isSuccessfull, ResourceConditionError } from './conditionHandler';
+import { getFinishedCondition, isResourceStatusSuccessfull } from './conditionHandler';
+import { k8sWaitForUpdate } from './k8sUtils';
 
 /**
  * Create service account for purpose of supplying connection credentials
@@ -169,11 +170,11 @@ export const createServiceAccountIfNeeded = async (currentNamespace) => {
       const condition = getFinishedCondition(resource);
 
       if (condition) {
-        if (isSuccessfull(resource)) {
+        if (isResourceStatusSuccessfull(resource)) {
           return true;
         }
         const errorToLog = condition.message;
-        throw new ResourceConditionError(errorToLog);
+        throw new Error(errorToLog);
       }
       return false;
     },
@@ -225,6 +226,22 @@ export const createManagedKafkaConnection = async (
     },
     10000,
   );
+};
+
+/**
+ * createManagedKafkaConnection
+ *
+ * @param kafkaId
+ * @param kafkaName
+ * @param currentNamespace
+ */
+export const deleteManagedKafkaConnection = async (kafkaName: string, currentNamespace: string) => {
+  try {
+    return k8sKillByName(ManagedKafkaConnectionModel, kafkaName, currentNamespace);
+  } catch {
+    // eslint-disable-next-line no-console
+    console.log('rhoas: failed to delete kafka connection');
+  }
 };
 
 export const listOfCurrentKafkaConnectionsById = async (currentNamespace: string) => {

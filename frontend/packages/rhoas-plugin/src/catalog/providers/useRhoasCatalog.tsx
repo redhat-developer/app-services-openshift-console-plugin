@@ -16,7 +16,7 @@ import { useActiveNamespace } from '@console/shared';
 import { ServiceToken } from '../../components/access-services/ServicesToken';
 import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { ManagedServiceAccountRequest } from '../../models';
-import { isSuccessfull } from '../../utils/conditionHandler';
+import { isResourceStatusSuccessfull } from '../../utils/conditionHandler';
 import { referenceForModel } from '@console/internal/module/k8s';
 import { CATALOG_TYPE } from '../const';
 
@@ -31,7 +31,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     namespaced: true,
   });
 
-  const isServiceAccountValid = isSuccessfull(serviceAccount);
+  const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount);
 
   const tokenStatusFooter = () => {
     let token;

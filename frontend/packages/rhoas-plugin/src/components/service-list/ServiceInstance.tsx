@@ -55,7 +55,7 @@ const ServiceInstance = ({
         {allKafkasConnected ? (
           <ServicesEmptyState
             title={t('rhoas-plugin~All Kafka clusters are in use')}
-            actionInfo={t('rhoas-plugin~See Kafka clusters in Topology view')}
+            actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
             icon="CubesIcon"
           />
         ) : kafkaArray.length === 0 ? (
