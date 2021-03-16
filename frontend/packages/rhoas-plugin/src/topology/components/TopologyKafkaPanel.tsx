@@ -41,7 +41,7 @@ type TopologyRhoasPanelProps = PropsFromState & PropsFromDispatch & OwnProps;
 const DetailsComponent: React.FC<any> = ({ obj }) => {
   const { t } = useTranslation();
   const boostrapServerHost = obj.status?.bootstrapServerHost;
-  const url = obj.status?.metadata.cloudUI;
+  const url = obj.status?.metadata?.cloudUI;
 
   return (
     <div className="co-m-pane__body">
