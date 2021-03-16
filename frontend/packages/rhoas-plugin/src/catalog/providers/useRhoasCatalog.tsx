@@ -75,9 +75,8 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
   ];
 
   const cloudServicesCard: CatalogItem[] = [
-    // TODO internationalize this
     {
-      name: 'Red Hat Cloud Services',
+      name: 'Red Hat Cloud Service',
       type: CATALOG_TYPE,
       uid: 'services-1615213269575',
       description: tokenStatusFooter(),

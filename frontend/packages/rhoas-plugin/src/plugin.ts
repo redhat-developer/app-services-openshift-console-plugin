@@ -66,7 +66,7 @@ const plugin: Plugin<ConsumedExtensions> = [
     properties: {
       id: 'rhoasAddAction',
       url: '/catalog?catalogType=managedservices',
-      label: '%rhoas-plugin~Managed Services%',
+      label: '%rhoas-plugin~Cloud Services%',
       description:
         '%rhoas-plugin~Reduce operational complexity and focus on building and scaling applications that add more value.%',
       icon: cloudServicesIcon,
