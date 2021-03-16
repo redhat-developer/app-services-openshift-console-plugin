@@ -129,11 +129,6 @@ const ServiceListPage = () => {
           createKafkaConnectionFlow={createKafkaConnectionFlow}
           disableCreateButton={disableCreateButton}
         />
-        <ServicesErrorState
-          title={t('Could not fetch services')}
-          message={t('Could not connect to RHOAS with API Token')}
-          actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
-        />
       </NamespacedPage>
     </>
   );
