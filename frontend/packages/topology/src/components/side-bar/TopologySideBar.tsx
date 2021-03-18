@@ -35,7 +35,7 @@ import TopologyServiceBindingRequestPanel from '../../operators/TopologyServiceB
 import TopologyOperatorBackedPanel from '../../operators/TopologyOperatorBackedPanel';
 import TopologyResourcePanel from './TopologyResourcePanel';
 import TopologyHelmWorkloadPanel from '@console/helm-plugin/src/topology/TopologyHelmWorkloadPanel';
-import TopologyKafkaPanel from "@console/rhoas-plugin/src/topology/components/TopologyKafkaPanel"
+import TopologyKafkaPanel from '@console/rhoas-plugin/src/topology/components/TopologyKafkaPanel';
 
 type TopologySideBarProps = {
   show: boolean;
