@@ -3,8 +3,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormFooter, FormHeader, FlexForm, FormBody } from '@console/shared';
 import { history } from '@console/internal/components/utils';
-import StreamsInstanceFilter from '../service-table/StreamsInstanceFilter';
-import StreamsInstanceTable from '../service-table/StreamsInstanceTable';
+import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
+import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
 import { ServicesEmptyState } from '../states/ServicesEmptyState';
 import { CloudKafka } from '../../utils/rhoas-types';
 import FormSection from '@console/dev-console/src/components/import/section/FormSection';
@@ -67,11 +67,11 @@ const ServiceInstance = ({
               />
             ) : (
               <>
-                <StreamsInstanceFilter
+                <ServiceInstanceFilter
                   textInputNameValue={textInputNameValue}
                   handleTextInputNameChange={handleTextInputNameChange}
                 />
-                <StreamsInstanceTable
+                <ServiceInstanceTable
                   kafkaArray={kafkaArray}
                   pageKafkas={pageKafkas}
                   handleTextInputNameChange={handleTextInputNameChange}

@@ -26,5 +26,7 @@
   "Created": "Created",
   "List of Kafka Instances": "List of Kafka Instances",
   "Bootstrap Server": "Bootstrap Server",
-  "URL": "URL"
+  "URL": "URL",
+  "Cloud Service": "Cloud Service",
+  "This resource represents service that exist outside your cluster": "This resource represents service that exist outside your cluster"
 }
