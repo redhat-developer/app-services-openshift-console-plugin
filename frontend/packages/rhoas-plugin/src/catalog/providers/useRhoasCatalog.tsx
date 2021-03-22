@@ -23,17 +23,13 @@ import { CATALOG_TYPE } from '../const';
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[], boolean, any] => {
   const [currentNamespace] = useActiveNamespace();
   const { t } = useTranslation();
-  const [serviceAccount, loaded] = useK8sWatchResource({
+  const [serviceAccount] = useK8sWatchResource({
     kind: referenceForModel(CloudServiceAccountRequest),
     isList: false,
     name: ServiceAccountCRName,
     namespace: currentNamespace,
     namespaced: true,
   });
-
-  if (!loaded) {
-    return [[], false, undefined];
-  }
 
   const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount);
 
@@ -137,13 +133,12 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
       },
     },
   ];
-  // eslint-disable-next-line no-console
-  console.log('rhoas: Is ServiceAccount valid', isServiceAccountValid);
+
   const services = React.useMemo(
     () => (isServiceAccountValid ? serviceKafkaCard : cloudServicesCard),
     // Prevent automatically filling other the dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isServiceAccountValid],
+    [isServiceAccountValid, serviceAccount],
   );
   return [services, true, undefined];
 };
