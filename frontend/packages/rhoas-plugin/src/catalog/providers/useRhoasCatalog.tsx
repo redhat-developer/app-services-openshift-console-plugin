@@ -23,7 +23,7 @@ import { CATALOG_TYPE } from '../const';
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[], boolean, any] => {
   const [currentNamespace] = useActiveNamespace();
   const { t } = useTranslation();
-  const [serviceAccount] = useK8sWatchResource({
+  const [serviceAccount, loaded, loadError] = useK8sWatchResource({
     kind: referenceForModel(CloudServiceAccountRequest),
     isList: false,
     name: ServiceAccountCRName,
@@ -31,7 +31,11 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
     namespaced: true,
   });
 
-  const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount);
+  if (!loaded) {
+    return [[], false, undefined];
+  }
+
+  const isServiceAccountValid = loadError || isResourceStatusSuccessfull(serviceAccount);
 
   const tokenStatusFooter = () => {
     let token;
