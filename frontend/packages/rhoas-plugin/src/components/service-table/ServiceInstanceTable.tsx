@@ -22,7 +22,7 @@ import {
 } from '@patternfly/react-table';
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
 import { Timestamp } from '@console/internal/components/utils';
-import './StreamsInstanceTable.css';
+import './ServiceInstanceTable.css';
 import { CloudKafka } from '../../utils/rhoas-types';
 
 type FormattedKafkas = {
@@ -166,7 +166,7 @@ const StreamsInstanceTable = ({
           rows={formattedKafkas}
           onSelect={onSelectTableRow}
           selectVariant={RowSelectVariant.radio}
-          className="mk-streams-table"
+          className="rhoas-plugin--service-table"
           onSort={onSort}
           sortBy={sortBy}
         >
