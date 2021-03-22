@@ -91,10 +91,6 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
         class: 'CloudServicesIcon',
         url: operatorIcon,
       },
-      cta: {
-        label: undefined,
-        href: '',
-      },
       details: {
         properties: [{ label: 'Type', value: 'Red Hat Cloud Service' }],
         descriptions: detailsDescriptions,
@@ -133,13 +129,12 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
       },
     },
   ];
-  // eslint-disable-next-line no-console
-  console.log('rhoas: Is ServiceAccount valid', isServiceAccountValid);
+
   const services = React.useMemo(
     () => (isServiceAccountValid ? serviceKafkaCard : cloudServicesCard),
     // Prevent automatically filling other the dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isServiceAccountValid],
+    [isServiceAccountValid, serviceAccount],
   );
   return [services, true, undefined];
 };
