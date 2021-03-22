@@ -9,15 +9,15 @@ import {
 } from '@patternfly/react-core';
 import { KEYBOARD_SHORTCUTS } from '@console/shared';
 
-type StreamsInstanceFilterProps = {
+type ServiceInstanceFilterProps = {
   textInputNameValue: string;
   handleTextInputNameChange: (textInputNameValue: string) => void;
 };
 
-const StreamsInstanceFilter = ({
+const ServiceInstanceFilter = ({
   textInputNameValue,
   handleTextInputNameChange,
-}: StreamsInstanceFilterProps) => {
+}: ServiceInstanceFilterProps) => {
   const { t } = useTranslation();
 
   return (
@@ -45,4 +45,4 @@ const StreamsInstanceFilter = ({
   );
 };
 
-export default StreamsInstanceFilter;
+export default ServiceInstanceFilter;

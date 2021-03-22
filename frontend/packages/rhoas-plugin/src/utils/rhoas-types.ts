@@ -1,6 +1,5 @@
 import { K8sResourceCommon } from '@console/internal/module/k8s';
 
-// FIXME replace with generic type
 export interface CloudKafka {
   id: string;
   kind: string;
