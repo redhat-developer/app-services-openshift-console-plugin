@@ -6,7 +6,6 @@ import { Node } from '@patternfly/react-topology';
 import {
   navFactory,
   SimpleTabNav,
-  // ResourceIcon,
   ResourceSummary,
   ResourceLink,
 } from '@console/internal/components/utils';
@@ -58,7 +57,9 @@ const DetailsComponent: React.FC<any> = ({ obj }) => {
           <dl className="co-m-pane__details">
             <dt>{t('rhoas-plugin~URL')}</dt>
             <dd>
-              <a href={url}>{url}</a>
+              <a href={url} rel="noopener noreferrer" target="_blank">
+                {url}
+              </a>
             </dd>
           </dl>
         )}
@@ -70,7 +71,7 @@ const DetailsComponent: React.FC<any> = ({ obj }) => {
 const ResourcesComponent = ({ obj }) => {
   const serviceAccountSecretName = obj?.spec?.credentials?.serviceAccountSecretName;
   const { namespace } = obj.metadata;
-  // const t = useTranslation();
+
   const link = (
     <ResourceLink
       kind={referenceForModel(SecretModel)}
@@ -97,7 +98,7 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
   onClickTab,
 }: TopologyRhoasPanelProps) => {
   const [showAlert, setShowAlert] = React.useState(true);
-
+  const { t } = useTranslation();
   // Resource
   const akc = item?.getData().resource;
   if (!akc) {
@@ -122,11 +123,11 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
           <div className="kafka-panel-alert">
             <Alert
               variant="default"
-              title="Cloud Service"
+              title={t('rhoas-plugin~Cloud Service')}
               actionClose={<AlertActionCloseButton onClick={handleAlertFunction} />}
               isInline
             >
-              This resource represents service that exist outside your cluster.
+              {t('rhoas-plugin~This resource represents service that exist outside your cluster')}
             </Alert>
           </div>
         )}

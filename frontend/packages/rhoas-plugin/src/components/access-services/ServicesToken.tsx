@@ -58,7 +58,6 @@ export const ServiceToken: any = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              {' '}
               https://cloud.redhat.com/openshift/token
             </a>
           </span>
