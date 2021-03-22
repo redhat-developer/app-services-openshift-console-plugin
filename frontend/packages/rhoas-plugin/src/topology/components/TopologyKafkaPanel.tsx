@@ -14,7 +14,6 @@ import { referenceForModel } from '@console/internal/module/k8s';
 import { SecretModel } from '@console/internal/models';
 import * as UIActions from '@console/internal/actions/ui';
 import './TopologyKafkaPanel.css';
-// import { KafkaConnectionModel } from '../../models';
 
 type PropsFromState = {
   selectedDetailsTab?: any;
@@ -116,10 +115,6 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
       <div className="overview__sidebar-pane-head resource-overview__heading">
         <h1 className="co-m-pane__heading">
           <div className="co-m-pane__name co-resource-item">
-            {/* <ResourceIcon
-              className="co-m-resource-icon--lg co-m-resource-kafka-connection"
-              kind={KafkaConnectionModel.abbr}
-            /> */}
             <h3>Kafka Connection</h3>
           </div>
         </h1>
@@ -131,13 +126,7 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
               actionClose={<AlertActionCloseButton onClick={handleAlertFunction} />}
               isInline
             >
-              This resource represents service that exist outside your cluster. To view details
-              about resource please go to
-              <a href="https://cloud.redhat.com/beta/application-services/openshift-streams/">
-                {' '}
-                OpenShift Streams Apache Kafka{' '}
-              </a>{' '}
-              console.
+              This resource represents service that exist outside your cluster.
             </Alert>
           </div>
         )}
