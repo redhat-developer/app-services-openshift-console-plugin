@@ -23,8 +23,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   namespace,
 }): [CatalogItem[], boolean, any] => {
   const { t } = useTranslation();
-
-  const [serviceAccount, loaded] = useK8sWatchResource({
+  const [serviceAccount, loaded, errorMsg] = useK8sWatchResource({
     kind: referenceForModel(CloudServiceAccountRequest),
     isList: false,
     name: ServiceAccountCRName,
@@ -32,9 +31,10 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
     namespaced: true,
   });
 
+  const loadedOrError = loaded || errorMsg;
   const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount);
   const services = React.useMemo(() => {
-    if (!loaded) return [];
+    if (!loaded && !errorMsg) return [];
 
     const tokenStatusFooter = () => {
       let token;
@@ -141,9 +141,9 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
       },
     ];
     return cloudServicesCard;
-  }, [namespace, isServiceAccountValid, loaded, serviceAccount, t]);
+  }, [namespace, errorMsg, isServiceAccountValid, loaded, serviceAccount, t]);
 
-  return [services, loaded, undefined];
+  return [services, loadedOrError, undefined];
 };
 
 export default useRhoasCatalog;
