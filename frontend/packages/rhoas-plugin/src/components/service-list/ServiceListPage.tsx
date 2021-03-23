@@ -51,6 +51,19 @@ const ServiceListPage: React.FC = () => {
     optional: true,
   });
 
+  let remoteKafkaInstances;
+
+  const createKafkaConnectionFlow = React.useCallback(async () => {
+    const { id, name } = remoteKafkaInstances[selectedKafka];
+    try {
+      await createKafkaConnection(id, name, currentNamespace);
+      history.push(`/topology/ns/${currentNamespace}`);
+    } catch (error) {
+      deleteKafkaConnection(name, currentNamespace);
+      setKafkaCreateError(error);
+    }
+  }, [currentNamespace, remoteKafkaInstances, selectedKafka]);
+
   if (kafkaCreateError) {
     return (
       <ServicesErrorState
@@ -69,8 +82,8 @@ const ServiceListPage: React.FC = () => {
     if (!isAcccesTokenSecretValid(watchedKafkaRequest)) {
       return (
         <ServicesErrorState
-          title={t('Could not fetch services')}
-          message={t('Could not connect to RHOAS with API Token')}
+          title={t('rhoas-plugin~Could not fetch services')}
+          message={t('rhoas-plugin~Could not connect to RHOAS with API Token')}
           actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
         />
       );
@@ -78,11 +91,10 @@ const ServiceListPage: React.FC = () => {
     return (
       <>
         <ServicesErrorState
-          title={t('Could not fetch services')}
-          message={
-            t('Failed to load list of services') +
-            getFinishedCondition(watchedKafkaRequest)?.message
-          }
+          title={t('rhoas-plugin~Could not fetch services')}
+          message={t('rhoas-plugin~Failed to load list of services', {
+            error: getFinishedCondition(watchedKafkaRequest)?.message,
+          })}
           actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
         />
         <div />
@@ -90,19 +102,7 @@ const ServiceListPage: React.FC = () => {
     );
   }
 
-  const remoteKafkaInstances = watchedKafkaRequest.status.userKafkas;
-
-  const createKafkaConnectionFlow = async () => {
-    const kafkaId = remoteKafkaInstances[selectedKafka].id;
-    const kafkaName = remoteKafkaInstances[selectedKafka].name;
-    try {
-      await createKafkaConnection(kafkaId, kafkaName, currentNamespace);
-      history.push(`/topology/ns/${currentNamespace}`);
-    } catch (error) {
-      deleteKafkaConnection(kafkaName, currentNamespace);
-      setKafkaCreateError(error);
-    }
-  };
+  remoteKafkaInstances = watchedKafkaRequest.status.userKafkas;
 
   const disableCreateButton = () => {
     if (selectedKafka === null || selectedKafka === undefined) {
