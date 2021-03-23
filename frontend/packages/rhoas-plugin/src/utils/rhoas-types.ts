@@ -15,6 +15,20 @@ export interface CloudKafka {
   updatedAt: string;
 }
 
+export interface KafkaConnection extends K8sResourceCommon {
+  spec: {
+    accessTokenSecretName: string;
+    credentials: {
+      serviceAccountSecretName: string;
+    };
+  };
+  status: {
+    bootstrapServerHost: string;
+    conditions: StatusCondition[];
+    metadata: any;
+  };
+}
+
 export interface KafkaRequest extends K8sResourceCommon {
   spec: {
     accessTokenSecretName: string;

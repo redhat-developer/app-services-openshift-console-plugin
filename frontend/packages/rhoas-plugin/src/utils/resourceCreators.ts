@@ -235,15 +235,9 @@ export const deleteKafkaConnection = (kafkaName: string, currentNamespace: strin
 };
 
 export const listOfCurrentKafkaConnectionsById = async (currentNamespace: string) => {
-  const localArray = [];
   const kafkaConnections = await k8sGet(KafkaConnectionModel, null, currentNamespace);
   if (kafkaConnections) {
-    const callback = (kafka) => {
-      const { kafkaId } = kafka.spec;
-      localArray.push(kafkaId);
-    };
-    kafkaConnections.items.map(callback);
-    return localArray;
+    return kafkaConnections.items.map((kafka) => kafka.spec.kafkaId);
   }
 
   return Promise.resolve([]);
