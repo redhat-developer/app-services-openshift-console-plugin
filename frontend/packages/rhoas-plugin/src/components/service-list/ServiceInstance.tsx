@@ -19,6 +19,21 @@ type ServiceInstanceProps = {
   disableCreateButton: boolean;
 };
 
+function areAllServicesSelected(currentServices: string[], listOfServices: CloudKafka[]) {
+  const selectedServices = listOfServices.reduce((count, service) => {
+    if (service.status !== 'ready') {
+      return count;
+    }
+    for (const selectedService of currentServices) {
+      if (selectedService === service.id) {
+        return count;
+      }
+    }
+    return count + 1;
+  }, 0);
+  return selectedServices === 0;
+}
+
 const ServiceInstance: React.FC<ServiceInstanceProps> = ({
   kafkaArray,
   selectedKafka,
@@ -27,7 +42,6 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
   createKafkaConnectionFlow,
   disableCreateButton,
 }: ServiceInstanceProps) => {
-  const [allKafkasConnected, setAllKafkasConnected] = React.useState<boolean>(false);
   const [textInputNameValue, setTextInputNameValue] = React.useState<string>('');
   // const [pageKafkas, setPageKafkas] = React.useState<CloudKafka[]>(kafkaArray);
 
@@ -53,16 +67,16 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
           marginBottom="lg"
         />
         <FormSection fullWidth flexLayout extraMargin>
-          {allKafkasConnected ? (
+          {areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
             <ServicesEmptyState
               title={t('rhoas-plugin~All Kafka clusters are in use')}
-              actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
+              actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
               icon={CubesIcon}
             />
           ) : kafkaArray.length === 0 ? (
             <ServicesEmptyState
               title={t('rhoas-plugin~No Kafka Clusters found')}
-              actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
+              actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
               icon={CubesIcon}
             />
           ) : (
@@ -78,8 +92,6 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
                 selectedKafka={selectedKafka}
                 setSelectedKafka={setSelectedKafka}
                 currentKafkaConnections={currentKafkaConnections}
-                allKafkasConnected={allKafkasConnected}
-                setAllKafkasConnected={setAllKafkasConnected}
               />
             </>
           )}

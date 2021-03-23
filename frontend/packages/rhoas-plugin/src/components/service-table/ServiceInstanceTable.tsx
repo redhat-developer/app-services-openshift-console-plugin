@@ -30,25 +30,21 @@ type FormattedKafkas = {
   selected: boolean;
 };
 
-type StreamsInstanceTableProps = {
+type ServiceInstanceTableProps = {
   kafkaArray: CloudKafka[];
   pageKafkas: CloudKafka[];
   selectedKafka: number;
   setSelectedKafka: (selectedKafka: number) => void;
   currentKafkaConnections: string[];
-  allKafkasConnected: boolean;
-  setAllKafkasConnected: (allKafkasConnected: boolean) => void;
-  setTextInputNameValue: (arg0: string) => void;
+  setTextInputNameValue: (input: string) => void;
 };
 
-const StreamsInstanceTable: React.FC<StreamsInstanceTableProps> = ({
-  kafkaArray,
+const ServiceInstanceTable: React.FC<ServiceInstanceTableProps> = ({
   pageKafkas,
   setSelectedKafka,
   currentKafkaConnections,
-  setAllKafkasConnected,
   setTextInputNameValue,
-}: StreamsInstanceTableProps) => {
+}: ServiceInstanceTableProps) => {
   const [formattedKafkas, setFormattedKafkas] = React.useState<FormattedKafkas[]>([]);
   const [kafkaRows, setKafkaRows] = React.useState(pageKafkas);
   const [sortBy, setSortBy] = React.useState({});
@@ -74,13 +70,9 @@ const StreamsInstanceTable: React.FC<StreamsInstanceTableProps> = ({
           };
         });
 
-      if (kafkaArray && kafkaArray.length === currentKafkaConnections.length) {
-        setAllKafkasConnected(true);
-      } else {
-        setFormattedKafkas(tableRow);
-      }
+      setFormattedKafkas(tableRow);
     },
-    [currentKafkaConnections, kafkaArray, setAllKafkasConnected],
+    [currentKafkaConnections],
   );
 
   React.useEffect(() => {
@@ -178,4 +170,4 @@ const StreamsInstanceTable: React.FC<StreamsInstanceTableProps> = ({
   );
 };
 
-export default StreamsInstanceTable;
+export default ServiceInstanceTable;

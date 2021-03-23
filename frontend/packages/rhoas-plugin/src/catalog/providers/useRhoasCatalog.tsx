@@ -59,7 +59,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
 
     const serviceKafkaCardDescription = (
       <TextContent>
-        <Text component={TextVariants.p}>TO DO</Text>
+        <Text component={TextVariants.p}>{t('rhoas-plugin~KafkaCardDescription')}</Text>
       </TextContent>
     );
 
@@ -68,11 +68,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
         <FlexItem>
           <TextContent>
             <Text component={TextVariants.p}>
-              Red Hat OpenShift Application Services provide a streamlined developer experience for
-              building, deploying, and scaling cloud-native applications in open hybrid-cloud
-              environments. The combination of enterprise-grade Kubernetes, cloud-native approach to
-              application delivery, and managed operations allows teams to focus on core
-              competencies, accelerate time to value and reduce operational cost.
+              {t('rhoas-plugin~ManagedServices-card-description')}
             </Text>
           </TextContent>
         </FlexItem>
