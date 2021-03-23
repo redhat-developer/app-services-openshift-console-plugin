@@ -13,6 +13,7 @@ import { referenceForModel } from '@console/internal/module/k8s';
 import { SecretModel } from '@console/internal/models';
 import * as UIActions from '@console/internal/actions/ui';
 import './TopologyKafkaPanel.css';
+import { KafkaConnection } from '../../utils/rhoas-types';
 
 type PropsFromState = {
   selectedDetailsTab?: any;
@@ -36,7 +37,7 @@ type OwnProps = {
 
 type TopologyRhoasPanelProps = PropsFromState & PropsFromDispatch & OwnProps;
 
-const DetailsComponent: React.FC<any> = ({ obj }) => {
+const DetailsComponent: React.FC<{ obj: KafkaConnection }> = ({ obj }) => {
   const { t } = useTranslation();
   const boostrapServerHost = obj.status?.bootstrapServerHost;
   const url = obj.status?.metadata?.cloudUI;
@@ -68,7 +69,7 @@ const DetailsComponent: React.FC<any> = ({ obj }) => {
   );
 };
 
-const ResourcesComponent = ({ obj }) => {
+const ResourcesComponent: React.FC<{ obj: KafkaConnection }> = ({ obj }) => {
   const serviceAccountSecretName = obj?.spec?.credentials?.serviceAccountSecretName;
   const { namespace } = obj.metadata;
 
@@ -96,7 +97,7 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
   item,
   selectedDetailsTab,
   onClickTab,
-}: TopologyRhoasPanelProps) => {
+}) => {
   const [showAlert, setShowAlert] = React.useState(true);
   const { t } = useTranslation();
   // Resource
@@ -120,7 +121,7 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
           </div>
         </h1>
         {showAlert && (
-          <div className="kafka-panel-alert">
+          <div className="rhoas-topology-kafka-panel-alert">
             <Alert
               variant="default"
               title={t('rhoas-plugin~Cloud Service')}

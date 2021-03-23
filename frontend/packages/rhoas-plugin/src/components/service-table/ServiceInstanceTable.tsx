@@ -149,25 +149,23 @@ const ServiceInstanceTable: React.FC<ServiceInstanceTableProps> = ({
     setKafkaRows(direction === SortByDirection.asc ? sortedRows : sortedRows.reverse());
   };
 
-  return (
+  return formattedKafkas && pageKafkas ? (
     <>
-      {formattedKafkas && pageKafkas && (
-        <Table
-          aria-label={t('rhoas-plugin~List of Kafka Instances')}
-          cells={tableColumns}
-          rows={formattedKafkas}
-          onSelect={onSelectTableRow}
-          selectVariant={RowSelectVariant.radio}
-          className="rhoas-plugin--service-table"
-          onSort={onSort}
-          sortBy={sortBy}
-        >
-          <TableHeader />
-          {pageKafkas.length === 0 ? emptyStateRows : <TableBody />}
-        </Table>
-      )}
+      <Table
+        aria-label={t('rhoas-plugin~List of Kafka Instances')}
+        cells={tableColumns}
+        rows={formattedKafkas}
+        onSelect={onSelectTableRow}
+        selectVariant={RowSelectVariant.radio}
+        className="rhoas-plugin--service-table"
+        onSort={onSort}
+        sortBy={sortBy}
+      >
+        <TableHeader />
+        {pageKafkas.length === 0 ? emptyStateRows : <TableBody />}
+      </Table>
     </>
-  );
+  ) : null;
 };
 
 export default ServiceInstanceTable;

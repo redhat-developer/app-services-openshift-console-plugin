@@ -21,7 +21,7 @@ const ServiceInstanceFilter: React.FC<ServiceInstanceFilterProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Toolbar id="toolbar-filter-instances">
+    <Toolbar data-test-id="toolbar-filter-instances">
       <ToolbarContent>
         <ToolbarGroup variant="filter-group">
           <ToolbarItem>

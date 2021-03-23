@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Form,
@@ -47,16 +47,15 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
           {t(
             'rhoas-plugin~To access this Cloud Service, input the API token which can be located at',
           )}
-          <Trans t={t} ns="rhoas-plugin">
-            <a
-              href="https://cloud.redhat.com/openshift/token"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {' '}
-              https://cloud.redhat.com/openshift/token
-            </a>
-          </Trans>
+
+          <a
+            href="https://cloud.redhat.com/openshift/token"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {' '}
+            https://cloud.redhat.com/openshift/token
+          </a>
         </Text>
       </TextContent>
       <Form>
@@ -66,6 +65,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
             onChange={setApiTokenValue}
             type="password"
             name="apitoken"
+            aria-label="rhoas-token"
           />
         </FormGroup>
         <TextContent>

@@ -11,6 +11,7 @@
   "Cant create an access token? Contact your administrator": "Cant create an access token? Contact your administrator",
   "Create": "Create",
   "Cancel": "Cancel",
+  "Reset": "Reset",
   "Select Kafka Cluster": "Select Kafka Cluster",
   "The Kafka cluster selected below will appear on the topology view.": "The Kafka cluster selected below will appear on the topology view.",
   "All Kafka clusters are in use": "All Kafka clusters are in use",

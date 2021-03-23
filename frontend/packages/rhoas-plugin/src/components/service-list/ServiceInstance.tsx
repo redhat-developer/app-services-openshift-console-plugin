@@ -98,8 +98,8 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
         </FormSection>
       </FormBody>
       <FormFooter
-        handleSubmit={() => createKafkaConnectionFlow()}
-        isSubmitting={false}
+        handleSubmit={createKafkaConnectionFlow}
+        isSubmitting={disableCreateButton}
         errorMessage=""
         submitLabel={t('rhoas-plugin~Create')}
         disableSubmit={disableCreateButton}
