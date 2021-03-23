@@ -33,7 +33,7 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
 
   const pageKafkas = React.useMemo(
     () => kafkaArray.filter((kafka) => kafka.name.includes(textInputNameValue)),
-    [kafkaArray, textInputNameValue]
+    [kafkaArray, textInputNameValue],
   );
 
   const { t } = useTranslation();
@@ -66,23 +66,23 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
               icon={CubesIcon}
             />
           ) : (
-                <>
-                  <ServiceInstanceFilter
-                    textInputNameValue={textInputNameValue}
-                    handleTextInputNameChange={handleTextInputNameChange}
-                  />
-                  <ServiceInstanceTable
-                    kafkaArray={kafkaArray}
-                    pageKafkas={pageKafkas}
-                    setTextInputNameValue={setTextInputNameValue}
-                    selectedKafka={selectedKafka}
-                    setSelectedKafka={setSelectedKafka}
-                    currentKafkaConnections={currentKafkaConnections}
-                    allKafkasConnected={allKafkasConnected}
-                    setAllKafkasConnected={setAllKafkasConnected}
-                  />
-                </>
-              )}
+            <>
+              <ServiceInstanceFilter
+                textInputNameValue={textInputNameValue}
+                handleTextInputNameChange={handleTextInputNameChange}
+              />
+              <ServiceInstanceTable
+                kafkaArray={kafkaArray}
+                pageKafkas={pageKafkas}
+                setTextInputNameValue={setTextInputNameValue}
+                selectedKafka={selectedKafka}
+                setSelectedKafka={setSelectedKafka}
+                currentKafkaConnections={currentKafkaConnections}
+                allKafkasConnected={allKafkasConnected}
+                setAllKafkasConnected={setAllKafkasConnected}
+              />
+            </>
+          )}
         </FormSection>
       </FormBody>
       <FormFooter
