@@ -6,11 +6,11 @@
   "Unlocked": "Unlocked",
   "RHOAS can include Streams for Kafka, Service Registry": "RHOAS can include Kafka, Service Registry and other Red Hat Services",
   "Access Red Hat Cloud Services with API Token": "Access Red Hat Cloud Services with API Token",
-  "To access this Cloud Service, input the API token which can be located at": "To access this Cloud Service, input the API token which can be located at",
+  "To access this Cloud Service, input the API token which can be located at": "To access this Cloud Service, input the API token which can be located at ",
   "API token can be accessed at": "API token can be accessed at",
   "Cant create an access token? Contact your administrator": "Cant create an access token? Contact your administrator",
   "Create": "Create",
-  "Reset": "Reset",
+  "Cancel": "Cancel",
   "Select Kafka Cluster": "Select Kafka Cluster",
   "The Kafka cluster selected below will appear on the topology view.": "The Kafka cluster selected below will appear on the topology view.",
   "All Kafka clusters are in use": "All Kafka clusters are in use",
@@ -28,5 +28,9 @@
   "Bootstrap Server": "Bootstrap Server",
   "URL": "URL",
   "Cloud Service": "Cloud Service",
-  "This resource represents service that exist outside your cluster": "This resource represents service that exist outside your cluster"
+  "This resource represents service that exist outside your cluster": "This resource represents service that exist outside your cluster",
+  "Create a binding connector": "Create a binding connector",
+  "API Token": "API Token",
+  "Problem with creating secret": "Problem with creating secret: {{error}}",
+  "Cannot create service account": "Cannot create service account: {{error}}"
 }

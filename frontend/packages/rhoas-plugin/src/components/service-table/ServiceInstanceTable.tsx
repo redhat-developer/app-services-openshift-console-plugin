@@ -38,16 +38,16 @@ type StreamsInstanceTableProps = {
   currentKafkaConnections: string[];
   allKafkasConnected: boolean;
   setAllKafkasConnected: (allKafkasConnected: boolean) => void;
-  handleTextInputNameChange: (arg0: string) => void;
+  setTextInputNameValue: (arg0: string) => void;
 };
 
-const StreamsInstanceTable = ({
+const StreamsInstanceTable: React.FC<StreamsInstanceTableProps> = ({
   kafkaArray,
   pageKafkas,
   setSelectedKafka,
   currentKafkaConnections,
   setAllKafkasConnected,
-  handleTextInputNameChange,
+  setTextInputNameValue,
 }: StreamsInstanceTableProps) => {
   const [formattedKafkas, setFormattedKafkas] = React.useState<FormattedKafkas[]>([]);
   const [kafkaRows, setKafkaRows] = React.useState(pageKafkas);
@@ -99,7 +99,7 @@ const StreamsInstanceTable = ({
 
   const clearFilters = () => {
     const value = '';
-    handleTextInputNameChange(value);
+    setTextInputNameValue(value);
   };
 
   const emptyStateRows = (

@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { Button, EmptyState, EmptyStateIcon, Title } from '@patternfly/react-core';
-import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
-import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
 import { history } from '@console/internal/components/utils';
 
 type ServicesEmptyStateProps = {
   title: string;
   actionInfo?: string;
   action?: () => void;
-  icon: string;
+  icon: React.ComponentClass;
 };
 
 export const ServicesEmptyState = ({
@@ -17,16 +15,6 @@ export const ServicesEmptyState = ({
   action,
   icon,
 }: ServicesEmptyStateProps) => {
-  const renderIcon = () => {
-    switch (icon) {
-      case 'TimesCircleIcon':
-        return TimesCircleIcon;
-      case 'CubesIcon':
-        return CubesIcon;
-      default:
-        return undefined;
-    }
-  };
   let stateAction;
   if (action) {
     stateAction = action;
@@ -38,7 +26,7 @@ export const ServicesEmptyState = ({
 
   return (
     <EmptyState>
-      <EmptyStateIcon icon={renderIcon()} />
+      <EmptyStateIcon icon={icon} />
       <Title headingLevel="h4" size="lg">
         {title}
       </Title>

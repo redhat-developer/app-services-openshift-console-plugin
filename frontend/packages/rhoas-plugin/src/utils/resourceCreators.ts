@@ -230,14 +230,8 @@ export const createKafkaConnection = async (
  * @param kafkaName
  * @param currentNamespace
  */
-export const deleteKafkaConnection = async (kafkaName: string, currentNamespace: string) => {
-  try {
-    return k8sKillByName(KafkaConnectionModel, kafkaName, currentNamespace);
-  } catch {
-    // eslint-disable-next-line no-console
-    console.info('rhoas: failed to delete kafka connection');
-  }
-  return Promise.resolve();
+export const deleteKafkaConnection = (kafkaName: string, currentNamespace: string) => {
+  return k8sKillByName(KafkaConnectionModel, kafkaName, currentNamespace);
 };
 
 export const listOfCurrentKafkaConnectionsById = async (currentNamespace: string) => {
