@@ -14,7 +14,7 @@ type ServiceInstanceFilterProps = {
   handleTextInputNameChange: (textInputNameValue: string) => void;
 };
 
-const ServiceInstanceFilter = ({
+const ServiceInstanceFilter: React.FC<ServiceInstanceFilterProps> = ({
   textInputNameValue,
   handleTextInputNameChange,
 }: ServiceInstanceFilterProps) => {

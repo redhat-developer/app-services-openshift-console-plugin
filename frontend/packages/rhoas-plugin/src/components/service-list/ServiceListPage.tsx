@@ -24,7 +24,7 @@ import {
 import { ServicesErrorState } from '../states/ServicesErrorState';
 import { useTranslation } from 'react-i18next';
 
-const ServiceListPage = () => {
+const ServiceListPage: React.FC = () => {
   const [currentNamespace] = useActiveNamespace();
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
   const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState<string[]>([]);
@@ -62,11 +62,7 @@ const ServiceListPage = () => {
   }
 
   if (!watchedKafkaRequest || !watchedKafkaRequest.status) {
-    return (
-      <>
-        <LoadingBox />
-      </>
-    );
+    return <LoadingBox />;
   }
 
   if (!isResourceStatusSuccessfull(watchedKafkaRequest)) {
@@ -127,7 +123,7 @@ const ServiceListPage = () => {
           setSelectedKafka={setSelectedKafka}
           currentKafkaConnections={currentKafkaConnections}
           createKafkaConnectionFlow={createKafkaConnectionFlow}
-          disableCreateButton={disableCreateButton}
+          disableCreateButton={disableCreateButton()}
         />
       </NamespacedPage>
     </>

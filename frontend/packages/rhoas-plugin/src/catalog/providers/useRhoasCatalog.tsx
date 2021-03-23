@@ -12,22 +12,22 @@ import {
 import { LockIcon } from '@patternfly/react-icons';
 import { CatalogExtensionHook, CatalogItem } from '@console/dynamic-plugin-sdk';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
-import { useActiveNamespace } from '@console/shared';
+import { referenceForModel } from '@console/internal/module/k8s';
 import { ServiceToken } from '../../components/access-services/ServicesToken';
 import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { CloudServiceAccountRequest } from '../../models';
 import { isResourceStatusSuccessfull } from '../../utils/conditionHandler';
-import { referenceForModel } from '@console/internal/module/k8s';
 import { CATALOG_TYPE } from '../const';
 
-const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[], boolean, any] => {
-  const [currentNamespace] = useActiveNamespace();
+const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
+  namespace,
+}): [CatalogItem[], boolean, any] => {
   const { t } = useTranslation();
   const [serviceAccount, loaded, errorMsg] = useK8sWatchResource({
     kind: referenceForModel(CloudServiceAccountRequest),
     isList: false,
     name: ServiceAccountCRName,
-    namespace: currentNamespace,
+    namespace,
     namespaced: true,
   });
 
@@ -57,7 +57,13 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
       );
     };
 
-    const drawerDescription = (
+    const serviceKafkaCardDescription = (
+      <TextContent>
+        <Text component={TextVariants.p}>TO DO</Text>
+      </TextContent>
+    );
+
+    const cloudServicesCardDescription = (
       <Flex direction={{ default: 'column' }}>
         <FlexItem>
           <TextContent>
@@ -72,14 +78,23 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
         </FlexItem>
         <Divider component="li" />
         <FlexItem>
-          <ServiceToken />
+          <Text component={TextVariants.h2}>
+            {t('rhoas-plugin~Access Red Hat Cloud Services with API Token')}
+          </Text>
+          <ServiceToken namespace={namespace} />
         </FlexItem>
       </Flex>
     );
 
-    const detailsDescriptions = [
+    const serviceKafkaCardDetailsDescription = [
       {
-        value: drawerDescription,
+        value: serviceKafkaCardDescription,
+      },
+    ];
+
+    const cloudServicesCardDetailsDescription = [
+      {
+        value: cloudServicesCardDescription,
       },
     ];
 
@@ -92,26 +107,16 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
           description: 'Streams for Apache Kafka',
           provider: 'Red Hat',
           tags: ['kafka', 'service'],
-          creationTimestamp: '2019-09-04T13:56:06Z',
-          attributes: {
-            version: '1',
-            type: 'kafka',
-          },
           icon: {
-            class: 'kafkaIcon',
             url: kafkaIcon,
           },
           cta: {
             label: 'Connect',
-            href: `/rhoas/ns/${currentNamespace}/kafka`,
+            href: `/rhoas/ns/${namespace}/kafka`,
           },
           details: {
             properties: [{ label: 'Type', value: 'Red Hat Cloud Service' }],
-            descriptions: [
-              {
-                value: <p />,
-              },
-            ],
+            descriptions: serviceKafkaCardDetailsDescription,
           },
         },
       ];
@@ -126,23 +131,17 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = (): [CatalogItem[],
         description: tokenStatusFooter(),
         provider: 'Red Hat',
         tags: ['kafka', 'service'],
-        creationTimestamp: '2019-09-04T13:56:06Z',
-        attributes: {
-          version: '1',
-          type: 'kafka',
-        },
         icon: {
-          class: 'CloudServicesIcon',
           url: operatorIcon,
         },
         details: {
           properties: [{ label: 'Type', value: 'Red Hat Cloud Service' }],
-          descriptions: detailsDescriptions,
+          descriptions: cloudServicesCardDetailsDescription,
         },
       },
     ];
     return cloudServicesCard;
-  }, [currentNamespace, errorMsg, isServiceAccountValid, loaded, serviceAccount, t]);
+  }, [namespace, errorMsg, isServiceAccountValid, loaded, serviceAccount, t]);
 
   return [services, loadedOrError, undefined];
 };
