@@ -111,7 +111,7 @@ const TrapezoidBaseNode: React.FC<TrapezoidBaseNodeProps> = ({
 
   return (
     <Tooltip
-      content={t('topology~Create a binding connector')}
+      content={t('rhoas-plugin~Create a binding connector')}
       trigger="manual"
       isVisible={dropTarget && canDrop}
       animationDuration={0}
