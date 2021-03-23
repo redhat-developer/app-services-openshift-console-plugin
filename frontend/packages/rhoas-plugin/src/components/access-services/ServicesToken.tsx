@@ -28,14 +28,14 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
     try {
       await createSecretIfNeeded(namespace, apiTokenValue);
     } catch (error) {
-      setErrorMessage(t('rhoas-plugin~Problem with creating secret {{error}}', { error }));
+      setErrorMessage(t('rhoas-plugin~Problem with creating secret', { error, namespace }));
       setSendDisabled(false);
       return;
     }
     try {
       await createServiceAccountIfNeeded(namespace);
     } catch (error) {
-      setErrorMessage(t('rhoas-plugin~Cannot create service account {{error}}', { error }));
+      setErrorMessage(t('rhoas-plugin~Cannot create service account', { error, namespace }));
     }
     setSendDisabled(false);
   };

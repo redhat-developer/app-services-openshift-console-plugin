@@ -27,10 +27,15 @@
   "List of Kafka Instances": "List of Kafka Instances",
   "Bootstrap Server": "Bootstrap Server",
   "URL": "URL",
+  "Failed to load list of services": "Failed to load list of services: {{error}}",
+  "Could not fetch services": "Could not fetch services",
+  "Could not connect to RHOAS with API Token": "Could not connect to RHOAS with API Token",
   "Cloud Service": "Cloud Service",
   "This resource represents service that exist outside your cluster": "This resource represents service that exist outside your cluster",
   "Create a binding connector": "Create a binding connector",
   "API Token": "API Token",
-  "Problem with creating secret": "Problem with creating secret: {{error}}",
-  "Cannot create service account": "Cannot create service account: {{error}}"
+  "Problem with creating secret": "Problem with creating secret: {{error}} Namespace: {{namespace}}",
+  "Cannot create service account": "Cannot create service account: {{error}} Namespace: {{namespace}}",
+  "KafkaCardDescription": "OpenShift Streams for Apache Kafka",
+  "ManagedServices-card-description": "Red Hat OpenShift Application Services provide a streamlined developer experience for building, deploying, and scaling cloud-native applications in open hybrid-cloud environments. The combination of enterprise-grade Kubernetes, cloud-native approach toapplication delivery, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost."
 }
