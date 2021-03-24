@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   Button,
   Form,
@@ -11,6 +11,7 @@ import {
   Alert,
 } from '@patternfly/react-core';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
+import { Link } from 'react-router-dom';
 
 type ServiceTokenProps = {
   namespace: string;
@@ -47,15 +48,20 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
           {t(
             'rhoas-plugin~To access this Cloud Service, input the API token which can be located at',
           )}
-
+          <Trans t={t} ns="rhoas-plugin">
+            <Link to={'https://cloud.redhat.com/openshift/token'}>
+              https://cloud.redhat.com/openshift/token
+            </Link>{' '}
+            {/*  
           <a
-            href="https://cloud.redhat.com/openshift/token"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {' '}
-            https://cloud.redhat.com/openshift/token
-          </a>
+              href="https://cloud.redhat.com/openshift/token"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {' '}
+              https://cloud.redhat.com/openshift/token
+            </a> */}
+          </Trans>
         </Text>
       </TextContent>
       <Form>
