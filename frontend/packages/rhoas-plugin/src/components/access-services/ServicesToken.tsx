@@ -11,7 +11,6 @@ import {
   Alert,
 } from '@patternfly/react-core';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
-import { Link } from 'react-router-dom';
 
 type ServiceTokenProps = {
   namespace: string;
@@ -21,7 +20,6 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
   const [sendDisabled, setSendDisabled] = React.useState(false);
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
-
   const { t } = useTranslation();
 
   const onCreate = async () => {
@@ -45,22 +43,15 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
     <>
       <TextContent>
         <Text component={TextVariants.p}>
-          {t(
-            'rhoas-plugin~To access this Cloud Service, input the API token which can be located at',
-          )}
           <Trans t={t} ns="rhoas-plugin">
-            <Link to={'https://cloud.redhat.com/openshift/token'}>
-              https://cloud.redhat.com/openshift/token
-            </Link>{' '}
-            {/*  
-          <a
+            To access this Cloud Service, input the API token which can be located at{' '}
+            <a
               href="https://cloud.redhat.com/openshift/token"
               rel="noopener noreferrer"
               target="_blank"
             >
-              {' '}
               https://cloud.redhat.com/openshift/token
-            </a> */}
+            </a>
           </Trans>
         </Text>
       </TextContent>
