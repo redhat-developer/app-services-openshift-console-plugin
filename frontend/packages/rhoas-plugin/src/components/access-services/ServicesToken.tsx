@@ -10,18 +10,15 @@ import {
   TextVariants,
   Alert,
 } from '@patternfly/react-core';
+import { useActiveNamespace } from '@console/shared';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
-import { Link } from 'react-router-dom';
 
-type ServiceTokenProps = {
-  namespace: string;
-};
-
-export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: ServiceTokenProps) => {
+export const ServiceToken: any = () => {
   const [sendDisabled, setSendDisabled] = React.useState(false);
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
-
+  const [currentNamespace] = useActiveNamespace();
+  const namespace = currentNamespace;
   const { t } = useTranslation();
 
   const onCreate = async () => {
@@ -29,49 +26,52 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
     try {
       await createSecretIfNeeded(namespace, apiTokenValue);
     } catch (error) {
-      setErrorMessage(t('rhoas-plugin~Problem with creating secret', { error, namespace }));
+      setErrorMessage(`Problem with creating secret: ${error}`);
       setSendDisabled(false);
       return;
     }
     try {
       await createServiceAccountIfNeeded(namespace);
     } catch (error) {
-      setErrorMessage(t('rhoas-plugin~Cannot create service account', { error, namespace }));
+      setErrorMessage(`Cannot create service account: ${error}`);
     }
     setSendDisabled(false);
+  };
+
+  const handleApiTokenValueChange = (value) => {
+    setApiTokenValue(value);
   };
 
   return (
     <>
       <TextContent>
-        <Text component={TextVariants.p}>
-          {t(
-            'rhoas-plugin~To access this Cloud Service, input the API token which can be located at',
-          )}
-          <Trans t={t} ns="rhoas-plugin">
-            <Link to={'https://cloud.redhat.com/openshift/token'}>
-              https://cloud.redhat.com/openshift/token
-            </Link>{' '}
-            {/*  
+        <Trans t={t} ns="rhoas-plugin">
+          To access this Cloud Service, input the API token which can be located at{' '}
           <a
-              href="https://cloud.redhat.com/openshift/token"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {' '}
-              https://cloud.redhat.com/openshift/token
-            </a> */}
-          </Trans>
-        </Text>
+            href="https://cloud.redhat.com/openshift/token"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            https://cloud.redhat.com/openshift/token
+          </a>
+        </Trans>
       </TextContent>
       <Form>
-        <FormGroup fieldId="api-token-value" label={t('rhoas-plugin~API Token')} isRequired>
+        <FormGroup
+          fieldId="api-token-value"
+          label="API Token"
+          isRequired
+          helperText={`${t(
+            'rhoas-plugin~API token can be accessed at',
+          )} cloud.redhat.com/openshift/token`}
+        >
           <TextInput
             value={apiTokenValue}
-            onChange={setApiTokenValue}
+            onChange={(value: string) => handleApiTokenValueChange(value)}
             type="password"
+            id="offlinetoken"
             name="apitoken"
-            aria-label="rhoas-token"
+            placeholder=""
           />
         </FormGroup>
         <TextContent>
