@@ -62,6 +62,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
             onChange={setApiTokenValue}
             type="password"
             name="apitoken"
+            aria-label="rhoas-token"
           />
         </FormGroup>
         <TextContent>
