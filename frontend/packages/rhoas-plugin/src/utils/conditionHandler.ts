@@ -1,6 +1,6 @@
-import { StatusCondition } from './rhoas-types';
+import { StatusCondition, StatusEnabledResource } from './rhoas-types';
 
-export const getCondition = (request: any, name: string) => {
+export const getCondition = (request: StatusEnabledResource, name: string) => {
   if (request && request.status && request.status.conditions) {
     for (const condition of request.status.conditions) {
       if (condition.type === name) {
@@ -11,15 +11,15 @@ export const getCondition = (request: any, name: string) => {
   return undefined;
 };
 
-export const getFinishedCondition = (request: any) => {
+export const getFinishedCondition = (request: StatusEnabledResource) => {
   return getCondition(request, 'Finished');
 };
 
-export const isResourceStatusSuccessfull = (request: any) => {
+export const isResourceStatusSuccessfull = (request: StatusEnabledResource) => {
   const condition = getCondition(request, 'Finished');
   return condition && condition.status === 'True';
 };
 
-export const isAcccesTokenSecretValid = (request: any) => {
+export const isAcccesTokenSecretValid = (request: StatusEnabledResource) => {
   return getCondition(request, 'AcccesTokenSecretValid')?.status === 'True';
 };

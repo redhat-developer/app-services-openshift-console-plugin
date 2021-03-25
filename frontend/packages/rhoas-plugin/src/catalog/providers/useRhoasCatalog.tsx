@@ -18,6 +18,7 @@ import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { CloudServiceAccountRequest } from '../../models';
 import { isResourceStatusSuccessfull } from '../../utils/conditionHandler';
 import { CATALOG_TYPE } from '../const';
+import { StatusEnabledResource } from '../../utils/rhoas-types';
 
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   namespace,
@@ -34,7 +35,9 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   });
 
   const loadedOrError = loaded || errorMsg;
-  const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount);
+  const isServiceAccountValid = isResourceStatusSuccessfull(
+    serviceAccount as StatusEnabledResource,
+  );
   const services = React.useMemo(() => {
     if (!loaded && !errorMsg) return [];
 
