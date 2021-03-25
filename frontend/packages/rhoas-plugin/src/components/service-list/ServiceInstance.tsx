@@ -20,7 +20,9 @@ type ServiceInstanceProps = {
 };
 
 const areAllServicesSelected = (currentServices: string[], listOfServices: CloudKafka[]) =>
-  listOfServices.some((service) => service.status !== 'ready' || !currentServices.includes(service.id));
+  listOfServices.some(
+    (service) => service.status !== 'ready' || !currentServices.includes(service.id),
+  );
 
 const ServiceInstance: React.FC<ServiceInstanceProps> = ({
   kafkaArray,
@@ -63,21 +65,21 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
               icon={CubesIcon}
             />
           ) : (
-                <>
-                  <ServiceInstanceFilter
-                    textInputNameValue={textInputNameValue}
-                    setTextInputNameValue={setTextInputNameValue}
-                  />
-                  <ServiceInstanceTable
-                    kafkaArray={kafkaArray}
-                    pageKafkas={pageKafkas}
-                    setTextInputNameValue={setTextInputNameValue}
-                    selectedKafka={selectedKafka}
-                    setSelectedKafka={setSelectedKafka}
-                    currentKafkaConnections={currentKafkaConnections}
-                  />
-                </>
-              )}
+            <>
+              <ServiceInstanceFilter
+                textInputNameValue={textInputNameValue}
+                setTextInputNameValue={setTextInputNameValue}
+              />
+              <ServiceInstanceTable
+                kafkaArray={kafkaArray}
+                pageKafkas={pageKafkas}
+                setTextInputNameValue={setTextInputNameValue}
+                selectedKafka={selectedKafka}
+                setSelectedKafka={setSelectedKafka}
+                currentKafkaConnections={currentKafkaConnections}
+              />
+            </>
+          )}
         </FormSection>
       </FormBody>
       <FormFooter
