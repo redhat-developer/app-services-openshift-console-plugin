@@ -15,13 +15,7 @@ export interface CloudKafka {
   updatedAt: string;
 }
 
-export interface StatusEnabledResource {
-  status: {
-    conditions: StatusCondition[];
-  };
-}
-
-export interface KafkaConnection extends K8sResourceCommon, StatusEnabledResource {
+export interface KafkaConnection extends K8sResourceCommon {
   spec: {
     accessTokenSecretName: string;
     credentials: {
@@ -35,7 +29,7 @@ export interface KafkaConnection extends K8sResourceCommon, StatusEnabledResourc
   };
 }
 
-export interface KafkaRequest extends K8sResourceCommon, StatusEnabledResource {
+export interface KafkaRequest extends K8sResourceCommon {
   spec: {
     accessTokenSecretName: string;
   };

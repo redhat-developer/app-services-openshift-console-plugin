@@ -12,13 +12,12 @@ import {
 import { LockIcon } from '@patternfly/react-icons';
 import { CatalogExtensionHook, CatalogItem } from '@console/dynamic-plugin-sdk';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
-import { referenceForModel } from '@console/internal/module/k8s';
+import { referenceForModel, K8sResourceKind } from '@console/internal/module/k8s';
 import { ServiceToken } from '../../components/access-services/ServicesToken';
 import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { CloudServiceAccountRequest } from '../../models';
 import { isResourceStatusSuccessfull } from '../../utils/conditionHandler';
 import { CATALOG_TYPE } from '../const';
-import { StatusEnabledResource } from '../../utils/rhoas-types';
 
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   namespace,
@@ -35,9 +34,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   });
 
   const loadedOrError = loaded || errorMsg;
-  const isServiceAccountValid = isResourceStatusSuccessfull(
-    serviceAccount as StatusEnabledResource,
-  );
+  const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount as K8sResourceKind);
   const services = React.useMemo(() => {
     if (!loaded && !errorMsg) return [];
 

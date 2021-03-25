@@ -15,7 +15,7 @@ type PropsFromState = {
 };
 
 type PropsFromDispatch = {
-  onClickTab?: (name: string) => void;
+  onClickTab: (name: string) => void;
 };
 
 const stateToProps = ({ UI }): PropsFromState => ({
@@ -88,7 +88,7 @@ export const ConnectedTopologyRhoasPanel: React.FC<TopologyRhoasPanelProps> = ({
   );
 };
 
-export default connect<PropsFromState, PropsFromDispatch, TopologyRhoasPanelProps>(
+export default connect<PropsFromState, PropsFromDispatch, OwnProps>(
   stateToProps,
   dispatchToProps,
 )(ConnectedTopologyRhoasPanel);
