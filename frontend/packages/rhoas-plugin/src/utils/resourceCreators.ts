@@ -177,12 +177,6 @@ export const createServiceAccountIfNeeded = async (currentNamespace) => {
   );
 };
 
-/**
- * createKafkaConnection
- * @param kafkaId
- * @param kafkaName
- * @param currentNamespace
- */
 export const createKafkaConnection = async (
   kafkaId: string,
   kafkaName: string,

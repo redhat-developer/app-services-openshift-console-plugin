@@ -89,19 +89,15 @@ const ServiceListPage: React.FC = () => {
       );
     }
     return (
-      <>
-        <ServicesErrorState
-          title={t('rhoas-plugin~Could not fetch services')}
-          message={t('rhoas-plugin~Failed to load list of services', {
-            error: getFinishedCondition(watchedKafkaRequest)?.message,
-          })}
-          actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
-        />
-      </>
+      <ServicesErrorState
+        title={t('rhoas-plugin~Could not fetch services')}
+        message={t('rhoas-plugin~Failed to load list of services', {
+          error: getFinishedCondition(watchedKafkaRequest)?.message,
+        })}
+        actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
+      />
     );
   }
-
-  // remoteKafkaInstances = watchedKafkaRequest.status.userKafkas;
 
   const disableCreateButton = () => {
     if (selectedKafka === null || selectedKafka === undefined) {
