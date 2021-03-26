@@ -7,7 +7,7 @@ export type ServicesEmptyStateProps = {
   message?: string;
   actionLabel: string;
   icon?: React.ComponentClass;
-  iconClass: string;
+  iconClass?: string;
 };
 
 export const ServicesEmptyState = ({
@@ -15,7 +15,7 @@ export const ServicesEmptyState = ({
   message,
   actionLabel,
   icon,
-  iconClass
+  iconClass,
 }: ServicesEmptyStateProps) => {
   return (
     <EmptyState>

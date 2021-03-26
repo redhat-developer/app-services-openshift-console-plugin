@@ -69,7 +69,7 @@ const ServiceListPage: React.FC = () => {
       <ServicesErrorState
         title={t('rhoas-plugin~Failed to create connection')}
         message={kafkaCreateError + t('rhoas-plugin~Please try again')}
-        actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
+        actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
       />
     );
   }
@@ -84,7 +84,7 @@ const ServiceListPage: React.FC = () => {
         <ServicesErrorState
           title={t('rhoas-plugin~Could not fetch services')}
           message={t('rhoas-plugin~Could not connect to RHOAS with API Token')}
-          actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
+          actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
         />
       );
     }
@@ -95,7 +95,7 @@ const ServiceListPage: React.FC = () => {
           message={t('rhoas-plugin~Failed to load list of services', {
             error: getFinishedCondition(watchedKafkaRequest)?.message,
           })}
-          actionInfo={t('rhoas-plugin~Go back to Services Catalog')}
+          actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
         />
       </>
     );
