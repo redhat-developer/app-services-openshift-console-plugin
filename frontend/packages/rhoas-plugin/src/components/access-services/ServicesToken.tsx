@@ -31,7 +31,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
       setErrorMessage(
         t('rhoas-plugin~There was an error with this API token', { error, namespace }),
       );
-      setSendDisabled(false);
+      setSendDisabled(true);
       return;
     }
     try {
@@ -77,7 +77,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
             onClick={onCreate}
             isDisabled={apiTokenValue.length < APITokenLengthMinimum ? true : sendDisabled}
           >
-            {t('rhoas-plugin~Create')}
+            {t('rhoas-plugin~Connect')}
           </Button>
         </FormGroup>
       </Form>

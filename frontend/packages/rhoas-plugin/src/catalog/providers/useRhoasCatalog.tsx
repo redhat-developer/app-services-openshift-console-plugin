@@ -5,9 +5,10 @@ import {
   FlexItem,
   Divider,
   Label,
-  TextContent,
   Text,
   TextVariants,
+  TextList,
+  TextListItem,
 } from '@patternfly/react-core';
 import { LockIcon } from '@patternfly/react-icons';
 import { CatalogExtensionHook, CatalogItem } from '@console/dynamic-plugin-sdk';
@@ -49,74 +50,101 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
         token = t('rhoas-plugin~Unlocked');
       }
       return (
-        <Flex direction={{ default: 'column' }}>
-          <FlexItem>
-            {t(
-              'rhoas-plugin~Red Hat OpenShift Application Services include Red Hat OpenShift API Management and Red Hat OpenShift Streams for Apache Kafka',
-            )}
+        <Flex direction={{ default: 'column' }} className="catalog-tile-pf-body">
+          <FlexItem className="catalog-tile-pf-description">
+            <span>
+              {t(
+                'rhoas-plugin~Red Hat OpenShift Application Services include Red Hat OpenShift API Management and Red Hat OpenShift Streams for Apache Kafka',
+              )}
+            </span>
           </FlexItem>
           <FlexItem>{token}</FlexItem>
         </Flex>
       );
     };
 
+    const serviceKafkaCardDescription1 = (
+      <Text component={TextVariants.p}>{t('rhoas-plugin~Service Kafka Card Description 1')}</Text>
+    );
+
+    const serviceKafkaCardDescription2 = (
+      <Text component={TextVariants.p}>{t('rhoas-plugin~Service Kafka Card Description 2')}</Text>
+    );
+
     const serviceKafkaCardDescription3 = (
-      <Trans t={t} ns="rhoas-plugin">
-        <b>Delivered as a service, managed by Red Hat SRE</b> - Red Hat`&lsquo;`s specialized 24x7
-        global SRE team fully manages the Kafka infrastructure and daily operations, including
-        monitoring, logging, upgrades and patching, to proactively address issues and quickly solve
-        problems.
-      </Trans>
+      <Text component={TextVariants.p}>
+        <Trans t={t} ns="rhoas-plugin">
+          <b>Delivered as a service, managed by Red Hat SRE</b> - Red Hat&lsquo;s specialized 24x7
+          global SRE team fully manages the Kafka infrastructure and daily operations, including
+          monitoring, logging, upgrades and patching, to proactively address issues and quickly
+          solve problems.
+        </Trans>
+      </Text>
     );
 
     const serviceKafkaCardDescription4 = (
-      <Trans t={t} ns="rhoas-plugin">
-        <b>Streamlined developer experience</b> - a developer-first, consistent experience that
-        shields the user from administrative tasks, supports self-service, and easily connects to
-        other OpenShift workloads.
-      </Trans>
+      <Text component={TextVariants.p}>
+        <Trans t={t} ns="rhoas-plugin">
+          <b>Streamlined developer experience</b> - a developer-first, consistent experience that
+          shields the user from administrative tasks, supports self-service, and easily connects to
+          other OpenShift workloads.
+        </Trans>
+      </Text>
     );
 
     const serviceKafkaCardDescription5 = (
-      <Trans t={t} ns="rhoas-plugin">
-        <b>Real-time, streaming data broker</b> - service that can run in any cloud to support large
-        data transfer volumes between distributed microservices for enterprise-scale applications.
-      </Trans>
+      <Text component={TextVariants.p}>
+        <Trans t={t} ns="rhoas-plugin">
+          <b>Real-time, streaming data broker</b> - service that can run in any cloud to support
+          large data transfer volumes between distributed microservices for enterprise-scale
+          applications.
+        </Trans>
+      </Text>
     );
 
     const serviceKafkaCardDescription6 = (
-      <Trans t={t} ns="rhoas-plugin">
-        <b>Schema registry</b> - Red Hat OpenShift Service Registry is included, making it easy for
-        development teams to publish, communicate and discover any streaming data topics.
-      </Trans>
+      <Text component={TextVariants.p}>
+        <Trans t={t} ns="rhoas-plugin">
+          <b>Schema registry</b> - Red Hat OpenShift Service Registry is included, making it easy
+          for development teams to publish, communicate and discover any streaming data topics.
+        </Trans>
+      </Text>
     );
 
     const serviceKafkaCardDescription7 = (
-      <Trans t={t} ns="rhoas-plugin">
-        <b>Connectors</b> - the Kafka brokers can securely connect to distributed services, making
-        it easy to consume and share streaming data between applications and enterprise systems,
-        cloud provider services, and SaaS applications.
-      </Trans>
+      <Text component={TextVariants.p}>
+        <Trans t={t} ns="rhoas-plugin">
+          <b>Connectors</b> - the Kafka brokers can securely connect to distributed services, making
+          it easy to consume and share streaming data between applications and enterprise systems,
+          cloud provider services, and SaaS applications.
+        </Trans>
+      </Text>
     );
 
     const cloudServicesCardDescription1 = (
-      <TextContent>
+      <>
         <Text component={TextVariants.p}>
           {t('rhoas-plugin~Red Hat OpenShift Application Services include:')}
         </Text>
-        <Text component={TextVariants.p}>{t('rhoas-plugin~Red Hat OpenShift API Management')}</Text>
-        <Text component={TextVariants.p}>
-          {t('rhoas-plugin~Red Hat OpenShift Streams for Apache Kafka')}
-        </Text>
-      </TextContent>
+        <TextList>
+          <TextListItem>{t('rhoas-plugin~Red Hat OpenShift API Management')}</TextListItem>
+          <TextListItem>
+            {t('rhoas-plugin~Red Hat OpenShift Streams for Apache Kafka')}
+          </TextListItem>
+        </TextList>
+      </>
+    );
+
+    const cloudServicesCardDescription2 = (
+      <Text component={TextVariants.p}>{t('rhoas-plugin~Cloud Services Card Description')}</Text>
     );
 
     const serviceKafkaCardDetailsDescription = [
       {
-        value: t('rhoas-plugin~ServiceKafkaCardDescription1'),
+        value: serviceKafkaCardDescription1,
       },
       {
-        value: t('rhoas-plugin~ServiceKafkaCardDescription2'),
+        value: serviceKafkaCardDescription2,
       },
       {
         value: serviceKafkaCardDescription3,
@@ -148,7 +176,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
         value: cloudServicesCardDescription1,
       },
       {
-        value: t('rhoas-plugin~Cloud Services Card Description'),
+        value: cloudServicesCardDescription2,
       },
     ];
 
@@ -158,7 +186,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
           name: t('rhoas-plugin~Red Hat OpenShift Streams for Apache Kafka'),
           type: CATALOG_TYPE,
           uid: 'streams-1615213269575',
-          description: t('rhoas-plugin~ServiceKafkaCardDescription1'),
+          description: t('rhoas-plugin~Service Kafka Card Description 1'),
           provider: 'Red Hat, Inc.',
           tags: ['kafka'],
           icon: {

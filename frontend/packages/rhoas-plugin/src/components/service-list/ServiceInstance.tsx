@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormFooter, FormHeader, FlexForm, FormBody } from '@console/shared';
+import { FormFooter, FormHeader, FlexForm, FormBody, TechPreviewBadge } from '@console/shared';
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
+import { Title, Split, SplitItem } from '@patternfly/react-core';
 import FormSection from '@console/dev-console/src/components/import/section/FormSection';
 import { history } from '@console/internal/components/utils';
+
 import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
 import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
 import { ServicesEmptyState } from '../states/ServicesEmptyState';
@@ -39,21 +41,33 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
 
   const { t } = useTranslation();
 
+  const title = (
+    <Split className="odc-form-section-pipeline" hasGutter>
+      <SplitItem className="odc-form-section__heading">
+        <Title headingLevel="h1" size="2xl">
+          {t('rhoas-plugin~Select Kafka Instance')}
+        </Title>
+      </SplitItem>
+      <SplitItem>
+        <TechPreviewBadge />
+      </SplitItem>
+    </Split>
+  );
+
   return (
     <FlexForm>
       <FormBody flexLayout>
         <FormHeader
-          title={t('rhoas-plugin~Select Kafka Instance')}
+          title={title}
           helpText={t(
             'rhoas-plugin~The selected Kafka instance will be added to the topology view.',
           )}
-          marginBottom="lg"
         />
-        <FormSection fullWidth flexLayout extraMargin>
+        <FormSection fullWidth>
           {!areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
             <ServicesEmptyState
-              title={t('rhoas-plugin~All Kafka clusters are in use')}
-              actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
+              title={t('rhoas-plugin~All available Kafka instances are connected to this project')}
+              actionLabel={t('rhoas-plugin~See Kafka instances in topology view')}
               icon={CubesIcon}
             />
           ) : kafkaArray.length === 0 ? (

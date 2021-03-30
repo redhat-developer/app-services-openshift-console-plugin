@@ -103,15 +103,13 @@ const ServiceInstanceTable: React.FC<ServiceInstanceTableProps> = ({
             <EmptyState variant={EmptyStateVariant.small}>
               <EmptyStateIcon icon={SearchIcon} />
               <Title headingLevel="h2" size="lg">
-                {t('rhoas-plugin~No results found')}
+                {t('rhoas-plugin~No Kafka instances found')}
               </Title>
               <EmptyStateBody>
-                {t(
-                  'rhoas-plugin~No results match the filter criteria. Remove all filters or clear all filters to show results.',
-                )}
+                {t('rhoas-plugin~No results match the filter criteria.')}
               </EmptyStateBody>
               <Button variant="link" onClick={clearFilters}>
-                {t('rhoas-plugin~Clear all filters')}
+                {t('rhoas-plugin~Clear filters')}
               </Button>
             </EmptyState>
           </Bullseye>
