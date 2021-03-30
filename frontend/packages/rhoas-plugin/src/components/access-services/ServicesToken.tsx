@@ -79,6 +79,16 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
           >
             {t('rhoas-plugin~Connect')}
           </Button>
+          <Button
+            key="reset"
+            variant="link"
+            onClick={() => {
+              setApiTokenValue('');
+              setErrorMessage('');
+            }}
+          >
+            {t('rhoas-plugin~Reset')}
+          </Button>
         </FormGroup>
       </Form>
     </>
