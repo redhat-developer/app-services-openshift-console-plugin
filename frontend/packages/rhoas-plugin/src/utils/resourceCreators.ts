@@ -1,4 +1,6 @@
 import { SecretModel } from '@console/internal/models';
+import { getRandomChars } from '@console/shared';
+import { k8sWaitForUpdate } from '@console/internal/module/k8s';
 import {
   k8sCreate,
   k8sGet,
@@ -6,7 +8,6 @@ import {
   k8sUpdate,
   k8sKillByName,
 } from '@console/internal/module/k8s/resource';
-
 import {
   AccessTokenSecretName,
   ServiceAccountCRName,
@@ -19,7 +20,6 @@ import {
   CloudServicesRequestModel,
 } from '../models/rhoas';
 import { getFinishedCondition, isResourceStatusSuccessfull } from './conditionHandler';
-import { k8sWaitForUpdate } from '@console/internal/module/k8s';
 
 /**
  * Create service account for purpose of supplying connection credentials
@@ -37,7 +37,7 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
     spec: {
       forceRefresh: new Date().toISOString(),
       accessTokenSecretName: AccessTokenSecretName,
-      serviceAccountName: `rhoas-operator-${currentNamespace}`,
+      serviceAccountName: `rhoas-operator-${getRandomChars(4)}`,
       serviceAccountDescription: 'Created by rhoas operator',
       serviceAccountSecretName: ServiceAccountSecretName,
     },
@@ -49,7 +49,7 @@ export const createManagedServiceAccount = async (currentNamespace: string) => {
 /**
  * Create request to fetch all kafkas from upstream
  */
-export const createCloudServicesRequest = async function(currentNamespace: string) {
+export const createCloudServicesRequest = async (currentNamespace: string) => {
   const mkRequest = {
     apiVersion: `${CloudServicesRequestModel.apiGroup}/${CloudServicesRequestModel.apiVersion}`,
     kind: CloudServicesRequestModel.kind,
@@ -66,7 +66,7 @@ export const createCloudServicesRequest = async function(currentNamespace: strin
   return k8sCreate(CloudServicesRequestModel, mkRequest);
 };
 
-export const patchServiceAccountRequest = async function(request: any) {
+export const patchServiceAccountRequest = async (request: any) => {
   const path = '/spec/forceRefresh';
   return k8sPatch(CloudServiceAccountRequest, request, [
     {
@@ -77,7 +77,7 @@ export const patchServiceAccountRequest = async function(request: any) {
   ]);
 };
 
-export const patchCloudServicesRequest = async function(request: any) {
+export const patchCloudServicesRequest = async (request: any) => {
   const path = '/spec/forceRefresh';
 
   return k8sPatch(CloudServicesRequestModel, request, [
@@ -214,16 +214,8 @@ export const createKafkaConnection = async (
   );
 };
 
-/**
- * createKafkaConnection
- *
- * @param kafkaId
- * @param kafkaName
- * @param currentNamespace
- */
-export const deleteKafkaConnection = (kafkaName: string, currentNamespace: string) => {
-  return k8sKillByName(KafkaConnectionModel, kafkaName, currentNamespace);
-};
+export const deleteKafkaConnection = (kafkaName: string, currentNamespace: string) =>
+  k8sKillByName(KafkaConnectionModel, kafkaName, currentNamespace);
 
 export const listOfCurrentKafkaConnectionsById = async (currentNamespace: string) => {
   const kafkaConnections = await k8sGet(KafkaConnectionModel, null, currentNamespace);

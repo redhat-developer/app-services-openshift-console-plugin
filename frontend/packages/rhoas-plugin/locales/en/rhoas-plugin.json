@@ -35,7 +35,7 @@
   "Please try again": "Please try again",
   "Could not fetch services": "Could not fetch services",
   "Could not connect to RHOAS with API Token": "Could not connect to RHOAS with API Token",
-  "Failed to load list of services": "Failed to load list of services",
+  "Failed to load list of services": "Failed to load list of services: {{error}}",
   "Search by name": "Search by name",
   "Name": "Name",
   "Cloud provider": "Cloud provider",
