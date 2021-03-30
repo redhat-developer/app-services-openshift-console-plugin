@@ -34,7 +34,7 @@
     "properties": {
       "type": "managedservices",
       "title": "%rhoas-plugin~Managed Services%",
-      "catalogDescription": "%rhoas-plugin~Browse services to connect applications and microservices to other services and support services to create a full solution.%",
+      "catalogDescription": "%rhoas-plugin~Browse managed services to connect applications and microservices to support services to create a full solution.%",
       "typeDescription": "%rhoas-plugin~Managed Services%"
     },
     "flags": {

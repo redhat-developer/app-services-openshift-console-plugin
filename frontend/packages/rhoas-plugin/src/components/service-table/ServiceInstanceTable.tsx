@@ -82,8 +82,8 @@ const ServiceInstanceTable: React.FC<ServiceInstanceTableProps> = ({
   }, [pageKafkas, currentKafkaConnections, formatTableRowData, kafkaRows]);
 
   const tableColumns = [
-    { title: t('rhoas-plugin~Cluster Name'), transforms: [sortable] },
-    { title: t('rhoas-plugin~Provider'), transforms: [sortable] },
+    { title: t('rhoas-plugin~Name'), transforms: [sortable] },
+    { title: t('rhoas-plugin~Cloud provider'), transforms: [sortable] },
     { title: t('rhoas-plugin~Region'), transforms: [sortable] },
     { title: t('rhoas-plugin~Owner'), transforms: [sortable] },
     { title: t('rhoas-plugin~Status'), transforms: [sortable] },

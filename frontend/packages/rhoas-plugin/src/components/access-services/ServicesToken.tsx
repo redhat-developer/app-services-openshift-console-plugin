@@ -28,7 +28,9 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
     try {
       await createSecretIfNeeded(namespace, apiTokenValue);
     } catch (error) {
-      setErrorMessage(t('rhoas-plugin~Problem with creating secret', { error, namespace }));
+      setErrorMessage(
+        t('rhoas-plugin~There was an error with this API token', { error, namespace }),
+      );
       setSendDisabled(false);
       return;
     }
@@ -45,14 +47,15 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
       <TextContent>
         <Text component={TextVariants.p}>
           <Trans t={t} ns="rhoas-plugin">
-            To access this Cloud Service, input the API token which can be located at{' '}
+            Enter your API token from{' '}
             <a
               href="https://cloud.redhat.com/openshift/token"
               rel="noopener noreferrer"
               target="_blank"
             >
-              https://cloud.redhat.com/openshift/token
+              https://cloud.redhat.com
             </a>
+            , so we can check what services you have access to based on your subscription.
           </Trans>
         </Text>
       </TextContent>
@@ -66,11 +69,6 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
             aria-label={t('rhoas-plugin~API Token')}
           />
         </FormGroup>
-        <TextContent>
-          <Text component={TextVariants.small}>
-            {t('rhoas-plugin~Cant create an access token? Contact your administrator')}
-          </Text>
-        </TextContent>
         {errorMessage && <Alert variant="danger" isInline title={errorMessage} />}
         <FormGroup fieldId="action-group">
           <Button

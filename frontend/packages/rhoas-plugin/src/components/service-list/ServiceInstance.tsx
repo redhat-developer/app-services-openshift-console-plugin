@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { FormFooter, FormHeader, FlexForm, FormBody } from '@console/shared';
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
 import FormSection from '@console/dev-console/src/components/import/section/FormSection';
+import { history } from '@console/internal/components/utils';
 import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
 import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
-import { history } from '@console/internal/components/utils';
 import { ServicesEmptyState } from '../states/ServicesEmptyState';
 import { CloudKafka } from '../../utils/rhoas-types';
 
@@ -43,9 +43,9 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
     <FlexForm>
       <FormBody flexLayout>
         <FormHeader
-          title={t('rhoas-plugin~Select Kafka Cluster')}
+          title={t('rhoas-plugin~Select Kafka Instance')}
           helpText={t(
-            'rhoas-plugin~The Kafka cluster selected below will appear on the topology view.',
+            'rhoas-plugin~The selected Kafka instance will be added to the topology view.',
           )}
           marginBottom="lg"
         />
@@ -84,7 +84,7 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
         handleSubmit={createKafkaConnectionFlow}
         isSubmitting={isSubmitting}
         errorMessage=""
-        submitLabel={t('rhoas-plugin~Create')}
+        submitLabel={t('rhoas-plugin~Next')}
         disableSubmit={selectedKafka === undefined || isSubmitting}
         resetLabel={t('rhoas-plugin~Cancel')}
         sticky
