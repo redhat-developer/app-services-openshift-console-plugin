@@ -42,6 +42,11 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
     setSendDisabled(false);
   };
 
+  const handleTextInputChange = (value) => {
+    setSendDisabled(false);
+    setApiTokenValue(value);
+  };
+
   return (
     <>
       <TextContent>
@@ -63,7 +68,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
         <FormGroup fieldId="api-token-value" label={t('rhoas-plugin~API Token')} isRequired>
           <TextInput
             value={apiTokenValue}
-            onChange={setApiTokenValue}
+            onChange={(value) => handleTextInputChange(value)}
             type="password"
             name="apitoken"
             aria-label={t('rhoas-plugin~API Token')}
