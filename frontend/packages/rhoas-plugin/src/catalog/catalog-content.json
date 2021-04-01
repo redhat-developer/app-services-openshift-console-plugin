@@ -1,23 +1,7 @@
 {
-  "DeveloperCatalog": {
-    "title": "Managed Services",
-    "description": "Browse managed services to connect applications and microservices to support services to create a full solution."
-  },
-  "cloudServices": {
-    "card": {
-      "title": "Red Hat OpenShift Application Services",
-      "description": "Red Hat OpenShift Application Services include Red Hat OpenShift API Management and Red Hat OpenShift Streams for Apache Kafka"
-    },
-    "information": {
-      "paragraph1": "Red Hat OpenShift Application Services include:\n- Red Hat OpenShift API Management\n- Red Hat OpenShift Streams for Apache Kafka",
-      "paragraph2": "Red Hat OpenShift Application Services provide a streamlined developer experience for building, deploying, and scaling cloud-native applications in open hybrid-cloud environments. The combination of enterprise-grade Kubernetes, cloud-native approach to application delivery, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost."
-    }
-  },
   "serviceKafka": {
-    "card": {
-      "title": "Red Hat OpenShift Streams for Apache Kafka",
-      "description": "Red Hat OpenShift Streams for Apache Kafka is a managed cloud service that provides a streamlined developer experience for building, deploying, and scaling real-time applications in hybrid-cloud environments. The combination of seamless operations across distributed microservices, large data transfer volumes, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost."
-    },
+    "title": "Red Hat OpenShift Streams for Apache Kafka",
+    "description": "Red Hat OpenShift Streams for Apache Kafka is a managed cloud service that provides a streamlined developer experience for building, deploying, and scaling real-time applications in hybrid-cloud environments. The combination of seamless operations across distributed microservices, large data transfer volumes, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost.",
     "information": [
       "Red Hat OpenShift Streams for Apache Kafka is a managed cloud service that provides a streamlined developer experience for building, deploying, and scaling real-time applications in hybrid-cloud environments. The combination of seamless operations across distributed microservices, large data transfer volumes, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost.",
       "Red Hat OpenShift Streams for Apache Kafka makes it easy to create, discover, and connect to real-time data streams no matter where they are deployed. Streams are a key component for delivering real-time experiences and connecting loosely-coupled microservices.",

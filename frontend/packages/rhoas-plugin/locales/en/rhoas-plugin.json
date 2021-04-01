@@ -5,6 +5,7 @@
   "Unlock with token": "Unlock with token",
   "Unlocked": "Unlocked",
   "Red Hat OpenShift Application Services include Red Hat OpenShift API Management and Red Hat OpenShift Streams for Apache Kafka": "Red Hat OpenShift Application Services include Red Hat OpenShift API Management and Red Hat OpenShift Streams for Apache Kafka",
+  "Red Hat OpenShift Application Services include:\n- Red Hat OpenShift API Management\n- Red Hat OpenShift Streams for Apache Kafka": "Red Hat OpenShift Application Services include:\n- Red Hat OpenShift API Management\n- Red Hat OpenShift Streams for Apache Kafka",
   "Service Kafka Card Description 1": "Red Hat OpenShift Streams for Apache Kafka is a managed cloud service that provides a streamlined developer experience for building, deploying, and scaling real-time applications in hybrid-cloud environments. The combination of seamless operations across distributed microservices, large data transfer volumes, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost.",
   "Service Kafka Card Description 2": "Red Hat OpenShift Streams for Apache Kafka makes it easy to create, discover, and connect to real-time data streams no matter where they are deployed. Streams are a key component for delivering real-time experiences and connecting loosely-coupled microservices.",
   "<0>Delivered as a service, managed by Red Hat SRE</0> - Red Hat&lsquo;s specialized 24x7 global SRE team fully manages the Kafka infrastructure and daily operations, including monitoring, logging, upgrades and patching, to proactively address issues and quickly solve problems.": "<0>Delivered as a service, managed by Red Hat SRE</0> - Red Hat&lsquo;s specialized 24x7 global SRE team fully manages the Kafka infrastructure and daily operations, including monitoring, logging, upgrades and patching, to proactively address issues and quickly solve problems.",
@@ -56,5 +57,6 @@
   "This resource represents service that exist outside your cluster": "This resource represents service that exist outside your cluster",
   "Details": "Details",
   "Resources": "Resources",
-  "Create a binding connector": "Create a binding connector"
+  "Create a binding connector": "Create a binding connector",
+  "Could not connect to Kafka instances": "Could not connect to Kafka instances"
 }

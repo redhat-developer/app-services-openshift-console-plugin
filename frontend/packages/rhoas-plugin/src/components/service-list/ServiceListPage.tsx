@@ -133,6 +133,7 @@ const ServiceListPage: React.FC = () => {
         currentKafkaConnections={currentKafkaConnections}
         createKafkaConnectionFlow={createKafkaConnectionFlow}
         isSubmitting={isSubmitting}
+        currentNamespace={currentNamespace}
       />
     </NamespacedPage>
   );

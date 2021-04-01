@@ -9,6 +9,7 @@ import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
 import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
 import { ServicesEmptyState } from '../states/ServicesEmptyState';
 import { CloudKafka } from '../../utils/rhoas-types';
+// import { cloudServicesIcon } from '../../const';
 
 type ServiceInstanceProps = {
   kafkaArray: CloudKafka[];
@@ -17,6 +18,7 @@ type ServiceInstanceProps = {
   currentKafkaConnections: string[];
   createKafkaConnectionFlow: () => void;
   isSubmitting: boolean;
+  currentNamespace: string;
 };
 
 const areAllServicesSelected = (currentServices: string[], listOfServices: CloudKafka[]) =>
@@ -31,6 +33,7 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
   currentKafkaConnections,
   createKafkaConnectionFlow,
   isSubmitting,
+  currentNamespace,
 }: ServiceInstanceProps) => {
   const [textInputNameValue, setTextInputNameValue] = React.useState<string>('');
   const pageKafkas = React.useMemo(
@@ -53,6 +56,12 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
     </Split>
   );
 
+  // const customEmptyStateIcon: React.ComponentClass = () => {
+  //   return (
+  //     <svg xmlns={cloudServicesIcon} className="pf-c-empty-state__icon" />
+  //   )
+  // }
+
   return (
     <FlexForm>
       <FormBody flexLayout>
@@ -67,11 +76,12 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
             <ServicesEmptyState
               title={t('rhoas-plugin~All available Kafka instances are connected to this project')}
               actionLabel={t('rhoas-plugin~See Kafka instances in topology view')}
+              action={() => history.push(`/topology/ns/${currentNamespace}`)}
               icon={CubesIcon}
             />
           ) : kafkaArray.length === 0 ? (
             <ServicesEmptyState
-              title={t('rhoas-plugin~No Kafka Clusters found')}
+              title={t('rhoas-plugin~Could not connect to Kafka instances')}
               actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
               icon={CubesIcon}
             />
