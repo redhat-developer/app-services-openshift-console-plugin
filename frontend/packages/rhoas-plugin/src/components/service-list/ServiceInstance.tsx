@@ -7,9 +7,9 @@ import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
 import { Title, Split, SplitItem } from '@patternfly/react-core';
 import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
 import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
-import { ServicesEmptyState } from '../states/ServicesEmptyState';
+import { ServicesEmptyState, ConnectionFailedEmptyState } from '../states';
 import { CloudKafka } from '../../utils/rhoas-types';
-// import { cloudServicesIcon } from '../../const';
+import { K8sResourceKind } from '@console/internal/module/k8s';
 
 type ServiceInstanceProps = {
   kafkaArray: CloudKafka[];
@@ -19,6 +19,10 @@ type ServiceInstanceProps = {
   createKafkaConnectionFlow: () => void;
   isSubmitting: boolean;
   currentNamespace: string;
+  kafkaCreateError: string;
+  kafkaListError: string;
+  isResourceStatusSuccessful: (request: K8sResourceKind) => boolean;
+  isAccessTokenSecretValid: (request: K8sResourceKind) => boolean;
 };
 
 const areAllServicesSelected = (currentServices: string[], listOfServices: CloudKafka[]) =>
@@ -34,6 +38,10 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
   createKafkaConnectionFlow,
   isSubmitting,
   currentNamespace,
+  kafkaCreateError,
+  kafkaListError,
+  isResourceStatusSuccessful,
+  isAccessTokenSecretValid,
 }: ServiceInstanceProps) => {
   const [textInputNameValue, setTextInputNameValue] = React.useState<string>('');
   const pageKafkas = React.useMemo(
@@ -56,12 +64,6 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
     </Split>
   );
 
-  // const customEmptyStateIcon: React.ComponentClass = () => {
-  //   return (
-  //     <svg xmlns={cloudServicesIcon} className="pf-c-empty-state__icon" />
-  //   )
-  // }
-
   return (
     <FlexForm>
       <FormBody flexLayout>
@@ -72,17 +74,17 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
           )}
         />
         <FormSection fullWidth>
-          {!areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
+          {kafkaArray.length === 0 ||
+          kafkaCreateError ||
+          kafkaListError ||
+          !isResourceStatusSuccessful ||
+          !isAccessTokenSecretValid ? (
+            <ConnectionFailedEmptyState currentNamespace={currentNamespace} />
+          ) : !areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
             <ServicesEmptyState
               title={t('rhoas-plugin~All available Kafka instances are connected to this project')}
               actionLabel={t('rhoas-plugin~See Kafka instances in topology view')}
               action={() => history.push(`/topology/ns/${currentNamespace}`)}
-              icon={CubesIcon}
-            />
-          ) : kafkaArray.length === 0 ? (
-            <ServicesEmptyState
-              title={t('rhoas-plugin~Could not connect to Kafka instances')}
-              actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
               icon={CubesIcon}
             />
           ) : (

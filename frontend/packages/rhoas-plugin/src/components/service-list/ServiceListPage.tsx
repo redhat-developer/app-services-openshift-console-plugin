@@ -7,7 +7,6 @@ import { history, LoadingBox } from '@console/internal/components/utils';
 import { referenceForModel } from '@console/internal/module/k8s';
 import { useActiveNamespace } from '@console/shared';
 import { useK8sWatchResource } from '@console/internal/components/utils/k8s-watch-hook';
-import { useTranslation } from 'react-i18next';
 import { CloudServicesRequestModel } from '../../models/rhoas';
 import { ServicesRequestCRName } from '../../const';
 import {
@@ -17,18 +16,12 @@ import {
   listOfCurrentKafkaConnectionsById,
 } from '../../utils/resourceCreators';
 import { KafkaRequest } from '../../utils/rhoas-types';
-import {
-  isResourceStatusSuccessfull,
-  isAcccesTokenSecretValid,
-  getFinishedCondition,
-} from '../../utils/conditionHandler';
-import { ServicesErrorState } from '../states/ServicesErrorState';
+import { isResourceStatusSuccessful, isAccessTokenSecretValid } from '../../utils/conditionHandler';
 
 const ServiceListPage: React.FC = () => {
   const [currentNamespace] = useActiveNamespace();
   const [selectedKafka, setSelectedKafka] = React.useState<number>();
   const [currentKafkaConnections, setCurrentKafkaConnections] = React.useState<string[]>();
-  const { t } = useTranslation();
   const [kafkaCreateError, setKafkaCreateError] = React.useState<string>();
   const [kafkaListError, setKafkaListError] = React.useState<string>();
   const [isSubmitting, setSubmitting] = React.useState<boolean>(false);
@@ -73,55 +66,12 @@ const ServiceListPage: React.FC = () => {
     }
   }, [currentNamespace, remoteKafkaInstances, selectedKafka]);
 
-  if (kafkaCreateError) {
-    return (
-      <ServicesErrorState
-        title={t('rhoas-plugin~Failed to create connection')}
-        message={kafkaCreateError + t('rhoas-plugin~Please try again')}
-        actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
-      />
-    );
-  }
-
-  if (kafkaListError) {
-    return (
-      <ServicesErrorState
-        title={t('rhoas-plugin~Could not fetch services')}
-        message={t('rhoas-plugin~Failed to load list of services', {
-          error: kafkaListError,
-        })}
-        actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
-      />
-    );
-  }
-
   if (
     !watchedKafkaRequest ||
     !watchedKafkaRequest.status ||
     currentKafkaConnections === undefined
   ) {
     return <LoadingBox />;
-  }
-
-  if (!isResourceStatusSuccessfull(watchedKafkaRequest)) {
-    if (!isAcccesTokenSecretValid(watchedKafkaRequest)) {
-      return (
-        <ServicesErrorState
-          title={t('rhoas-plugin~Could not fetch services')}
-          message={t('rhoas-plugin~Could not connect to RHOAS with API Token')}
-          actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
-        />
-      );
-    }
-    return (
-      <ServicesErrorState
-        title={t('rhoas-plugin~Could not fetch services')}
-        message={t('rhoas-plugin~Failed to load list of services', {
-          error: getFinishedCondition(watchedKafkaRequest)?.message,
-        })}
-        actionLabel={t('rhoas-plugin~Go back to Services Catalog')}
-      />
-    );
   }
 
   return (
@@ -134,6 +84,10 @@ const ServiceListPage: React.FC = () => {
         createKafkaConnectionFlow={createKafkaConnectionFlow}
         isSubmitting={isSubmitting}
         currentNamespace={currentNamespace}
+        kafkaCreateError={kafkaCreateError}
+        kafkaListError={kafkaListError}
+        isResourceStatusSuccessful={isResourceStatusSuccessful}
+        isAccessTokenSecretValid={isAccessTokenSecretValid}
       />
     </NamespacedPage>
   );

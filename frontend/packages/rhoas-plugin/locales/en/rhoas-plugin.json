@@ -1,6 +1,6 @@
 {
   "Managed Services": "Managed Services",
-  "Reduce operational complexity and focus on building and scaling applications that add more value.": "Reduce operational complexity and focus on building and scaling applications that add more value.",
+  "Discover managed services to simplify deployments and reduce operational overhead & complexities": "Discover managed services to simplify deployments and reduce operational overhead & complexities",
   "Browse managed services to connect applications and microservices to support services to create a full solution.": "Browse managed services to connect applications and microservices to support services to create a full solution.",
   "Unlock with token": "Unlock with token",
   "Unlocked": "Unlocked",
@@ -58,5 +58,10 @@
   "Details": "Details",
   "Resources": "Resources",
   "Create a binding connector": "Create a binding connector",
-  "Could not connect to Kafka instances": "Could not connect to Kafka instances"
+  "Could not connect to Kafka instances": "Could not connect to Kafka instances",
+  "Ready": "Ready",
+  "Creation pending": "Creation pending",
+  "Creation in progress": "Creation in progress",
+  "Failed": "Failed",
+  "Deletion in progress": "Deletion in progress"
 }

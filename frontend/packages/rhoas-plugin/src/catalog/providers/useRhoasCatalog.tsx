@@ -8,7 +8,7 @@ import { referenceForModel, K8sResourceKind } from '@console/internal/module/k8s
 import { ServiceToken } from '../../components/access-services/ServicesToken';
 import { ServiceAccountCRName, kafkaIcon, operatorIcon } from '../../const';
 import { CloudServiceAccountRequest } from '../../models';
-import { isResourceStatusSuccessfull } from '../../utils/conditionHandler';
+import { isResourceStatusSuccessful } from '../../utils/conditionHandler';
 import { CATALOG_TYPE } from '../const';
 import * as CatalogContent from '../catalog-content.json';
 
@@ -26,7 +26,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   });
 
   const loadedOrError = loaded || errorMsg;
-  const isServiceAccountValid = isResourceStatusSuccessfull(serviceAccount as K8sResourceKind);
+  const isServiceAccountValid = isResourceStatusSuccessful(serviceAccount as K8sResourceKind);
   const services = React.useMemo(() => {
     if (!loaded && !errorMsg) return [];
 
