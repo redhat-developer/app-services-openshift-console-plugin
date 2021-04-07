@@ -56,7 +56,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
     };
 
     const serviceKafkaCardDetailsDescription = () => {
-      return CatalogContent.serviceKafka.information.map((text) => {
+      return CatalogContent.KafkaConnection.details.map((text) => {
         return {
           value: <Text component={TextVariants.p}>{text}</Text>,
         };
@@ -96,15 +96,15 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
           name: t('rhoas-plugin~Red Hat OpenShift Application Services'),
           type: CATALOG_TYPE,
           uid: 'streams-1615213269575',
-          description: CatalogContent.serviceKafka.information[0],
-          provider: 'Red Hat, Inc.',
-          tags: ['kafka'],
+          description: CatalogContent.KafkaConnection.details[0],
+          provider: CatalogContent.KafkaConnection.provider,
+          tags: CatalogContent.KafkaConnection.tags,
           icon: {
             url: kafkaIcon,
           },
           cta: {
             label: t('rhoas-plugin~Connect'),
-            href: `/rhoas/ns/${namespace}/kafka`,
+            href: `/rhoas/ns/${namespace}/${CatalogContent.KafkaConnection.serviceName}`,
           },
           details: {
             descriptions: serviceKafkaCardDetailsDescription(),
