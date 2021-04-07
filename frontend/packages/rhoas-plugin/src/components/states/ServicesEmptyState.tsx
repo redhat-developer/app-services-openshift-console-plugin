@@ -17,22 +17,22 @@ export const ServicesEmptyState = ({
   message,
   actionLabel,
   action,
-  icon,
   iconClass,
 }: ServicesEmptyStateProps) => (
-  <EmptyState>
-    {ServicesEmptyStateIcon}
-    <EmptyStateIcon className={iconClass} icon={icon} />
-    <Title headingLevel="h4" size="lg">
-      {title}
-    </Title>
-    {message || (
-      <Title headingLevel="h5" size="md">
-        {message}
+  <>
+    <EmptyState>
+      <EmptyStateIcon className={iconClass} icon={ServicesEmptyStateIcon} />
+      <Title headingLevel="h4" size="lg">
+        {title}
       </Title>
-    )}
-    <Button variant="link" onClick={action || history.goBack}>
-      {actionLabel}
-    </Button>
-  </EmptyState>
+      {message || (
+        <Title headingLevel="h5" size="md">
+          {message}
+        </Title>
+      )}
+      <Button variant="link" onClick={action || history.goBack}>
+        {actionLabel}
+      </Button>
+    </EmptyState>
+  </>
 );

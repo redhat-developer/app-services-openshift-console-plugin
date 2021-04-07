@@ -96,7 +96,7 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
           name: t('rhoas-plugin~Red Hat OpenShift Application Services'),
           type: CATALOG_TYPE,
           uid: 'streams-1615213269575',
-          description: t('rhoas-plugin~Service Kafka Card Description 1'),
+          description: CatalogContent.serviceKafka.information[0],
           provider: 'Red Hat, Inc.',
           tags: ['kafka'],
           icon: {

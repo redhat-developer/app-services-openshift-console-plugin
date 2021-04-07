@@ -10,6 +10,7 @@ import {
   TextVariants,
   Alert,
 } from '@patternfly/react-core';
+import { LoadingInline } from '@console/internal/components/utils/status-box';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
 import { APITokenLengthMinimum } from '../../const';
 
@@ -21,12 +22,16 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
   const [sendDisabled, setSendDisabled] = React.useState(false);
   const [apiTokenValue, setApiTokenValue] = React.useState<string>('');
   const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const { t } = useTranslation();
 
   const onCreate = async () => {
+    setIsLoading(true);
     setSendDisabled(true);
     try {
       await createSecretIfNeeded(namespace, apiTokenValue);
+      setIsLoading(false);
     } catch (error) {
       setErrorMessage(t('rhoas-plugin~There was an error with this API token', { error }));
       setSendDisabled(true);
@@ -93,6 +98,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
             {t('rhoas-plugin~Reset')}
           </Button>
         </FormGroup>
+        {isLoading && <LoadingInline />}
       </Form>
     </>
   );
