@@ -1,38 +1,34 @@
 import * as React from 'react';
-import { Button, EmptyState, EmptyStateIcon, Title } from '@patternfly/react-core';
+import { Button, EmptyState, EmptyStateBody, EmptyStateIcon, Title } from '@patternfly/react-core';
 import { history } from '@console/internal/components/utils';
-import { ServicesEmptyStateIcon } from './ServicesEmptyStateIcon';
 
 type ServicesEmptyStateProps = {
   title: string;
-  message?: string;
-  actionLabel: string;
+  message?: string | JSX.Element;
+  actionLabel?: string;
   action?: () => void;
-  icon?: React.ComponentClass;
+  icon?: React.ComponentClass | JSX.Element;
   iconClass?: string;
 };
 
 export const ServicesEmptyState = ({
   title,
   message,
-  actionLabel,
   action,
+  actionLabel,
+  icon,
   iconClass,
 }: ServicesEmptyStateProps) => (
-  <>
-    <EmptyState>
-      <EmptyStateIcon className={iconClass} icon={ServicesEmptyStateIcon} />
-      <Title headingLevel="h4" size="lg">
-        {title}
-      </Title>
-      {message || (
-        <Title headingLevel="h5" size="md">
-          {message}
-        </Title>
-      )}
+  <EmptyState>
+    <EmptyStateIcon className={iconClass} icon={icon} />
+    <Title headingLevel="h4" size="lg">
+      {title}
+    </Title>
+    {message && <EmptyStateBody>{message}</EmptyStateBody>}
+    {action && (
       <Button variant="link" onClick={action || history.goBack}>
         {actionLabel}
       </Button>
-    </EmptyState>
-  </>
+    )}
+  </EmptyState>
 );

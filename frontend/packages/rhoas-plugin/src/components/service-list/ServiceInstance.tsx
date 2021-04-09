@@ -1,15 +1,22 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { FormFooter, FormHeader, FlexForm, FormBody, TechPreviewBadge } from '@console/shared';
+import { useTranslation, Trans } from 'react-i18next';
+import { FormFooter, FormBody } from '@console/shared';
 import FormSection from '@console/dev-console/src/components/import/section/FormSection';
 import { history } from '@console/internal/components/utils';
-import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
-import { Title, Split, SplitItem } from '@patternfly/react-core';
+import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
+import { Button } from '@patternfly/react-core';
 import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
 import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
-import { ServicesEmptyState, ConnectionFailedEmptyState } from '../states';
+import { ServicesEmptyState } from '../states';
 import { CloudKafka } from '../../utils/rhoas-types';
-import { K8sResourceKind } from '@console/internal/module/k8s';
+import { ServicesEmptyStateIcon } from '../states/ServicesEmptyStateIcon';
+
+type ConnectionErrorProps = {
+  title: string;
+  message: string;
+  action: () => void;
+  actionLabel: string;
+};
 
 type ServiceInstanceProps = {
   kafkaArray: CloudKafka[];
@@ -19,10 +26,7 @@ type ServiceInstanceProps = {
   createKafkaConnectionFlow: () => void;
   isSubmitting: boolean;
   currentNamespace: string;
-  kafkaCreateError: string;
-  kafkaListError: string;
-  isResourceStatusSuccessful: (request: K8sResourceKind) => boolean;
-  isAccessTokenSecretValid: (request: K8sResourceKind) => boolean;
+  connectionError: ConnectionErrorProps;
 };
 
 const areAllServicesSelected = (currentServices: string[], listOfServices: CloudKafka[]) =>
@@ -38,10 +42,7 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
   createKafkaConnectionFlow,
   isSubmitting,
   currentNamespace,
-  kafkaCreateError,
-  kafkaListError,
-  isResourceStatusSuccessful,
-  isAccessTokenSecretValid,
+  connectionError,
 }: ServiceInstanceProps) => {
   const [textInputNameValue, setTextInputNameValue] = React.useState<string>('');
   const pageKafkas = React.useMemo(
@@ -51,41 +52,48 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
 
   const { t } = useTranslation();
 
-  const title = (
-    <Split className="odc-form-section-pipeline" hasGutter>
-      <SplitItem className="odc-form-section__heading">
-        <Title headingLevel="h1" size="2xl">
-          {t('rhoas-plugin~Select Kafka Instance')}
-        </Title>
-      </SplitItem>
-      <SplitItem>
-        <TechPreviewBadge />
-      </SplitItem>
-    </Split>
+  const noKafkaInstancesExist = (
+    <Trans t={t} ns="rhoas-plugin">
+      To make sure the instance exists and that you&lsquo;re authorized to access it, you can see
+      your Kafka instances at{' '}
+      <a href="https://cloud.redhat.com/openshift/token" rel="noopener noreferrer" target="_blank">
+        https://cloud.redhat.com.
+      </a>{' '}
+      To discover more managed services, go to the{' '}
+      <Button
+        isInline
+        variant="link"
+        onClick={() => history.push(`/catalog/ns/${currentNamespace}?catalogType=managedservices`)}
+      >
+        managed services catalog.
+      </Button>
+    </Trans>
   );
 
   return (
-    <FlexForm>
-      <FormBody flexLayout>
-        <FormHeader
-          title={title}
-          helpText={t(
-            'rhoas-plugin~The selected Kafka instance will be added to the topology view.',
-          )}
-        />
+    <>
+      <FormBody flexLayout style={{ borderTop: 0 }}>
         <FormSection fullWidth>
-          {kafkaArray.length === 0 ||
-          kafkaCreateError ||
-          kafkaListError ||
-          !isResourceStatusSuccessful ||
-          !isAccessTokenSecretValid ? (
-            <ConnectionFailedEmptyState currentNamespace={currentNamespace} />
+          {connectionError ? (
+            <ServicesEmptyState
+              title={connectionError.title}
+              message={connectionError.message}
+              actionLabel={connectionError.actionLabel}
+              action={connectionError.action}
+              icon={TimesCircleIcon}
+            />
+          ) : kafkaArray.length === 0 ? (
+            <ServicesEmptyState
+              title={t('rhoas-plugin~Could not connect to Kafka instances')}
+              message={noKafkaInstancesExist}
+              icon={TimesCircleIcon}
+            />
           ) : !areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
             <ServicesEmptyState
               title={t('rhoas-plugin~All available Kafka instances are connected to this project')}
               actionLabel={t('rhoas-plugin~See Kafka instances in topology view')}
               action={() => history.push(`/topology/ns/${currentNamespace}`)}
-              icon={CubesIcon}
+              icon={ServicesEmptyStateIcon}
             />
           ) : (
             <>
@@ -110,12 +118,12 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
         isSubmitting={isSubmitting}
         errorMessage=""
         submitLabel={t('rhoas-plugin~Next')}
-        disableSubmit={selectedKafka === undefined || isSubmitting}
+        disableSubmit={selectedKafka === undefined || connectionError || isSubmitting}
         resetLabel={t('rhoas-plugin~Cancel')}
         sticky
         handleCancel={history.goBack}
       />
-    </FlexForm>
+    </>
   );
 };
 

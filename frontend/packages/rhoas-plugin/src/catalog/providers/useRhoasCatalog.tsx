@@ -10,13 +10,12 @@ import { ServiceAccountCRName, operatorIcon } from '../../const';
 import { CloudServiceAccountRequest } from '../../models';
 import { isResourceStatusSuccessful } from '../../utils/conditionHandler';
 import { CATALOG_TYPE } from '../const';
-import CatalogContent = require('../catalog-content.json');
+import { RHOASService } from '../catalog-content';
 
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   namespace,
 }): [CatalogItem[], boolean, any] => {
   const { t } = useTranslation();
-  const rhoasService = CatalogContent.RHOASService;
 
   const [serviceAccount, loaded, errorMsg] = useK8sWatchResource({
     kind: referenceForModel(CloudServiceAccountRequest),
@@ -82,7 +81,6 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
     ];
 
     if (isServiceAccountValid) {
-      // const rhoasCard: CatalogItem[] = () => {
       const {
         serviceName,
         name,
@@ -94,16 +92,16 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
         icon,
         ctaLabel,
         details,
-      } = rhoasService;
+      } = RHOASService;
 
       const rhoasCard: CatalogItem[] = [
         {
-          name: name,
-          type: type,
-          uid: uid,
-          description: description,
-          provider: provider,
-          tags: tags,
+          name,
+          type,
+          uid,
+          description,
+          provider,
+          tags,
           icon: {
             url: icon,
           },
