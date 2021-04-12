@@ -8,9 +8,6 @@ import {
   Bullseye,
   Title,
   EmptyStateIcon,
-  Flex,
-  FlexItem,
-  Spinner,
 } from '@patternfly/react-core';
 import {
   sortable,
@@ -25,13 +22,9 @@ import {
 } from '@patternfly/react-table';
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
 import { Timestamp } from '@console/internal/components/utils';
-import {
-  GreenCheckCircleIcon,
-  YellowExclamationTriangleIcon,
-  RedExclamationCircleIcon,
-} from '@console/shared';
 import { CloudKafka } from '../../utils/rhoas-types';
 import './ServiceInstanceTable.scss';
+import ServiceIconStatus from './ServiceIconStatus';
 
 type FormattedKafkas = {
   cells: JSX.Element[];
@@ -58,50 +51,6 @@ const ServiceInstanceTable: React.FC<ServiceInstanceTableProps> = ({
   const [sortBy, setSortBy] = React.useState({});
   const { t } = useTranslation();
 
-  const returnIconStatus = (status: string) => {
-    let icon;
-    let text;
-
-    switch (status) {
-      case 'ready':
-        icon = <GreenCheckCircleIcon />;
-        text = t('rhoas-plugin~Ready');
-        break;
-      case 'accepted':
-        icon = <YellowExclamationTriangleIcon />;
-        text = t('rhoas-plugin~Creation pending');
-        break;
-      case 'provisioning':
-      case 'preparing':
-        icon = (
-          <Spinner
-            size="md"
-            aria-label={t('rhoas-plugin~Creation in progress')}
-            aria-valuetext={t('rhoas-plugin~Creation in progress')}
-          />
-        );
-        text = t('rhoas-plugin~Creation in progress');
-        break;
-      case 'failed':
-        icon = <RedExclamationCircleIcon />;
-        text = t('rhoas-plugin~Failed');
-        break;
-      case 'deprovision':
-        text = t('rhoas-plugin~Deletion in progress');
-        break;
-      default:
-        icon = <YellowExclamationTriangleIcon />;
-        text = t('rhoas-plugin~Creation pending');
-        break;
-    }
-    return (
-      <Flex>
-        {icon && <FlexItem spacer={{ default: 'spacerSm' }}>{icon}</FlexItem>}
-        <FlexItem>{text}</FlexItem>
-      </Flex>
-    );
-  };
-
   const formatTableRowData = React.useCallback(
     (updatedRows) => {
       const tableRow =
@@ -113,7 +62,7 @@ const ServiceInstanceTable: React.FC<ServiceInstanceTableProps> = ({
               { title: provider === 'aws' ? 'Amazon Web Services' : provider },
               { title: region === 'us-east-1' ? 'US East, N.Virginia' : region },
               { title: owner },
-              { title: returnIconStatus(status) },
+              { title: <ServiceIconStatus status={status} /> },
               { title: <Timestamp timestamp={createdAt} /> },
             ],
             ...((currentKafkaConnections.includes(id) || status !== 'ready') && {

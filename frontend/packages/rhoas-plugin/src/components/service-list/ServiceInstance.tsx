@@ -9,7 +9,7 @@ import ServiceInstanceFilter from '../service-table/ServiceInstanceFilter';
 import ServiceInstanceTable from '../service-table/ServiceInstanceTable';
 import { ServicesEmptyState } from '../states';
 import { CloudKafka } from '../../utils/rhoas-types';
-import { ServicesEmptyStateIcon } from '../states/ServicesEmptyStateIcon';
+// import ServicesEmptyStateIcon from '../states/ServicesEmptyStateIcon';
 
 type ConnectionErrorProps = {
   title: string;
@@ -30,8 +30,8 @@ type ServiceInstanceProps = {
 };
 
 const areAllServicesSelected = (currentServices: string[], listOfServices: CloudKafka[]) =>
-  listOfServices.some(
-    (service) => service.status !== 'ready' || !currentServices.includes(service.id),
+  listOfServices.every(
+    (service) => currentServices.includes(service.id) || service.status !== 'ready',
   );
 
 const ServiceInstance: React.FC<ServiceInstanceProps> = ({
@@ -88,12 +88,12 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
               message={noKafkaInstancesExist}
               icon={TimesCircleIcon}
             />
-          ) : !areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
+          ) : areAllServicesSelected(currentKafkaConnections, kafkaArray) ? (
             <ServicesEmptyState
               title={t('rhoas-plugin~All available Kafka instances are connected to this project')}
               actionLabel={t('rhoas-plugin~See Kafka instances in topology view')}
               action={() => history.push(`/topology/ns/${currentNamespace}`)}
-              icon={ServicesEmptyStateIcon}
+              icon={TimesCircleIcon}
             />
           ) : (
             <>
@@ -118,7 +118,7 @@ const ServiceInstance: React.FC<ServiceInstanceProps> = ({
         isSubmitting={isSubmitting}
         errorMessage=""
         submitLabel={t('rhoas-plugin~Next')}
-        disableSubmit={selectedKafka === undefined || connectionError || isSubmitting}
+        disableSubmit={selectedKafka === undefined || connectionError !== undefined || isSubmitting}
         resetLabel={t('rhoas-plugin~Cancel')}
         sticky
         handleCancel={history.goBack}

@@ -7,7 +7,7 @@ type ServicesEmptyStateProps = {
   message?: string | JSX.Element;
   actionLabel?: string;
   action?: () => void;
-  icon?: React.ComponentClass | JSX.Element;
+  icon?: React.ComponentClass | JSX.Element | any;
   iconClass?: string;
 };
 

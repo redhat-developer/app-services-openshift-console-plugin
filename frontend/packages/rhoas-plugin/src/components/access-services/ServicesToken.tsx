@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import {
+  ActionGroup,
   Button,
   Form,
   FormGroup,
@@ -8,9 +9,8 @@ import {
   TextContent,
   Text,
   TextVariants,
-  Alert,
 } from '@patternfly/react-core';
-import { LoadingInline } from '@console/internal/components/utils/status-box';
+import { ButtonBar } from '@console/internal/components/utils';
 import { createServiceAccountIfNeeded, createSecretIfNeeded } from '../../utils/resourceCreators';
 import { APITokenLengthMinimum } from '../../const';
 
@@ -33,7 +33,7 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
       await createSecretIfNeeded(namespace, apiTokenValue);
       setIsLoading(false);
     } catch (error) {
-      setErrorMessage(t('rhoas-plugin~There was an error with this API token', { error }));
+      setErrorMessage(t('rhoas-plugin~Problem with creating secret', { error }));
       setSendDisabled(true);
       return;
     }
@@ -72,28 +72,28 @@ export const ServiceToken: React.FC<ServiceTokenProps> = ({ namespace }: Service
             aria-label={t('rhoas-plugin~API Token')}
           />
         </FormGroup>
-        {errorMessage && <Alert variant="danger" isInline title={errorMessage} />}
-        <FormGroup fieldId="action-group">
-          <Button
-            key="confirm"
-            variant="primary"
-            onClick={onCreate}
-            isDisabled={apiTokenValue.length < APITokenLengthMinimum ? true : sendDisabled}
-          >
-            {t('rhoas-plugin~Connect')}
-          </Button>
-          <Button
-            key="reset"
-            variant="link"
-            onClick={() => {
-              setApiTokenValue('');
-              setErrorMessage('');
-            }}
-          >
-            {t('rhoas-plugin~Reset')}
-          </Button>
-        </FormGroup>
-        {isLoading && <LoadingInline />}
+        <ButtonBar errorMessage={errorMessage} inProgress={isLoading}>
+          <ActionGroup className="pf-c-form pf-c-form__actions--left">
+            <Button
+              key="confirm"
+              variant="primary"
+              onClick={onCreate}
+              isDisabled={apiTokenValue.length < APITokenLengthMinimum ? true : sendDisabled}
+            >
+              {t('rhoas-plugin~Connect')}
+            </Button>
+            <Button
+              key="reset"
+              variant="link"
+              onClick={() => {
+                setApiTokenValue('');
+                setErrorMessage('');
+              }}
+            >
+              {t('rhoas-plugin~Reset')}
+            </Button>
+          </ActionGroup>
+        </ButtonBar>
       </Form>
     </>
   );

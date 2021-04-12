@@ -10,7 +10,7 @@ import { ServiceAccountCRName, operatorIcon } from '../../const';
 import { CloudServiceAccountRequest } from '../../models';
 import { isResourceStatusSuccessful } from '../../utils/conditionHandler';
 import { CATALOG_TYPE } from '../const';
-import { RHOASService } from '../catalog-content';
+import { RHOASServices } from '../catalog-content';
 
 const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
   namespace,
@@ -81,39 +81,39 @@ const useRhoasCatalog: CatalogExtensionHook<CatalogItem[]> = ({
     ];
 
     if (isServiceAccountValid) {
-      const {
-        serviceName,
-        name,
-        type,
-        uid,
-        description,
-        provider,
-        tags,
-        icon,
-        ctaLabel,
-        details,
-      } = RHOASService;
-
-      const rhoasCard: CatalogItem[] = [
-        {
+      const rhoasCard: CatalogItem[] = RHOASServices.map(
+        ({
+          serviceName,
           name,
           type,
           uid,
           description,
           provider,
           tags,
-          icon: {
-            url: icon,
-          },
-          cta: {
-            label: ctaLabel,
-            href: `/rhoas/ns/${namespace}/${serviceName}`,
-          },
-          details: {
-            descriptions: [{ value: details }],
-          },
+          icon,
+          ctaLabel,
+          details,
+        }) => {
+          return {
+            name,
+            type,
+            uid,
+            description,
+            provider,
+            tags,
+            icon: {
+              url: icon,
+            },
+            cta: {
+              label: ctaLabel,
+              href: `/rhoas/ns/${namespace}/${serviceName}`,
+            },
+            details: {
+              descriptions: [{ value: <Text component={TextVariants.p}>{details}</Text> }],
+            },
+          };
         },
-      ];
+      );
       return rhoasCard;
     }
 

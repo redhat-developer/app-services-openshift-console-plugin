@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ServiceInstance from './ServiceInstance';
+import { useTranslation } from 'react-i18next';
 import NamespacedPage, {
   NamespacedPageVariants,
 } from '@console/dev-console/src/components/NamespacedPage';
@@ -30,8 +30,8 @@ import {
   isAccessTokenSecretValid,
   getFinishedCondition,
 } from '../../utils/conditionHandler';
-import { useTranslation } from 'react-i18next';
 import { ServicesEmptyState } from '../states';
+import ServiceInstance from './ServiceInstance';
 
 type ConnectionErrorProps = {
   title: string;
