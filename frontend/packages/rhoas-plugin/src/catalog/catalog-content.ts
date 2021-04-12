@@ -1,10 +1,6 @@
 import { kafkaIcon } from '../const';
 
-// export const details = (
-//   <p>"test"</p>
-// );
-
-export const RHOASService = {
+export const RHOASServices = [{
   serviceName: 'kafka',
   name: 'Red Hat OpenShift Application Services',
   type: 'managedservices',
@@ -16,4 +12,14 @@ export const RHOASService = {
   icon: kafkaIcon,
   ctaLabel: 'Connect',
   details: 'tbd',
-};
+  model: {
+    version: 'v1alpha1',
+    kind: 'KafkaConnection',
+    id: 'kafkaconnection',
+    plural: 'kafkaconnections',
+    label: 'Kafka Connection',
+    labelPlural: 'Kafka Connections',
+    abbr: 'AKC',
+  }
+}
+]
