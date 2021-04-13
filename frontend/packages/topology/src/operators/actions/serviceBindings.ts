@@ -34,6 +34,8 @@ export const createServiceBinding = (
       namespace,
     },
     spec: {
+      bindAsFiles: true,
+      namingStrategy: 'none',
       application: {
         name: sourceName,
         group: sourceGroup[0],
