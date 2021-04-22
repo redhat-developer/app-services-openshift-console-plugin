@@ -29,4 +29,17 @@ export const RHOASServices = [
 **Connectors** - the Kafka brokers can securely connect to distributed services, making it easy to consume and share streaming data between applications and enterprise systems, cloud provider services, and SaaS applications.
 `,
   },
+  {
+    serviceName: 'database',
+    name: 'Red Hat OpenShift DB',
+    type: 'managedservices',
+    uid: 'db-1615213269575',
+    description:
+      'Red Hat OpenShift DB  and scaling real-time applications in hybrid-cloud environments. The combination of seamless operations across distributed microservices, large data transfer volumes, and managed operations allows teams to focus on core competencies, accelerate time to value and reduce operational cost.',
+    provider: 'Red Hat, Inc.',
+    tags: ['kafka', 'service', 'rhosak', 'rhoas', 'cloud'],
+    icon: '',
+    ctaLabel: 'Connect',
+    details: `**Red Hat OpenShift DB** is DB :D`,
+  },
 ];
